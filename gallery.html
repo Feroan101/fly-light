@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - fly Light Badminton</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+  <img src="logo.png" alt="fly Light Academy Logo" style="height:44px; vertical-align:middle;">
+</div>
+
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="achievements.html">Achievements</a></li>
+                <li><a href="gallery.html" class="active">Gallery</a></li>
+                <li><a href="coaches.html">Coaches</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#programs">Programs</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <div class="page-hero-overlay"></div>
+        <div class="page-hero-content">
+            <h1>Gallery</h1>
+            <p>Moments from Our Journey</p>
+        </div>
+    </section>
+
+    <!-- Gallery Grid -->
+    <section class="gallery-section">
+        <div class="container">
+            <div class="gallery-grid">
+                <div class="gallery-item" onclick="openLightbox(0)">
+                    <img src="https://via.placeholder.com/400x300/2C3E50/FFFFFF?text=Training+Session+1" alt="Training Session">
+                    <div class="gallery-overlay">
+                        <span>Training Session</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" onclick="openLightbox(1)">
+                    <img src="https://via.placeholder.com/400x300/10B981/FFFFFF?text=Tournament+Day" alt="Tournament">
+                    <div class="gallery-overlay">
+                        <span>Tournament Day</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" onclick="openLightbox(2)">
+                    <img src="https://via.placeholder.com/400x300/FF6B35/FFFFFF?text=Award+Ceremony" alt="Awards">
+                    <div class="gallery-overlay">
+                        <span>Award Ceremony</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" onclick="openLightbox(3)">
+                    <img src="https://via.placeholder.com/400x300/2C3E50/FFFFFF?text=Practice+Court" alt="Practice">
+                    <div class="gallery-overlay">
+                        <span>Practice Court</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" onclick="openLightbox(4)">
+                    <img src="https://via.placeholder.com/400x300/10B981/FFFFFF?text=Team+Photo" alt="Team">
+                    <div class="gallery-overlay">
+                        <span>Team Photo</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" onclick="openLightbox(5)">
+                    <img src="https://via.placeholder.com/400x300/FF6B35/FFFFFF?text=Victory+Celebration" alt="Victory">
+                    <div class="gallery-overlay">
+                        <span>Victory Celebration</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" onclick="openLightbox(6)">
+                    <img src="https://via.placeholder.com/400x300/2C3E50/FFFFFF?text=Coaching+Session" alt="Coaching">
+                    <div class="gallery-overlay">
+                        <span>Coaching Session</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" onclick="openLightbox(7)">
+                    <img src="https://via.placeholder.com/400x300/10B981/FFFFFF?text=Junior+Players" alt="Juniors">
+                    <div class="gallery-overlay">
+                        <span>Junior Players</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" onclick="openLightbox(8)">
+                    <img src="https://via.placeholder.com/400x300/FF6B35/FFFFFF?text=Facility+View" alt="Facility">
+                    <div class="gallery-overlay">
+                        <span>Our Facility</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" onclick="openLightbox(9)">
+                    <img src="https://via.placeholder.com/400x300/2C3E50/FFFFFF?text=Doubles+Match" alt="Doubles">
+                    <div class="gallery-overlay">
+                        <span>Doubles Match</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" onclick="openLightbox(10)">
+                    <img src="https://via.placeholder.com/400x300/10B981/FFFFFF?text=Summer+Camp" alt="Camp">
+                    <div class="gallery-overlay">
+                        <span>Summer Camp</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" onclick="openLightbox(11)">
+                    <img src="https://via.placeholder.com/400x300/FF6B35/FFFFFF?text=Champions" alt="Champions">
+                    <div class="gallery-overlay">
+                        <span>Our Champions</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <img class="lightbox-content" id="lightbox-img">
+        <button class="lightbox-prev" onclick="changeLightboxImage(-1)">&#10094;</button>
+        <button class="lightbox-next" onclick="changeLightboxImage(1)">&#10095;</button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 fly Light - The School of Badminton. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="achievements.html">Achievements</a>
+                <a href="gallery.html">Gallery</a>
+                <a href="coaches.html">Coaches</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
