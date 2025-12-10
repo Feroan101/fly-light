@@ -431,10 +431,10 @@
         selected_venue: formData.get('selected_venue')
       };
 
-      fetch(`http://127.0.0.1:5000/api/tournaments/${currentTournamentId}`)
+      fetch(`https://fly-light-1.onrender.com/tournaments/${currentTournamentId}`)
         .then(r => r.json())
         .then(tournament => {
-          return fetch(`http://127.0.0.1:5000/api/tournaments/${currentTournamentId}/join`, {
+          return fetch(`https://fly-light-1.onrender.com/tournaments/${currentTournamentId}/join`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
