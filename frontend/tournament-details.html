@@ -687,8 +687,6 @@
   </div>
 </div>
 
-
-
   <!-- Match Editor Modal -->
   <div id="match-editor-modal" class="modal">
     <div class="modal-content">
@@ -947,6 +945,12 @@
     function loadBracket() {
       if (!currentTournament.bracket_data) return;
 
+      // ONLY show bracket when registrations are closed
+      if (currentTournament.accept_entries) {
+        console.log('Bracket hidden - registrations still open');
+        return;
+      }
+
       try {
         currentBracket = typeof currentTournament.bracket_data === "string"
           ? JSON.parse(currentTournament.bracket_data)
@@ -960,6 +964,7 @@
         console.error("Error parsing bracket:", e);
       }
     }
+
 
     function selectEvent(eventId) {
       const select = document.getElementById('join-category-select'); // or 'modal-category-select' if that's what you used

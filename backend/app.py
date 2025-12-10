@@ -86,10 +86,11 @@ class Tournament(db.Model):
             'capacity': self.capacity,
             'status': self.status,
             'accept_entries': self.accept_entries,
-            'bracket_data': self.bracket_data,
+            'bracket_data': self.bracket_data,  # ← Already JSON from DB, SQLAlchemy handles it
             'created_by': self.created_by,
             'created_at': self.created_at.isoformat() if self.created_at else None
         }
+
     
 class Event(db.Model):
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
@@ -401,6 +402,26 @@ def create_tournament_event(tournament_id):
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
 
+@app.route('/api/admin/tournaments/<tournament_id>', methods=['GET'])
+@jwt_required()
+def get_admin_tournament(tournament_id):
+    try:
+        user_id = get_jwt_identity()
+        user = User.query.get(user_id)
+        if not user or user.role != 'admin':
+            return jsonify({'error': 'Admin access required'}), 403
+        
+        tournament = Tournament.query.get(tournament_id)
+        if not tournament:
+            return jsonify({'error': 'Tournament not found'}), 404
+            
+        # Only return tournaments created by this admin
+        if tournament.created_by != user_id:
+            return jsonify({'error': 'Tournament not found'}), 404
+            
+        return jsonify(tournament.to_dict()), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/admin/tournaments/<tournament_id>', methods=['PUT'])
 @jwt_required()
@@ -416,7 +437,11 @@ def update_tournament(tournament_id):
         if not tournament:
             return jsonify({'error': 'Tournament not found'}), 404
         
-        data = request.form
+        # Handle BOTH form AND JSON
+        if request.is_json:
+            data = request.get_json()
+        else:
+            data = request.form
         
         # Update fields
         if 'name' in data:
@@ -434,7 +459,9 @@ def update_tournament(tournament_id):
         if 'status' in data:
             tournament.status = data['status']
         if 'accept_entries' in data:
-            tournament.accept_entries = data['accept_entries'].lower() == 'true'
+            tournament.accept_entries = data['accept_entries'].lower() == 'true' if isinstance(data['accept_entries'], str) else data['accept_entries']
+        if 'bracket_data' in data:
+            tournament.bracket_data = data['bracket_data']
         
         if 'start_date' in data:
             tournament.start_date = datetime.strptime(data['start_date'], '%Y-%m-%d').date()

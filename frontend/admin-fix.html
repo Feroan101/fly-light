@@ -450,6 +450,349 @@
       color: var(--text);
     }
 
+    /* Enhanced Match Cards */
+    .match-card {
+      background: linear-gradient(145deg, rgba(19,26,51,0.95), rgba(11,18,36,0.95));
+      border: 2px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .match-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(58,169,255,0.3);
+    }
+
+    .match-card.status-completed {
+      border-color: #10B981;
+      background: linear-gradient(145deg, rgba(16,185,129,0.15), rgba(5,150,105,0.15));
+    }
+
+    .match-card.status-live {
+      border-color: #EF4444;
+      background: linear-gradient(145deg, rgba(239,68,68,0.2), rgba(220,38,38,0.2));
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.7); }
+      50% { box-shadow: 0 0 0 20px rgba(239,68,68,0); }
+    }
+
+    .match-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .match-id {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent);
+      background: rgba(58,169,255,0.15);
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .status-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .player-row {
+      margin-bottom: 8px;
+    }
+
+    .player-slot {
+      padding: 12px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: all 0.2s ease;
+    }
+
+    .player-slot.winner-highlight {
+      background: linear-gradient(135deg, rgba(16,185,129,0.3), rgba(5,150,105,0.3));
+      border-color: #10B981;
+      box-shadow: 0 0 0 2px rgba(16,185,129,0.3);
+    }
+
+    .player-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .player-meta {
+      font-size: 12px;
+      color: var(--muted);
+      opacity: 0.8;
+    }
+
+    .vs-divider {
+      text-align: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 12px 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .match-time {
+      background: rgba(58,169,255,0.1);
+      border: 1px solid rgba(58,169,255,0.2);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 12px;
+      color: var(--accent);
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    /* Modal Enhancements */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(8px);
+    }
+
+    .modal-content {
+      background: linear-gradient(145deg, var(--bg-card), var(--bg-panel));
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 32px;
+      max-width: 600px;
+      width: 95%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+      backdrop-filter: blur(20px);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .modal-close {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .modal-close:hover {
+      background: rgba(255,107,107,0.2);
+      color: var(--danger);
+      transform: scale(1.1);
+    }
+
+    .match-status-bar {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    #modal-status-badge {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .player-edit-section {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .player-edit-card {
+      flex: 1;
+      min-width: 220px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 20px;
+      transition: all 0.2s ease;
+    }
+
+    .player-edit-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 8px 24px rgba(58,169,255,0.15);
+    }
+
+    .player-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .player-header span {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .winner-toggle {
+      position: relative;
+    }
+
+    .winner-switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 28px;
+    }
+
+    .winner-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255,255,255,0.1);
+      border-radius: 28px;
+      transition: 0.3s;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slider:before {
+      content: "";
+      position: absolute;
+      height: 22px;
+      width: 22px;
+      left: 3px;
+      bottom: 3px;
+      background: var(--text);
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+
+    input:checked + .slider {
+      background: var(--accent-strong);
+      color: white;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(32px);
+    }
+
+    .vs-center {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--accent);
+      align-self: center;
+      padding: 20px 12px;
+      text-shadow: 0 2px 4px rgba(58,169,255,0.3);
+    }
+
+    .edit-form input, .edit-form select {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 14px;
+      color: var(--text);
+      transition: all 0.2s ease;
+      margin-bottom: 12px;
+    }
+
+    .edit-form input:focus, .edit-form select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(58,169,255,0.15);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn {
+      padding: 14px 24px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #1e40af);
+      color: white;
+      flex: 1;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(58,169,255,0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: var(--text);
+      flex: 1;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.15);
+      border-color: rgba(255,255,255,0.3);
+    }
+
     @media (max-width: 768px) {
       .layout {
         grid-template-columns: 1fr;
@@ -502,14 +845,14 @@
           </select>
         </div>
 
-        <button class="btn" id="btn-generate">Generate Bracket</button>
+        <button class="btn" id="btn-generate" onclick="generateBracket()">Generate Bracket</button>
 
         <hr style="border-color: rgba(255,255,255,0.1); margin: 15px 0;" />
 
         <div class="section-title">📋 Registration Status</div>
 
         <div class="toggle-switch">
-          <input type="checkbox" id="accept-entries" checked />
+          <input type="checkbox" id="accept-entries-switch" checked />
           <label class="toggle-label" for="accept-entries">
             Accept New Entries
           </label>
@@ -519,7 +862,7 @@
           When <strong>OFF</strong>: Tournament shows as "Ongoing" (no new entries)
         </small>
 
-        <button class="btn" id="btn-save-settings" style="margin-top: 15px;">
+        <button class="btn" id="btn-save-settings" style="margin-top: 15px;" onclick="saveMatch()">
           Save Settings
         </button>
 
@@ -527,8 +870,8 @@
 
         <div class="section-title">🔧 Actions</div>
 
-        <button class="btn btn-secondary" id="btn-clear">Clear All</button>
-        <button class="btn btn-danger" style="margin-top: 8px;" id="btn-export">
+        <button onclick="clearAllBracket()" class="btn btn-secondary" id="btn-clear">Clear All</button>
+        <button onclick="exportBracket()" class="btn btn-danger" style="margin-top: 8px;" id="btn-export">
           Export Bracket (JSON)
         </button>
       </div>
@@ -557,444 +900,423 @@
   </div>
 
   <!-- Match Editor Modal -->
-  <div id="match-editor-modal" class="modal">
+  <div id="match-editor-modal" class="modal" style="display: none;">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>Edit Match</h2>
+        <h2>⚙️ Edit Match <span id="match-info-text" style="color: var(--accent); font-weight: 700;">M1</span></h2>
         <button class="modal-close" onclick="closeMatchEditor()">×</button>
       </div>
 
-      <div class="info-box">
-        Match: <strong id="match-info"></strong>
+      <div class="match-status-bar">
+        <div class="status-badge status-pending" id="modal-status-badge">⏳ Pending</div>
       </div>
 
-      <div class="form-group">
-        <label>Player A – Name</label>
-        <input type="text" id="player1-name" placeholder="Player name" />
-      </div>
+      <form class="edit-form">
+        <div class="player-edit-section">
+          <div class="player-edit-card">
+            <div class="player-header player1-header">
+              <span>👤 Player A</span>
+              <div class="winner-toggle">
+                <label class="winner-switch">
+                  <input type="radio" name="winner" value="1" id="winner-p1">
+                  <span class="slider">WINNER</span>
+                </label>
+              </div>
+            </div>
+            <input type="text" id="edit-player1-name" placeholder="Player name" />
+            <input type="text" id="edit-player1-academy" placeholder="Academy/Club" />
+          </div>
 
-      <div class="form-group">
-        <label>Player A – Academy</label>
-        <input type="text" id="player1-academy" placeholder="Academy/Club" />
-      </div>
+          <div class="vs-center">VS</div>
 
-      <div class="form-group">
-        <label>Player B – Name</label>
-        <input type="text" id="player2-name" placeholder="Player name" />
-      </div>
+          <div class="player-edit-card">
+            <div class="player-header player2-header">
+              <span>👤 Player B</span>
+              <div class="winner-toggle">
+                <label class="winner-switch">
+                  <input type="radio" name="winner" value="2" id="winner-p2">
+                  <span class="slider">WINNER</span>
+                </label>
+              </div>
+            </div>
+            <input type="text" id="edit-player2-name" placeholder="Player name" />
+            <input type="text" id="edit-player2-academy" placeholder="Academy/Club" />
+          </div>
+        </div>
 
-      <div class="form-group">
-        <label>Player B – Academy</label>
-        <input type="text" id="player2-academy" placeholder="Academy/Club" />
-      </div>
+        <div class="form-group">
+          <label>📅 Match Date & Time</label>
+          <input type="datetime-local" id="edit-match-time" />
+        </div>
 
-      <div class="form-group">
-        <label>Match Date & Time</label>
-        <input type="datetime-local" id="match-time" />
-      </div>
+        <div class="form-group">
+          <label>🎯 Match Status</label>
+          <select id="edit-match-status">
+            <option value="pending">⏳ Pending</option>
+            <option value="live">🔴 Live</option>
+            <option value="completed">✅ Completed</option>
+          </select>
+        </div>
 
-      <div class="form-group">
-        <label>Match Status</label>
-        <select id="match-status">
-          <option value="pending">Pending</option>
-          <option value="live">Live</option>
-          <option value="completed">Completed</option>
-        </select>
-      </div>
-
-      <div class="form-group" style="display: none;" id="winner-group">
-        <label>Winner</label>
-        <select id="winner-select">
-          <option value="0">No winner set</option>
-          <option value="1">Player A wins</option>
-          <option value="2">Player B wins</option>
-        </select>
-      </div>
-
-      <div class="info-box" style="margin-top: 15px;">
-        After setting the winner, click "Advance Winner" to move them to the next round.
-      </div>
-
-      <div style="display: flex; gap: 10px; margin-top: 20px;">
-        <button class="btn" id="btn-advance-winner" style="flex: 1;">
-          Advance Winner to Next Round
-        </button>
-        <button class="btn btn-secondary" style="flex: 1;" onclick="closeMatchEditor()">
-          Close
-        </button>
-      </div>
+        <div class="button-group">
+          <button type="button" class="btn btn-primary" onclick="saveMatch()" style="flex: 1;">💾 Save Match</button>
+          <button type="button" class="btn btn-secondary" onclick="closeMatchEditor()" style="flex: 1;">❌ Cancel</button>
+        </div>
+      </form>
     </div>
   </div>
 
-  <script src="js/db.js"></script>
-  <script>
-    const API_URL = "http://127.0.0.1:5000/api";
-    let tournaments = [];
-    let currentTournament = null;
-    let fixtures = [];
-    let roundNames = [];
-    let currentMatchEdit = null;
 
-    // Load tournaments on page load
-    document.addEventListener("DOMContentLoaded", () => {
-      loadTournaments();
-      document
-        .getElementById("tournament-select")
-        .addEventListener("change", onTournamentSelected);
-      document
-        .getElementById("rounds-select")
-        .addEventListener("change", generateBracket);
-      document
-        .getElementById("btn-generate")
-        .addEventListener("click", generateBracket);
-      document
-        .getElementById("btn-save-settings")
-        .addEventListener("click", saveSettings);
-      document
-        .getElementById("btn-clear")
-        .addEventListener("click", clearBracket);
-      document
-        .getElementById("btn-export")
-        .addEventListener("click", exportBracket);
-      document
-        .getElementById("search-player")
-        .addEventListener("input", applySearchHighlight);
-      document
-        .getElementById("btn-clear-search")
-        .addEventListener("click", () => {
-          document.getElementById("search-player").value = "";
-          applySearchHighlight();
+<script src="js/db.js"></script>
+<script>
+  const API_URL = "http://127.0.0.1:5000/api";
+  let currentTournament = null;
+  let currentBracket = null;
+
+  // Get tournament ID from URL
+  function getTournamentIdFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('id');
+  }
+
+  // Initialize
+  document.addEventListener('DOMContentLoaded', () => {
+    redirectIfNotAuth();
+    loadTournament();
+  });
+
+  // Load tournament
+  async function loadTournament() {
+    const id = getTournamentIdFromUrl();
+    if (!id) {
+      alert('Tournament ID missing');
+      return;
+    }
+
+    const token = db.getAuthToken();
+    try {
+      const res = await fetch(API_URL + '/tournaments/' + id, {  // ← Fixed endpoint
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+
+      currentTournament = data;
+
+      // ✅ FIX 1: Show tournament name
+      const tournamentSelect = document.getElementById('tournament-select');
+      tournamentSelect.innerHTML = `<option value="${id}" selected disabled>${data.name || 'Tournament'}</option>`;
+      tournamentSelect.disabled = true;
+
+      // ✅ FIX 2: Set toggle correctly
+      const toggle = document.getElementById('accept-entries-switch');
+      if (toggle) toggle.checked = !!data.accept_entries;
+
+      // ✅ SAFE bracket loading
+      if (data.bracket_data != null) {
+        try {
+          currentBracket = typeof data.bracket_data === 'object' 
+            ? data.bracket_data 
+            : JSON.parse(data.bracket_data);
+          if (Array.isArray(currentBracket) && currentBracket.length > 0) {
+            renderBracket();
+          }
+        } catch (e) {
+          console.error('Bracket parse error:', e);
+        }
+      }
+
+    } catch (err) {
+      alert('Error: ' + err.message);
+    }
+  }
+
+  // Generate bracket
+  async function generateBracket() {
+    const numRoundsSelect = document.getElementById('rounds-select');
+    if (!numRoundsSelect) {
+      alert('Rounds dropdown not found!');
+      return;
+    }
+
+    const numRounds = parseInt(numRoundsSelect.value);
+    if (!numRounds || numRounds < 1 || numRounds > 6) {
+      alert('Select valid number of rounds');
+      return;
+    }
+    
+    const maxPlayers = Math.pow(2, numRounds);
+    currentBracket = [];
+
+    for (let round = 0; round < numRounds; round++) {
+      const playersInRound = maxPlayers / Math.pow(2, round);
+      const matchCount = Math.floor(playersInRound / 2);  // ✅ FIXED: Math.floor()
+      const matches = [];
+
+      for (let i = 0; i < matchCount; i++) {
+        matches.push({
+          id: `M${i+1}-R${numRounds-round}`,  // ✅ FIXED: M1-R3, M2-R3, M1-R2, etc.
+          matchIndex: i,
+          player1: { name: 'TBD', academy: '' },
+          player2: { name: 'TBD', academy: '' },
+          winner: 0,
+          status: 'pending',
+          time: null
         });
-      document
-        .getElementById("match-status")
-        .addEventListener("change", (e) => {
-          document.getElementById("winner-group").style.display =
-            e.target.value === "completed" ? "block" : "none";
-        });
+      }
+      currentBracket.push(matches);
+    }
+
+    renderBracket();  // ✅ ADD THIS
+    alert(`✅ Bracket generated: ${maxPlayers} players, ${numRounds} rounds`);
+  }
+
+  // Render bracket
+  function renderBracket() {
+    const container = document.getElementById('fixture-grid');
+    if (!currentBracket?.length) {
+      container.innerHTML = '<div style="padding: 40px; text-align: center; color: var(--muted);">No bracket - generate one first</div>';
+      return;
+    }
+
+    const roundNames = ['Round of 32', 'Round of 16', 'Quarterfinals', 'Semifinals', 'Final'];
+    let html = '';
+
+    currentBracket.forEach((matches, roundIdx) => {
+      const roundName = roundNames[roundIdx] || `Round ${roundIdx + 1}`;
+      html += `<div class="round-column"><div class="round-title">${roundName}</div>`;
+      
+      matches.forEach((match, matchIdx) => {
+        // Status colors
+        let statusClass = '', statusIcon = '', statusBg = '';
+        switch(match.status) {
+          case 'completed': 
+            statusClass = 'status-completed'; 
+            statusIcon = '✅'; 
+            statusBg = 'linear-gradient(135deg, #10B981, #059669)';
+            break;
+          case 'live': 
+            statusClass = 'status-live'; 
+            statusIcon = '🔴 LIVE'; 
+            statusBg = 'linear-gradient(135deg, #EF4444, #DC2626)';
+            break;
+          default: 
+            statusClass = 'status-pending'; 
+            statusIcon = '⏳'; 
+            statusBg = 'linear-gradient(135deg, #6B7280, #4B5563)';
+        }
+
+        // Winner highlight
+        const p1Winner = match.winner === 1 ? 'winner-highlight' : '';
+        const p2Winner = match.winner === 2 ? 'winner-highlight' : '';
+
+        html += `
+          <div class="match-card ${statusClass}" onclick="editMatch(${roundIdx}, ${matchIdx})">
+            <div class="match-header">
+              <span class="match-id">${match.id}</span>
+              <span class="status-badge">${statusIcon}</span>
+            </div>
+            
+            <div class="player-row">
+              <div class="player-slot ${p1Winner}">
+                <div class="player-name">${match.player1.name}</div>
+                <div class="player-meta">${match.player1.academy || 'Independent'}</div>
+              </div>
+            </div>
+            
+            <div class="vs-divider">VS</div>
+            
+            <div class="player-row">
+              <div class="player-slot ${p2Winner}">
+                <div class="player-name">${match.player2.name}</div>
+                <div class="player-meta">${match.player2.academy || 'Independent'}</div>
+              </div>
+            </div>
+            
+            ${match.time ? `
+              <div class="match-time">
+                🕒 ${new Date(match.time).toLocaleString('en-IN', { 
+                  weekday: 'short', 
+                  hour: '2-digit', 
+                  minute: '2-digit' 
+                })}
+              </div>
+            ` : ''}
+          </div>
+        `;
+      });
+      html += '</div>';
     });
 
-    function loadTournaments() {
-      fetch(`${API_URL}/tournaments`)
-        .then((r) => r.json())
-        .then((data) => {
-          tournaments = data;
-          const select = document.getElementById("tournament-select");
-          select.innerHTML =
-            '<option value="">Select a tournament...</option>' +
-            tournaments
-              .map((t) => `<option value="${t.id}">${t.name}</option>`)
-              .join("");
-        });
+    container.innerHTML = html;
+  }
+
+
+  let currentEditRound = null;
+  let currentEditMatch = null;
+
+  function editMatch(roundIdx, matchIdx) {
+    if (!currentBracket || !currentBracket[roundIdx] || !currentBracket[roundIdx][matchIdx]) {
+      alert('Invalid match');
+      return;
     }
 
-    function onTournamentSelected(e) {
-      const id = e.target.value;
-      if (!id) {
-        currentTournament = null;
-        return;
-      }
-      currentTournament = tournaments.find((t) => t.id === id);
-      if (currentTournament) {
-        document.getElementById("fixture-title").textContent =
-          currentTournament.name + " – Bracket";
-        document.getElementById("accept-entries").checked =
-          currentTournament.accept_entries !== false;
-        generateBracket();
-      }
+    // Store for saveMatch
+    currentEditRound = roundIdx;
+    currentEditMatch = matchIdx;
+    
+    const match = currentBracket[roundIdx][matchIdx];
+    
+    // SAFE element access
+    const setValueSafe = (id, value) => {
+      const el = document.getElementById(id);
+      if (el) el.value = value || '';
+    };
+    
+    setValueSafe('match-info-text', match.id);
+    setValueSafe('edit-player1-name', match.player1.name);
+    setValueSafe('edit-player1-academy', match.player1.academy);
+    setValueSafe('edit-player2-name', match.player2.name);
+    setValueSafe('edit-player2-academy', match.player2.academy);
+    setValueSafe('edit-match-time', match.time || '');
+    
+    const statusEl = document.getElementById('edit-match-status');
+    if (statusEl) statusEl.value = match.status || 'pending';
+    
+    const winnerP1 = document.getElementById('winner-p1');
+    const winnerP2 = document.getElementById('winner-p2');
+    if (winnerP1 && winnerP2) {
+      winnerP1.checked = match.winner === 1;
+      winnerP2.checked = match.winner === 2;
     }
+    
+    // Show modal
+    const modal = document.getElementById('match-editor-modal');
+    if (modal) modal.style.display = 'flex';
+  }
 
-    function computePlayersCount(rounds) {
-      return Math.pow(2, rounds);
+  function saveMatch() {
+    if (currentEditRound === null || currentEditMatch === null) {
+      alert('No match selected');
+      return;
     }
+    
+    const match = currentBracket[currentEditRound][currentEditMatch];
+    if (!match) return;
+    
+    // SAFE value reading
+    const getValueSafe = (id) => {
+      const el = document.getElementById(id);
+      return el ? el.value : '';
+    };
+    
+    match.player1.name = getValueSafe('edit-player1-name') || 'TBD';
+    match.player1.academy = getValueSafe('edit-player1-academy') || '';
+    match.player2.name = getValueSafe('edit-player2-name') || 'TBD';
+    match.player2.academy = getValueSafe('edit-player2-academy') || '';
+    match.time = getValueSafe('edit-match-time') || null;
+    match.status = getValueSafe('edit-match-status') || 'pending';
+    
+    // WINNER IS OPTIONAL - defaults to 0 (no winner)
+    const winnerP1 = document.getElementById('winner-p1');
+    const winnerP2 = document.getElementById('winner-p2');
+    match.winner = 0;  // ← DEFAULT: No winner
+    
+    // Only set winner if explicitly selected
+    if (winnerP1 && winnerP1.checked) match.winner = 1;
+    if (winnerP2 && winnerP2.checked) match.winner = 2;
+    
+    closeMatchEditor();
+    renderBracket();
+    
+    // Smart status message
+    const statusMsg = match.status === 'completed' ? '✅ Match saved & completed!' : 
+                    match.status === 'live' ? '🔴 Match saved & LIVE!' : '💾 Match saved!';
+    alert(statusMsg);
+  }
 
-    function computeRoundNames(rounds) {
-      const names = [];
-      for (let i = 0; i < rounds; i++) {
-        const rIndex = rounds - i;
-        if (rIndex === 1) names.unshift("Final");
-        else if (rIndex === 2) names.unshift("Semi-finals");
-        else if (rIndex === 3) names.unshift("Quarter-finals");
-        else if (rIndex === 4) names.unshift("Round of 16");
-        else if (rIndex === 5) names.unshift("Round of 32");
-        else names.unshift("Round " + rIndex);
-      }
-      return names;
-    }
 
-    function generateBracket() {
-      if (!currentTournament) {
-        alert("Please select a tournament first");
-        return;
-      }
+  function closeMatchEditor() {
+    const modal = document.getElementById('match-editor-modal');
+    if (modal) modal.style.display = 'none';
+  }
 
-      const rounds = parseInt(document.getElementById("rounds-select").value);
-      roundNames = computeRoundNames(rounds);
-      fixtures = [];
-      let matchIdCounter = 1;
+  // Save match changes
+  function saveMatch(roundIdx, matchIdx) {
+    const match = currentBracket[roundIdx][matchIdx];
+    match.player1.name = document.getElementById('edit-player1-name').value;
+    match.player1.academy = document.getElementById('edit-player1-academy').value;
+    match.player2.name = document.getElementById('edit-player2-name').value;
+    match.player2.academy = document.getElementById('edit-player2-academy').value;
+    match.time = document.getElementById('edit-match-time').value;
+    match.status = document.getElementById('edit-match-status').value;
+    match.winner = parseInt(document.getElementById('edit-match-winner').value) || 0;
 
-      for (let r = 0; r < rounds; r++) {
-        const matchesInRound = Math.pow(2, rounds - r - 1);
-        const roundMatches = [];
+    closeMatchEditor();
+    renderBracket();
+    alert('✅ Match updated');
+  }
 
-        for (let m = 0; m < matchesInRound; m++) {
-          roundMatches.push({
-            id: "M" + matchIdCounter++,
-            roundIndex: r,
-            matchIndex: m,
-            player1: { name: "", academy: "" },
-            player2: { name: "", academy: "" },
-            time: "",
-            winner: 0,
-            status: "pending",
-          });
-        }
+  function closeMatchEditor() {
+    document.getElementById('match-editor-modal').style.display = 'none';
+  }
 
-        fixtures.push(roundMatches);
-      }
+  // Save tournament settings (bracket + accept_entries)
+  async function saveTournamentSettings() {
+    if (!currentTournament) return;
 
-      renderFixtures();
-    }
+    const token = db.getAuthToken();
+    const acceptEntries = document.getElementById('accept-entries-switch').checked;
 
-    function renderFixtures() {
-      const grid = document.getElementById("fixture-grid");
-      grid.innerHTML = "";
-
-      fixtures.forEach((roundMatches, roundIndex) => {
-        const column = document.createElement("div");
-        column.className = "round-column";
-
-        const title = document.createElement("div");
-        title.className = "round-title";
-        title.textContent = roundNames[roundIndex] || "Round " + (roundIndex + 1);
-        column.appendChild(title);
-
-        roundMatches.forEach((match) => {
-          const card = document.createElement("div");
-          card.className = "match-card";
-          card.dataset.roundIndex = match.roundIndex;
-          card.dataset.matchIndex = match.matchIndex;
-
-          const idSpan = document.createElement("span");
-          idSpan.className = "match-id";
-          idSpan.textContent = match.id;
-
-          const p1 = document.createElement("div");
-          p1.className = "player-slot";
-          p1.innerHTML = `
-            <input type="text" class="player1-name" placeholder="Player A" value="${match.player1.name}" />
-            <small style="color: var(--muted); font-size: 10px; display: block; margin-top: 2px;">${match.player1.academy}</small>
-          `;
-          p1.querySelector(".player1-name").addEventListener("input", (e) => {
-            match.player1.name = e.target.value;
-          });
-
-          const p2 = document.createElement("div");
-          p2.className = "player-slot";
-          p2.innerHTML = `
-            <input type="text" class="player2-name" placeholder="Player B" value="${match.player2.name}" />
-            <small style="color: var(--muted); font-size: 10px; display: block; margin-top: 2px;">${match.player2.academy}</small>
-          `;
-          p2.querySelector(".player2-name").addEventListener("input", (e) => {
-            match.player2.name = e.target.value;
-          });
-
-          const timeDiv = document.createElement("div");
-          timeDiv.className = "match-time";
-          timeDiv.textContent = match.time
-            ? new Date(match.time).toLocaleString()
-            : "No time set";
-
-          const statusSpan = document.createElement("span");
-          statusSpan.className = `status-badge status-${match.status}`;
-          statusSpan.textContent = match.status.toUpperCase();
-
-          const actions = document.createElement("div");
-          actions.className = "match-actions";
-          const editBtn = document.createElement("button");
-          editBtn.textContent = "✎ Edit";
-          editBtn.addEventListener("click", () => openMatchEditor(match));
-          actions.appendChild(editBtn);
-
-          card.appendChild(idSpan);
-          card.appendChild(p1);
-          card.appendChild(p2);
-          card.appendChild(timeDiv);
-          card.appendChild(statusSpan);
-          card.appendChild(actions);
-
-          column.appendChild(card);
-        });
-
-        grid.appendChild(column);
-      });
-
-      applySearchHighlight();
-    }
-
-    function openMatchEditor(match) {
-      currentMatchEdit = match;
-      document.getElementById("match-info").textContent =
-        match.id + " (" + roundNames[match.roundIndex] + ")";
-      document.getElementById("player1-name").value = match.player1.name;
-      document.getElementById("player1-academy").value = match.player1.academy;
-      document.getElementById("player2-name").value = match.player2.name;
-      document.getElementById("player2-academy").value = match.player2.academy;
-      document.getElementById("match-time").value = match.time;
-      document.getElementById("match-status").value = match.status;
-      document.getElementById("winner-select").value = match.winner;
-      document.getElementById("winner-group").style.display =
-        match.status === "completed" ? "block" : "none";
-
-      document.getElementById("btn-advance-winner").addEventListener("click", () => {
-        const winnerId = parseInt(
-          document.getElementById("winner-select").value
-        );
-        if (winnerId === 0) {
-          alert("Please select a winner first");
-          return;
-        }
-        advanceWinner(match, winnerId);
-      });
-
-      document.getElementById("match-editor-modal").classList.add("active");
-    }
-
-    function closeMatchEditor() {
-      document.getElementById("match-editor-modal").classList.remove("active");
-      currentMatchEdit = null;
-    }
-
-    function advanceWinner(match, winnerId) {
-      const winner =
-        winnerId === 1 ? match.player1 : match.player2;
-      const nextRound = match.roundIndex + 1;
-
-      if (nextRound >= fixtures.length) {
-        alert("Winner of the final!");
-        match.winner = winnerId;
-        match.status = "completed";
-        closeMatchEditor();
-        renderFixtures();
-        return;
-      }
-
-      const nextMatch =
-        fixtures[nextRound][Math.floor(match.matchIndex / 2)];
-      const slot = match.matchIndex % 2;
-
-      if (slot === 0) {
-        nextMatch.player1 = { ...winner };
-      } else {
-        nextMatch.player2 = { ...winner };
-      }
-
-      match.winner = winnerId;
-      match.status = "completed";
-      closeMatchEditor();
-      renderFixtures();
-    }
-
-    function saveSettings() {
-      if (!currentTournament) {
-        alert("Please select a tournament first");
-        return;
-      }
-
-      const acceptEntries = document.getElementById("accept-entries").checked;
-      const token = db.getAuthToken();
-
-      fetch(`${API_URL}/admin/tournaments/${currentTournament.id}`, {
-        method: "PUT",
+    try {
+      const res = await fetch(API_URL + '/tournaments/' + currentTournament.id, {
+        method: 'PUT',
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify({
-          accept_entries: acceptEntries,
-          bracket_data: JSON.stringify(fixtures),
-        }),
-      })
-        .then((r) => r.json())
-        .then((data) => {
-          if (data.error) {
-            alert("Error: " + data.error);
-          } else {
-            alert("Tournament settings saved!");
-            currentTournament.accept_entries = acceptEntries;
-          }
+          bracket_data: currentBracket,
+          accept_entries: acceptEntries
         })
-        .catch((err) => alert("Error: " + err.message));
-    }
-
-    function clearBracket() {
-      if (
-        !confirm(
-          "Clear all players, times, and results? This cannot be undone."
-        )
-      )
-        return;
-
-      fixtures.forEach((round) => {
-        round.forEach((match) => {
-          match.player1 = { name: "", academy: "" };
-          match.player2 = { name: "", academy: "" };
-          match.time = "";
-          match.winner = 0;
-          match.status = "pending";
-        });
       });
 
-      renderFixtures();
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+
+      alert('✅ Tournament settings saved');
+      currentTournament.bracket_data = currentBracket;
+      currentTournament.accept_entries = acceptEntries;
+
+    } catch (err) {
+      alert('Error saving: ' + err.message);
     }
+  }
 
-    function exportBracket() {
-      const json = JSON.stringify(
-        {
-          tournament: currentTournament?.name || "Unknown",
-          exportedAt: new Date().toISOString(),
-          bracket: fixtures,
-        },
-        null,
-        2
-      );
+  // Clear all
+  function clearAllBracket() {
+    if (!confirm('Delete entire bracket?')) return;
+    currentBracket = null;
+    document.getElementById('bracket-display').innerHTML = '<p style="color: #999; padding: 20px;">Bracket cleared.</p>';
+  }
 
-      const blob = new Blob([json], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `bracket-${currentTournament?.id || "export"}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
+  // Export bracket as JSON
+  function exportBracket() {
+    if (!currentBracket) {
+      alert('No bracket to export');
+      return;
     }
+    const json = JSON.stringify(currentBracket, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'bracket-' + currentTournament.id + '.json';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+</script>
 
-    function applySearchHighlight() {
-      const q = document
-        .getElementById("search-player")
-        .value.trim()
-        .toLowerCase();
-      document
-        .querySelectorAll(".match-card")
-        .forEach((c) => c.classList.remove("highlight"));
-
-      if (!q) return;
-
-      fixtures.forEach((round) => {
-        round.forEach((m) => {
-          const names = [
-            m.player1.name.toLowerCase(),
-            m.player2.name.toLowerCase(),
-            m.player1.academy.toLowerCase(),
-            m.player2.academy.toLowerCase(),
-          ];
-          if (names.some((x) => x && x.includes(q))) {
-            const sel =
-              `.match-card[data-round-index="${m.roundIndex}"][data-match-index="${m.matchIndex}"]`;
-            const card = document.querySelector(sel);
-            if (card) card.classList.add("highlight");
-          }
-        });
-      });
-    }
-  </script>
 </body>
 </html>
