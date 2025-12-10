@@ -75,7 +75,7 @@ const db = new LocalDB();
 // ==================== API UTILITY ====================
 
 class API {
-    constructor(baseURL = 'http://localhost:5000/api') {
+    constructor(baseURL = 'https://fly-light.onrender.com/api') {
         this.baseURL = baseURL;
     }
 
@@ -278,7 +278,7 @@ class API {
     }
 }
 
-const api = new API('http://localhost:5000/api');
+const api = new API('https://fly-light.onrender.com/api');
 
 // ==================== UTILITY FUNCTIONS ====================
 
