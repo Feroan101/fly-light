@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin – Fixture Manager & Bracket Editor</title>
+  <style>
+    :root {
+      --bg-dark: #050b1a;
+      --bg-panel: #0b1224;
+      --bg-card: #131a33;
+      --accent: #3aa9ff;
+      --accent-soft: rgba(58, 169, 255, 0.2);
+      --accent-strong: #1dd1a1;
+      --text: #f5f7ff;
+      --muted: #9ba4ce;
+      --danger: #ff6b6b;
+      --border: #242b4a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #19244a 0, #050816 50%, #02030a 100%);
+      color: var(--text);
+    }
+
+    .navbar {
+      background: rgba(44, 62, 80, 0.95);
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .navbar h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 14px;
+      transition: color 0.3s;
+    }
+
+    .navbar a:hover {
+      color: #10B981;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      margin: 0 0 10px;
+      font-size: 32px;
+    }
+
+    .header p {
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .control-panel {
+      background: rgba(7, 11, 28, 0.98);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.65);
+      padding: 20px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .field {
+      margin-bottom: 15px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(4, 9, 23, 0.95);
+      color: var(--text);
+    }
+
+    .field input:focus,
+    .field select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(58, 169, 255, 0.2);
+    }
+
+    .toggle-switch {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 15px 0;
+    }
+
+    .toggle-switch input[type="checkbox"] {
+      width: 40px;
+      height: 24px;
+      cursor: pointer;
+    }
+
+    .toggle-label {
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      border: none;
+      padding: 10px 16px;
+      font-size: 13px;
+      cursor: pointer;
+      background: var(--accent);
+      color: #020613;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(58, 169, 255, 0.3);
+    }
+
+    .btn-small {
+      width: auto;
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    /* Fixture section */
+    .fixture-panel {
+      background: rgba(7, 11, 28, 0.98);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.65);
+    }
+
+    .fixture-header {
+      padding: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .fixture-header h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .search-bar {
+      display: flex;
+      gap: 8px;
+    }
+
+    .search-bar input {
+      min-width: 200px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(4, 9, 23, 0.95);
+      color: var(--text);
+      font-size: 12px;
+    }
+
+    .fixture-scroll {
+      overflow-x: auto;
+      padding: 20px;
+    }
+
+    .fixture-grid {
+      display: inline-flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .round-column {
+      min-width: 260px;
+    }
+
+    .round-title {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .match-card {
+      background: linear-gradient(145deg, #050816, #0e1430);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      padding: 12px;
+      margin-bottom: 12px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .match-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(58, 169, 255, 0.3);
+    }
+
+    .match-card.highlight {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(58, 169, 255, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .match-id {
+      font-weight: 600;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .player-slot {
+      padding: 6px;
+      background: rgba(3, 7, 19, 0.96);
+      border-radius: 6px;
+      margin-bottom: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .player-slot input {
+      width: 100%;
+      padding: 4px 6px;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-size: 11px;
+    }
+
+    .player-slot input::placeholder {
+      color: var(--muted);
+    }
+
+    .player-slot input:focus {
+      outline: none;
+    }
+
+    .match-time {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 6px 0;
+      padding: 4px 6px;
+      background: rgba(58, 169, 255, 0.1);
+      border-radius: 4px;
+    }
+
+    .match-actions {
+      display: flex;
+      gap: 4px;
+      margin-top: 8px;
+    }
+
+    .match-actions button {
+      flex: 1;
+      padding: 4px;
+      font-size: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      border-radius: 4px;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .match-actions button:hover {
+      background: rgba(58, 169, 255, 0.2);
+      color: var(--accent);
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: rgba(7, 11, 28, 0.98);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 30px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--muted);
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      background: rgba(4, 9, 23, 0.95);
+      color: var(--text);
+      font-size: 13px;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .status-pending {
+      background: rgba(255, 193, 7, 0.2);
+      color: #ffc107;
+      border: 1px solid rgba(255, 193, 7, 0.3);
+    }
+
+    .status-completed {
+      background: rgba(29, 209, 161, 0.2);
+      color: var(--accent-strong);
+      border: 1px solid rgba(29, 209, 161, 0.3);
+    }
+
+    .info-box {
+      background: rgba(58, 169, 255, 0.1);
+      border-left: 3px solid var(--accent);
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      margin: 15px 0;
+      color: var(--text);
+    }
+
+    @media (max-width: 768px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+      .fixture-grid {
+        min-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <h1>🏸 Sky Light Badminton</h1>
+    <div>
+      <a href="index.html">Home</a>
+      <a href="tournaments.html">Tournaments</a>
+      <a href="admin.html">Admin</a>
+      <a href="admin-fix.html">Fixture Manager</a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="header">
+      <h1>Fixture Manager</h1>
+      <p>Design tournament brackets, add players, set match times, and manage entries</p>
+    </div>
+
+    <div class="layout">
+      <!-- Control Panel -->
+      <div class="control-panel">
+        <div class="section-title">⚙️ Tournament Settings</div>
+
+        <div class="field">
+          <label>Select Tournament</label>
+          <select id="tournament-select">
+            <option value="">Loading...</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Number of Rounds</label>
+          <select id="rounds-select">
+            <option value="1">1 – Final (2 players)</option>
+            <option value="2">2 – Semi + Final (4 players)</option>
+            <option value="3" selected>3 – QF + SF + Final (8 players)</option>
+            <option value="4">4 – R16 + QF + SF + Final (16 players)</option>
+            <option value="5">5 – R32 + ... (32 players)</option>
+          </select>
+        </div>
+
+        <button class="btn" id="btn-generate">Generate Bracket</button>
+
+        <hr style="border-color: rgba(255,255,255,0.1); margin: 15px 0;" />
+
+        <div class="section-title">📋 Registration Status</div>
+
+        <div class="toggle-switch">
+          <input type="checkbox" id="accept-entries" checked />
+          <label class="toggle-label" for="accept-entries">
+            Accept New Entries
+          </label>
+        </div>
+        <small style="color: var(--muted); display: block;">
+          When <strong>ON</strong>: Tournament shows as "Upcoming" (players can join)<br />
+          When <strong>OFF</strong>: Tournament shows as "Ongoing" (no new entries)
+        </small>
+
+        <button class="btn" id="btn-save-settings" style="margin-top: 15px;">
+          Save Settings
+        </button>
+
+        <hr style="border-color: rgba(255,255,255,0.1); margin: 15px 0;" />
+
+        <div class="section-title">🔧 Actions</div>
+
+        <button class="btn btn-secondary" id="btn-clear">Clear All</button>
+        <button class="btn btn-danger" style="margin-top: 8px;" id="btn-export">
+          Export Bracket (JSON)
+        </button>
+      </div>
+
+      <!-- Fixture Panel -->
+      <div class="fixture-panel">
+        <div class="fixture-header">
+          <h2 id="fixture-title">Tournament Bracket</h2>
+          <div class="search-bar">
+            <input
+              type="text"
+              id="search-player"
+              placeholder="Search player..."
+            />
+            <button class="btn btn-small" id="btn-clear-search">Clear</button>
+          </div>
+        </div>
+
+        <div class="fixture-scroll">
+          <div id="fixture-grid" class="fixture-grid">
+            <!-- Dynamically generated -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Match Editor Modal -->
+  <div id="match-editor-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Edit Match</h2>
+        <button class="modal-close" onclick="closeMatchEditor()">×</button>
+      </div>
+
+      <div class="info-box">
+        Match: <strong id="match-info"></strong>
+      </div>
+
+      <div class="form-group">
+        <label>Player A – Name</label>
+        <input type="text" id="player1-name" placeholder="Player name" />
+      </div>
+
+      <div class="form-group">
+        <label>Player A – Academy</label>
+        <input type="text" id="player1-academy" placeholder="Academy/Club" />
+      </div>
+
+      <div class="form-group">
+        <label>Player B – Name</label>
+        <input type="text" id="player2-name" placeholder="Player name" />
+      </div>
+
+      <div class="form-group">
+        <label>Player B – Academy</label>
+        <input type="text" id="player2-academy" placeholder="Academy/Club" />
+      </div>
+
+      <div class="form-group">
+        <label>Match Date & Time</label>
+        <input type="datetime-local" id="match-time" />
+      </div>
+
+      <div class="form-group">
+        <label>Match Status</label>
+        <select id="match-status">
+          <option value="pending">Pending</option>
+          <option value="live">Live</option>
+          <option value="completed">Completed</option>
+        </select>
+      </div>
+
+      <div class="form-group" style="display: none;" id="winner-group">
+        <label>Winner</label>
+        <select id="winner-select">
+          <option value="0">No winner set</option>
+          <option value="1">Player A wins</option>
+          <option value="2">Player B wins</option>
+        </select>
+      </div>
+
+      <div class="info-box" style="margin-top: 15px;">
+        After setting the winner, click "Advance Winner" to move them to the next round.
+      </div>
+
+      <div style="display: flex; gap: 10px; margin-top: 20px;">
+        <button class="btn" id="btn-advance-winner" style="flex: 1;">
+          Advance Winner to Next Round
+        </button>
+        <button class="btn btn-secondary" style="flex: 1;" onclick="closeMatchEditor()">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/db.js"></script>
+  <script>
+    const API_URL = "http://127.0.0.1:5000/api";
+    let tournaments = [];
+    let currentTournament = null;
+    let fixtures = [];
+    let roundNames = [];
+    let currentMatchEdit = null;
+
+    // Load tournaments on page load
+    document.addEventListener("DOMContentLoaded", () => {
+      loadTournaments();
+      document
+        .getElementById("tournament-select")
+        .addEventListener("change", onTournamentSelected);
+      document
+        .getElementById("rounds-select")
+        .addEventListener("change", generateBracket);
+      document
+        .getElementById("btn-generate")
+        .addEventListener("click", generateBracket);
+      document
+        .getElementById("btn-save-settings")
+        .addEventListener("click", saveSettings);
+      document
+        .getElementById("btn-clear")
+        .addEventListener("click", clearBracket);
+      document
+        .getElementById("btn-export")
+        .addEventListener("click", exportBracket);
+      document
+        .getElementById("search-player")
+        .addEventListener("input", applySearchHighlight);
+      document
+        .getElementById("btn-clear-search")
+        .addEventListener("click", () => {
+          document.getElementById("search-player").value = "";
+          applySearchHighlight();
+        });
+      document
+        .getElementById("match-status")
+        .addEventListener("change", (e) => {
+          document.getElementById("winner-group").style.display =
+            e.target.value === "completed" ? "block" : "none";
+        });
+    });
+
+    function loadTournaments() {
+      fetch(`${API_URL}/tournaments`)
+        .then((r) => r.json())
+        .then((data) => {
+          tournaments = data;
+          const select = document.getElementById("tournament-select");
+          select.innerHTML =
+            '<option value="">Select a tournament...</option>' +
+            tournaments
+              .map((t) => `<option value="${t.id}">${t.name}</option>`)
+              .join("");
+        });
+    }
+
+    function onTournamentSelected(e) {
+      const id = e.target.value;
+      if (!id) {
+        currentTournament = null;
+        return;
+      }
+      currentTournament = tournaments.find((t) => t.id === id);
+      if (currentTournament) {
+        document.getElementById("fixture-title").textContent =
+          currentTournament.name + " – Bracket";
+        document.getElementById("accept-entries").checked =
+          currentTournament.accept_entries !== false;
+        generateBracket();
+      }
+    }
+
+    function computePlayersCount(rounds) {
+      return Math.pow(2, rounds);
+    }
+
+    function computeRoundNames(rounds) {
+      const names = [];
+      for (let i = 0; i < rounds; i++) {
+        const rIndex = rounds - i;
+        if (rIndex === 1) names.unshift("Final");
+        else if (rIndex === 2) names.unshift("Semi-finals");
+        else if (rIndex === 3) names.unshift("Quarter-finals");
+        else if (rIndex === 4) names.unshift("Round of 16");
+        else if (rIndex === 5) names.unshift("Round of 32");
+        else names.unshift("Round " + rIndex);
+      }
+      return names;
+    }
+
+    function generateBracket() {
+      if (!currentTournament) {
+        alert("Please select a tournament first");
+        return;
+      }
+
+      const rounds = parseInt(document.getElementById("rounds-select").value);
+      roundNames = computeRoundNames(rounds);
+      fixtures = [];
+      let matchIdCounter = 1;
+
+      for (let r = 0; r < rounds; r++) {
+        const matchesInRound = Math.pow(2, rounds - r - 1);
+        const roundMatches = [];
+
+        for (let m = 0; m < matchesInRound; m++) {
+          roundMatches.push({
+            id: "M" + matchIdCounter++,
+            roundIndex: r,
+            matchIndex: m,
+            player1: { name: "", academy: "" },
+            player2: { name: "", academy: "" },
+            time: "",
+            winner: 0,
+            status: "pending",
+          });
+        }
+
+        fixtures.push(roundMatches);
+      }
+
+      renderFixtures();
+    }
+
+    function renderFixtures() {
+      const grid = document.getElementById("fixture-grid");
+      grid.innerHTML = "";
+
+      fixtures.forEach((roundMatches, roundIndex) => {
+        const column = document.createElement("div");
+        column.className = "round-column";
+
+        const title = document.createElement("div");
+        title.className = "round-title";
+        title.textContent = roundNames[roundIndex] || "Round " + (roundIndex + 1);
+        column.appendChild(title);
+
+        roundMatches.forEach((match) => {
+          const card = document.createElement("div");
+          card.className = "match-card";
+          card.dataset.roundIndex = match.roundIndex;
+          card.dataset.matchIndex = match.matchIndex;
+
+          const idSpan = document.createElement("span");
+          idSpan.className = "match-id";
+          idSpan.textContent = match.id;
+
+          const p1 = document.createElement("div");
+          p1.className = "player-slot";
+          p1.innerHTML = `
+            <input type="text" class="player1-name" placeholder="Player A" value="${match.player1.name}" />
+            <small style="color: var(--muted); font-size: 10px; display: block; margin-top: 2px;">${match.player1.academy}</small>
+          `;
+          p1.querySelector(".player1-name").addEventListener("input", (e) => {
+            match.player1.name = e.target.value;
+          });
+
+          const p2 = document.createElement("div");
+          p2.className = "player-slot";
+          p2.innerHTML = `
+            <input type="text" class="player2-name" placeholder="Player B" value="${match.player2.name}" />
+            <small style="color: var(--muted); font-size: 10px; display: block; margin-top: 2px;">${match.player2.academy}</small>
+          `;
+          p2.querySelector(".player2-name").addEventListener("input", (e) => {
+            match.player2.name = e.target.value;
+          });
+
+          const timeDiv = document.createElement("div");
+          timeDiv.className = "match-time";
+          timeDiv.textContent = match.time
+            ? new Date(match.time).toLocaleString()
+            : "No time set";
+
+          const statusSpan = document.createElement("span");
+          statusSpan.className = `status-badge status-${match.status}`;
+          statusSpan.textContent = match.status.toUpperCase();
+
+          const actions = document.createElement("div");
+          actions.className = "match-actions";
+          const editBtn = document.createElement("button");
+          editBtn.textContent = "✎ Edit";
+          editBtn.addEventListener("click", () => openMatchEditor(match));
+          actions.appendChild(editBtn);
+
+          card.appendChild(idSpan);
+          card.appendChild(p1);
+          card.appendChild(p2);
+          card.appendChild(timeDiv);
+          card.appendChild(statusSpan);
+          card.appendChild(actions);
+
+          column.appendChild(card);
+        });
+
+        grid.appendChild(column);
+      });
+
+      applySearchHighlight();
+    }
+
+    function openMatchEditor(match) {
+      currentMatchEdit = match;
+      document.getElementById("match-info").textContent =
+        match.id + " (" + roundNames[match.roundIndex] + ")";
+      document.getElementById("player1-name").value = match.player1.name;
+      document.getElementById("player1-academy").value = match.player1.academy;
+      document.getElementById("player2-name").value = match.player2.name;
+      document.getElementById("player2-academy").value = match.player2.academy;
+      document.getElementById("match-time").value = match.time;
+      document.getElementById("match-status").value = match.status;
+      document.getElementById("winner-select").value = match.winner;
+      document.getElementById("winner-group").style.display =
+        match.status === "completed" ? "block" : "none";
+
+      document.getElementById("btn-advance-winner").addEventListener("click", () => {
+        const winnerId = parseInt(
+          document.getElementById("winner-select").value
+        );
+        if (winnerId === 0) {
+          alert("Please select a winner first");
+          return;
+        }
+        advanceWinner(match, winnerId);
+      });
+
+      document.getElementById("match-editor-modal").classList.add("active");
+    }
+
+    function closeMatchEditor() {
+      document.getElementById("match-editor-modal").classList.remove("active");
+      currentMatchEdit = null;
+    }
+
+    function advanceWinner(match, winnerId) {
+      const winner =
+        winnerId === 1 ? match.player1 : match.player2;
+      const nextRound = match.roundIndex + 1;
+
+      if (nextRound >= fixtures.length) {
+        alert("Winner of the final!");
+        match.winner = winnerId;
+        match.status = "completed";
+        closeMatchEditor();
+        renderFixtures();
+        return;
+      }
+
+      const nextMatch =
+        fixtures[nextRound][Math.floor(match.matchIndex / 2)];
+      const slot = match.matchIndex % 2;
+
+      if (slot === 0) {
+        nextMatch.player1 = { ...winner };
+      } else {
+        nextMatch.player2 = { ...winner };
+      }
+
+      match.winner = winnerId;
+      match.status = "completed";
+      closeMatchEditor();
+      renderFixtures();
+    }
+
+    function saveSettings() {
+      if (!currentTournament) {
+        alert("Please select a tournament first");
+        return;
+      }
+
+      const acceptEntries = document.getElementById("accept-entries").checked;
+      const token = db.getAuthToken();
+
+      fetch(`${API_URL}/admin/tournaments/${currentTournament.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          accept_entries: acceptEntries,
+          bracket_data: JSON.stringify(fixtures),
+        }),
+      })
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.error) {
+            alert("Error: " + data.error);
+          } else {
+            alert("Tournament settings saved!");
+            currentTournament.accept_entries = acceptEntries;
+          }
+        })
+        .catch((err) => alert("Error: " + err.message));
+    }
+
+    function clearBracket() {
+      if (
+        !confirm(
+          "Clear all players, times, and results? This cannot be undone."
+        )
+      )
+        return;
+
+      fixtures.forEach((round) => {
+        round.forEach((match) => {
+          match.player1 = { name: "", academy: "" };
+          match.player2 = { name: "", academy: "" };
+          match.time = "";
+          match.winner = 0;
+          match.status = "pending";
+        });
+      });
+
+      renderFixtures();
+    }
+
+    function exportBracket() {
+      const json = JSON.stringify(
+        {
+          tournament: currentTournament?.name || "Unknown",
+          exportedAt: new Date().toISOString(),
+          bracket: fixtures,
+        },
+        null,
+        2
+      );
+
+      const blob = new Blob([json], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `bracket-${currentTournament?.id || "export"}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function applySearchHighlight() {
+      const q = document
+        .getElementById("search-player")
+        .value.trim()
+        .toLowerCase();
+      document
+        .querySelectorAll(".match-card")
+        .forEach((c) => c.classList.remove("highlight"));
+
+      if (!q) return;
+
+      fixtures.forEach((round) => {
+        round.forEach((m) => {
+          const names = [
+            m.player1.name.toLowerCase(),
+            m.player2.name.toLowerCase(),
+            m.player1.academy.toLowerCase(),
+            m.player2.academy.toLowerCase(),
+          ];
+          if (names.some((x) => x && x.includes(q))) {
+            const sel =
+              `.match-card[data-round-index="${m.roundIndex}"][data-match-index="${m.matchIndex}"]`;
+            const card = document.querySelector(sel);
+            if (card) card.classList.add("highlight");
+          }
+        });
+      });
+    }
+  </script>
+</body>
+</html>
