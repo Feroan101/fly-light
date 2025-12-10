@@ -90,6 +90,31 @@ class Tournament(db.Model):
             'created_by': self.created_by,
             'created_at': self.created_at.isoformat() if self.created_at else None
         }
+    
+class Event(db.Model):
+    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    tournament_id = db.Column(db.String(36), db.ForeignKey('tournament.id'), nullable=False)
+    name = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.Text)
+    category = db.Column(db.String(100))
+    entry_fee = db.Column(db.Float, default=0)
+    max_participants = db.Column(db.Integer, default=32)
+    current_participants = db.Column(db.Integer, default=0)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'tournament_id': self.tournament_id,
+            'name': self.name,
+            'description': self.description,
+            'category': self.category,
+            'entry_fee': self.entry_fee,
+            'max_participants': self.max_participants,
+            'current_participants': self.current_participants,
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }
+
 
 class TournamentRegistration(db.Model):
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
@@ -98,7 +123,8 @@ class TournamentRegistration(db.Model):
     email = db.Column(db.String(120), nullable=False)
     phone = db.Column(db.String(15), nullable=False)
     academy_name = db.Column(db.String(255))
-    status = db.Column(db.String(50), default='pending')  # pending, confirmed, cancelled
+    selected_event_id = db.Column(db.String(36), nullable=True) # CHANGED: single event
+    status = db.Column(db.String(50), default='pending')
     joined_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def to_dict(self):
@@ -109,9 +135,11 @@ class TournamentRegistration(db.Model):
             'email': self.email,
             'phone': self.phone,
             'academy_name': self.academy_name,
+            'selected_event_id': self.selected_event_id,  # CHANGED: single event
             'status': self.status,
             'joined_at': self.joined_at.isoformat() if self.joined_at else None
         }
+
 
 class Product(db.Model):
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
@@ -327,6 +355,52 @@ def create_tournament():
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
+    
+@app.route('/api/admin/tournaments/<tournament_id>/events', methods=['POST'])
+@jwt_required()
+def create_tournament_event(tournament_id):
+    """Create an event/category for a tournament"""
+    try:
+        user_id = get_jwt_identity()
+        user = User.query.get(user_id)
+        if not user or user.role != 'admin':
+            return jsonify({'error': 'Admin access required'}), 403
+
+        tournament = Tournament.query.get(tournament_id)
+        if not tournament:
+            return jsonify({'error': 'Tournament not found'}), 404
+
+        data = request.get_json() or {}
+
+        # Required
+        if not data.get('name'):
+            return jsonify({'error': 'Event name is required'}), 400
+
+        event = Event(
+            tournament_id=tournament_id,
+            name=data['name'],
+            description=data.get('description', ''),
+            category=data.get('category', None),
+            entry_fee=float(data.get('entryfee', data.get('entry_fee', 0))),
+            max_participants=int(data.get('maxparticipants', data.get('max_participants', 32))),
+            current_participants=0
+        )
+
+        db.session.add(event)
+        db.session.commit()
+
+        return jsonify({
+            'message': 'Event created successfully',
+            'event': event.to_dict()
+        }), 201
+
+    except ValueError as e:
+        db.session.rollback()
+        return jsonify({'error': f'Invalid data format: {str(e)}'}), 400
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
 
 @app.route('/api/admin/tournaments/<tournament_id>', methods=['PUT'])
 @jwt_required()
@@ -430,23 +504,6 @@ def get_admin_tournaments():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@app.route('/api/admin/tournaments/<tournament_id>/registrations', methods=['GET'])
-@jwt_required()
-def get_registrations(tournament_id):
-    try:
-        user_id = get_jwt_identity()
-        user = User.query.get(user_id)
-        
-        if not user or user.role != 'admin':
-            return jsonify({'error': 'Admin access required'}), 403
-        
-        registrations = TournamentRegistration.query.filter_by(tournament_id=tournament_id).all()
-        
-        return jsonify([r.to_dict() for r in registrations]), 200
-        
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
 # ==================== TOURNAMENT ROUTES (USER) ====================
 
 @app.route('/api/tournaments', methods=['GET'])
@@ -474,38 +531,96 @@ def join_tournament(tournament_id):
         tournament = Tournament.query.get(tournament_id)
         if not tournament:
             return jsonify({'error': 'Tournament not found'}), 404
-        
+
         if not tournament.accept_entries:
             return jsonify({'error': 'Tournament is closed for new entries', 'status': tournament.status}), 400
-        
-        data = request.get_json()
-        
+
+        data = request.get_json() or {}
+
         # Validate required fields
-        required = ['name', 'email', 'phone']
-        for field in required:
+        for field in ['name', 'email', 'phone']:
             if not data.get(field):
                 return jsonify({'error': f'{field} is required'}), 400
+
+        selected_event_id = data.get('selected_event_id')
         
+        if selected_event_id:
+            # Validate event exists and belongs to this tournament
+            event = Event.query.filter_by(id=selected_event_id, tournament_id=tournament_id).first()
+            if not event:
+                return jsonify({'error': 'Invalid category selected'}), 400
+
+            # Check capacity
+            if event.current_participants >= event.max_participants:
+                return jsonify({'error': f'Category "{event.name}" is full'}), 400
+
+            # Increment participant count
+            event.current_participants += 1
+
         registration = TournamentRegistration(
             tournament_id=tournament_id,
             participant_name=data['name'],
             email=data['email'],
             phone=data['phone'],
             academy_name=data.get('academy_name', ''),
+            selected_event_id=selected_event_id,
             status='pending'
         )
-        
+
         db.session.add(registration)
         db.session.commit()
-        
+
         return jsonify({
             'message': 'Registration successful',
             'registration': registration.to_dict()
         }), 201
-        
+
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
+
+@app.route('/api/admin/tournaments/<tournament_id>/events', methods=['GET'])
+@jwt_required()
+def get_tournament_events_admin(tournament_id):
+    try:
+        user_id = get_jwt_identity()
+        user = User.query.get(user_id)
+        
+        if not user or user.role != 'admin':
+            return jsonify({'error': 'Admin access required'}), 403
+        
+        events = Event.query.filter_by(tournament_id=tournament_id).all()
+        return jsonify([e.to_dict() for e in events]), 200
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/tournaments/<tournament_id>/events', methods=['GET'])
+def get_tournament_events(tournament_id):
+    """Get all events for a tournament (public endpoint)"""
+    try:
+        events = Event.query.filter_by(tournament_id=tournament_id).all()
+        return jsonify([e.to_dict() for e in events]), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/admin/tournaments/<tournament_id>/registrations', methods=['GET'])
+@jwt_required()
+def get_registrations(tournament_id):
+    try:
+        user_id = get_jwt_identity()
+        user = User.query.get(user_id)
+        
+        if not user or user.role != 'admin':
+            return jsonify({'error': 'Admin access required'}), 403
+        
+        registrations = TournamentRegistration.query.filter_by(tournament_id=tournament_id).all()
+        return jsonify([r.to_dict() for r in registrations]), 200
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 
 # ==================== PRODUCT ROUTES (ADMIN) ====================
 

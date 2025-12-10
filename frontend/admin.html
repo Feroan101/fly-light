@@ -388,7 +388,7 @@
       <form onsubmit="handleLogin(event)">
         <div class="form-group">
           <label>Admin Email</label>
-          <input type="email" id="email" value="admin@flylight.com" required>
+          <input type="email" id="email" value="admin@skylight.com" required>
         </div>
         <div class="form-group">
           <label>Password</label>
@@ -406,6 +406,7 @@
     <nav class="navbar">
       <h1>🏸 Admin Panel - Sky Light</h1>
       <a href="admin-fix.html">Fixture Manager (Admin)</a>
+      <a href="tournaments.html">tournaments</a>
       <button onclick="logout()">Logout</button>
     </nav>
 
@@ -509,6 +510,20 @@
             </div>
             <button type="submit" class="btn btn-primary">Create Tournament</button>
           </form>
+          <!-- Categories section - OUTSIDE the form -->
+              <div id="events-section" style="margin-top: 40px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                  <h3 style="margin: 0;">📌 Categories in this tournament</h3>
+                  <button type="button"
+                          onclick="showAddEventModal()"
+                          style="padding: 8px 16px; background: #10b981; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                    ➕ Add Category
+                  </button>
+                </div>
+                <div id="events-table" style="background: white; border-radius: 8px; padding: 20px; border: 1px solid #e5e7eb;">
+                  No categories yet. Click ➕ to add one.
+                </div>
+              </div>
         </div>
 
         <!-- Tournaments List -->
@@ -593,6 +608,7 @@
   </div>
 
   <script src="js/db.js"></script>
+  <script src="js/admin-events.js"></script>
   <script>
     const API_URL = 'http://127.0.0.1:5000/api';
 
@@ -700,29 +716,62 @@
       });
     }
 
-    function handleCreateTournament(e) {
+    async function handleCreateTournament(e) {
       e.preventDefault();
       const form = e.target;
       const formData = new FormData(form);
       const token = db.getAuthToken();
 
-      fetch(`${API_URL}/admin/tournaments`, {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` },
-        body: formData
-      })
-      .then(r => r.json())
-      .then(data => {
-        if (data.error) {
-          alert('Error: ' + data.error);
-        } else {
-          alert('Tournament created successfully!');
-          form.reset();
-          loadTournaments();
+      try {
+        // 1) Create the tournament
+        const res = await fetch(`${API_URL}/admin/tournaments`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}` },
+          body: formData
+        });
+
+        const data = await res.json();
+        if (!res.ok || data.error) {
+          alert('Error: ' + (data.error || 'Failed to create tournament'));
+          return;
         }
-      })
-      .catch(err => alert('Error: ' + err.message));
+
+        // Get tournament ID
+        const tournamentId = data.id || (data.tournament && data.tournament.id);
+        if (!tournamentId) {
+          alert('Tournament created but ID missing in response');
+          return;
+        }
+
+        // 2) Create categories for this tournament
+        const events = typeof getPendingEvents === 'function' ? getPendingEvents() : [];
+        for (const ev of events) {
+          try {
+            await api.createTournamentEvent(tournamentId, {
+              name: ev.name,
+              category: ev.category,
+              entry_fee: ev.entry_fee,
+              max_participants: ev.max_participants,
+              description: ev.description
+            });
+          } catch (err) {
+            console.error('Failed to create category:', err);
+          }
+        }
+
+        // 3) Reset and refresh
+        if (typeof resetPendingEvents === 'function') {
+          resetPendingEvents();
+        }
+
+        alert('Tournament and categories created successfully!');
+        form.reset();
+        loadTournaments();
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
     }
+
 
     function handleCreateProduct(e) {
       e.preventDefault();

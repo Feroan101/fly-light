@@ -597,10 +597,7 @@
             <div class="meta-label">Status</div>
             <div class="meta-value" id="entry-status">Accepting</div>
           </div>
-          <div class="meta-item">
-            <div class="meta-label">Players Joined</div>
-            <div class="meta-value" id="players-joined">0</div>
-          </div>
+
         </div>
 
         <div class="action-buttons">
@@ -645,54 +642,52 @@
   </div>
 
   <!-- Join Tournament Modal -->
-  <div id="join-modal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Join Tournament</h2>
-        <button class="modal-close" onclick="closeJoinModal()">×</button>
-      </div>
-
-      <div id="join-error-alert" class="error-alert" style="display: none;"></div>
-
-      <form onsubmit="submitJoinForm(event)">
-        <div class="form-group">
-          <label>Full Name *</label>
-          <input type="text" id="join-name" required />
-        </div>
-
-        <div class="form-group">
-          <label>Email *</label>
-          <input type="email" id="join-email" required />
-        </div>
-
-        <div class="form-group">
-          <label>Phone Number *</label>
-          <input type="tel" id="join-phone" required />
-        </div>
-
-        <div class="form-group">
-          <label>Academy / Club *</label>
-          <input type="text" id="join-academy" required />
-        </div>
-
-        <div class="form-group" id="event-select-group" style="display: none;">
-          <label>Select Event *</label>
-          <select id="join-event" required>
-            <option value="">Choose an event...</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Partner Name (for doubles)</label>
-          <input type="text" id="join-partner" />
-        </div>
-
-        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">
-          Submit Entry
-        </button>
-      </form>
+  <!-- Join Tournament Modal -->
+<!-- Join Tournament Modal (SIMPLE VERSION) -->
+<div id="join-modal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Join Tournament</h2>
+      <button class="modal-close" onclick="closeJoinModal()">&times;</button>
     </div>
+    <div id="join-error-alert" class="error-alert" style="display: none;"></div>
+    
+    <!-- NEW: PROMINENT Category Selector -->
+    <div class="form-group" style="background: rgba(58, 169, 255, 0.1); border-left: 3px solid var(--accent); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+      <label style="font-weight: 600; color: var(--accent);">🎯 Select Your Category</label>
+      <select id="join-category-select" style="margin-top: 8px;">
+        <option value="">-- Choose Category First --</option>
+      </select>
+      <div id="category-preview" style="margin-top: 10px; padding: 10px; background: rgba(16, 185, 129, 0.2); border-radius: 6px; font-size: 13px; display: none;"></div>
+    </div>
+    
+    <form onsubmit="submitJoinForm(event)">
+      <div class="form-group">
+        <label>Full Name *</label>
+        <input type="text" id="join-name" required>
+      </div>
+      <div class="form-group">
+        <label>Email *</label>
+        <input type="email" id="join-email" required>
+      </div>
+      <div class="form-group">
+        <label>Phone Number *</label>
+        <input type="tel" id="join-phone" required>
+      </div>
+      <div class="form-group">
+        <label>Academy/Club *</label>
+        <input type="text" id="join-academy" required>
+      </div>
+      <div class="form-group">
+        <label>Partner Name (for doubles)</label>
+        <input type="text" id="join-partner">
+      </div>
+      <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;" disabled id="submit-btn">Submit Entry</button>
+    </form>
   </div>
+</div>
+
+
 
   <!-- Match Editor Modal -->
   <div id="match-editor-modal" class="modal">
@@ -767,6 +762,7 @@
   <script>
     const API_URL = "http://127.0.0.1:5000/api";
     let currentTournament = null;
+    let currentEvents = [];  // ← ADD THIS LINE
     let currentBracket = null;
     let currentMatchEdit = null;
     let isAdmin = false;
@@ -860,45 +856,92 @@
       }
     }
 
-    // Load events
+    // Load events for this tournament - ERROR SAFE
     function loadEvents() {
       fetch(`${API_URL}/tournaments/${currentTournament.id}/events`)
         .then((r) => r.json())
-        .then((events) => {
-          if (events.length === 0) return;
+        .then((response) => {
+          // Check if response is an error
+          if (response.error) {
+            console.error("Events API error:", response.error);
+            document.getElementById("events-section").style.display = "none";
+            return;
+          }
 
+          // Ensure it's an array
+          const events = Array.isArray(response) ? response : [];
+          currentEvents = events;  // ← ADD THIS LINE (stores events globally)
+          
           const eventsSection = document.getElementById("events-section");
           const eventsGrid = document.getElementById("events-grid");
+          
+          if (events.length === 0) {
+            eventsSection.style.display = "none";
+            return;
+          }
+
+          // Show events section
           eventsSection.style.display = "block";
           eventsGrid.innerHTML = "";
 
           events.forEach((event) => {
+            const spotsLeft = event.max_participants - event.current_participants;
+            const isFull = event.current_participants >= event.max_participants;
+
             const eventCard = document.createElement("div");
             eventCard.className = "event-card";
             eventCard.innerHTML = `
-              <div class="event-name">${event.name}</div>
-              <div class="event-detail">📅 ${new Date(event.event_date).toLocaleDateString("en-IN")}</div>
-              <div class="event-detail">👥 Max ${event.max_participants} players</div>
-              <div class="event-price">₹${event.price}</div>
-              <button class="event-button" onclick="selectEventToJoin(${event.id}, '${event.name}', ${event.price})" ${!currentTournament.accept_entries ? "disabled" : ""}>
-                ${currentTournament.accept_entries ? "Book Event" : "Event Closed"}
+              <div class="event-name">${escapeHtml(event.name || 'Unnamed Event')}</div>
+              <div class="event-detail">
+                <span style="color: ${event.category ? 'var(--accent)' : 'var(--muted)'}">
+                  ${event.category || 'General'}
+                </span> • 
+                ${isFull ? '❌ FULL' : `✓ ${spotsLeft} spots left`}
+              </div>
+              <div class="event-detail">👥 ${event.current_participants || 0}/${event.max_participants || 32}</div>
+              <div class="event-price">₹${event.entry_fee || 0}</div>
+              ${event.description ? `
+                <div class="event-detail" style="font-size: 12px; margin-top: 8px;">
+                  ${escapeHtml(event.description.substring(0, 80))}${event.description.length > 80 ? '...' : ''}
+                </div>
+              ` : ''}
+              <button class="event-button" 
+                      onclick="selectEvent('${event.id}')"
+                      ${isFull || !currentTournament.accept_entries ? 'disabled' : ''}
+                      style="${isFull ? 'background: var(--muted); cursor: not-allowed;' : ''}">
+                ${isFull ? 'FULL' : currentTournament.accept_entries ? 'Join This Event' : 'Closed'}
               </button>
             `;
             eventsGrid.appendChild(eventCard);
           });
 
-          // Populate event select in join modal
-          const eventSelect = document.getElementById("join-event");
-          eventSelect.innerHTML = '<option value="">Choose an event...</option>';
-          events.forEach((event) => {
-            const option = document.createElement("option");
-            option.value = event.id;
-            option.textContent = `${event.name} - ₹${event.price}`;
-            eventSelect.appendChild(option);
-          });
+          // Populate join modal dropdown
+          populateJoinModalEvents(events);
         })
-        .catch((err) => console.error("Error loading events:", err));
+        .catch((err) => {
+          console.error("Error loading events:", err);
+          document.getElementById("events-section").style.display = "none";
+        });
     }
+
+
+    function populateJoinModalEvents(events) {
+      const eventSelect = document.getElementById("join-event");
+      if (!eventSelect) return;
+      
+      eventSelect.innerHTML = '<option value="">-- Select Category (Optional) --</option>';
+      
+      events.forEach((event) => {
+        const isFull = event.current_participants >= event.max_participants;
+        const option = document.createElement("option");
+        option.value = event.id;
+        option.disabled = isFull;
+        option.textContent = `${event.name} (${event.category || 'General'}) - ₹${event.entry_fee} ${isFull ? '[FULL]' : ''}`;
+        eventSelect.parentElement.parentElement.style.display = events.length > 0 ? 'block' : 'none';
+        eventSelect.appendChild(option);
+      });
+    }
+
 
     // Load bracket
     function loadBracket() {
@@ -917,6 +960,25 @@
         console.error("Error parsing bracket:", e);
       }
     }
+
+    function selectEvent(eventId) {
+      const select = document.getElementById('join-category-select'); // or 'modal-category-select' if that's what you used
+
+      if (!select) {
+        console.warn('join-category-select not found; opening modal without preselect');
+        openJoinModal();
+        return;
+      }
+
+      // Preselect the clicked event if it exists in the dropdown
+      select.value = eventId;
+      if (select.onchange) {
+        select.onchange();  // trigger preview update if you added one
+      }
+
+      openJoinModal();
+    }
+
 
     // Render bracket
     function renderBracket() {
@@ -1007,24 +1069,176 @@
       });
     }
 
-    // Load player count
-    function loadPlayerCount() {
-      fetch(`${API_URL}/tournaments/${currentTournament.id}/registrations`)
-        .then((r) => r.json())
-        .then((regs) => {
-          document.getElementById("players-joined").textContent = regs.length;
-        })
-        .catch(() => {});
-    }
 
     // Join modal functions
-    function openJoinModal() {
-      if (!currentTournament.accept_entries) {
-        alert("This tournament is no longer accepting new entries");
-        return;
+      function openJoinModal() {
+        if (!currentTournament) {
+          alert('Tournament not loaded yet');
+          return;
+        }
+        
+        populateModalCategories();  // Uses existing currentEvents
+        document.getElementById('join-modal').classList.add('active');
       }
-      document.getElementById("join-modal").classList.add("active");
+
+      // NEW: Populate categories using EXISTING events data
+      function populateModalCategories() {
+        const select = document.getElementById('join-category-select');
+        const preview = document.getElementById('category-preview');
+        const submitBtn = document.getElementById('submit-btn');
+        
+        if (currentEvents.length === 0) {
+          select.innerHTML = '<option value="">No categories available</option>';
+          return;
+        }
+        
+        select.innerHTML = '<option value="">-- Choose Category --</option>';
+        
+        currentEvents.forEach(event => {
+          // backend fields are snake_case
+          const current = event.current_participants || 0;
+          const max = event.max_participants || 32;
+          const fee = event.entry_fee || 0;
+
+          const isFull = current >= max;
+
+          const option = document.createElement('option');
+          option.value = event.id;
+          option.disabled = isFull || !currentTournament.accept_entries;
+
+          const categoryName = event.category || 'General';
+          option.textContent = `${event.name} (${categoryName}) - ₹${fee}`;
+          if (isFull) option.textContent += ' [FULL]';
+
+          select.appendChild(option);
+        });
+
+        
+        // Preview on change
+        select.onchange = function() {
+          if (this.value) {
+            const event = currentEvents.find(e => e.id == this.value);
+            const spotsLeft = event.maxparticipants - event.currentparticipants;
+            preview.innerHTML = `
+              ✅ <strong>${event.name}</strong> (${event.category || 'General'})<br>
+              💰 Entry: ₹${event.entryfee} | 📍 Spots: ${spotsLeft > 0 ? spotsLeft : 'FULL'}
+            `;
+            preview.style.display = 'block';
+            submitBtn.disabled = false;
+          } else {
+            preview.style.display = 'none';
+            submitBtn.disabled = true;
+          }
+        };
+      }
+
+    // NEW FUNCTION: Populate category dropdown inside modal
+    function populateCategorySelector() {
+      const select = document.getElementById('modal-category-select');
+      const previewCard = document.getElementById('category-preview-card');
+      const categoryGroup = document.getElementById('modal-category-group');
+      
+      // Show loading state
+      select.innerHTML = '<option value="">Loading categories...</option>';
+      
+      fetch(API_URL + 'tournaments/' + currentTournament.id + '/events')
+        .then(r => {
+          if (!r.ok) throw new Error('Events API failed');
+          return r.json();
+        })
+        .then(events => {
+          if (!Array.isArray(events)) {
+            events = [];
+          }
+          
+          if (events.length === 0) {
+            select.innerHTML = '<option value="">No categories available</option>';
+            categoryGroup.style.display = 'block';
+            return;
+          }
+          
+          // Clear and rebuild dropdown
+          select.innerHTML = '<option value="">-- Choose a Category --</option>';
+          
+          events.forEach(event => {
+            const isFull = event.currentparticipants >= event.maxparticipants;
+            const option = document.createElement('option');
+            option.value = event.id;
+            option.disabled = isFull;
+            
+            const categoryName = event.category || 'General';
+            option.textContent = `${event.name || 'Event'} (${categoryName}) - ₹${event.entryfee || 0}${isFull ? ' - FULL' : ''}`;
+            option.dataset.eventData = JSON.stringify(event);
+            
+            select.appendChild(option);
+            // Add this temporarily in populateCategorySelector()
+            console.log('Events loaded:', events);
+
+          });
+          
+          // Add change listener
+          // Preview on change
+          select.onchange = function() {
+            if (this.value) {
+              const event = currentEvents.find(e => e.id == this.value);
+              const current = event.current_participants || 0;
+              const max = event.max_participants || 32;
+              const fee = event.entry_fee || 0;
+              const spotsLeft = max - current;
+
+              preview.innerHTML = `
+                ✅ <strong>${event.name}</strong> (${event.category || 'General'})<br>
+                💰 Entry: ₹${fee} | 📍 Spots: ${spotsLeft > 0 ? spotsLeft : 'FULL'}
+              `;
+              preview.style.display = 'block';
+              submitBtn.disabled = false;
+            } else {
+              preview.style.display = 'none';
+              submitBtn.disabled = true;
+            }
+          };
+
+          
+          categoryGroup.style.display = 'block';
+        })
+        .catch(err => {
+          console.error('Error loading categories:', err);
+          select.innerHTML = '<option value="">Error loading categories</option>';
+          categoryGroup.style.display = 'block';
+        });
     }
+
+
+    // NEW FUNCTION: Display category details preview card
+    function showCategoryPreview(eventData) {
+      const previewCard = document.getElementById('category-preview-card');
+      const categoryName = eventData.category ? eventData.category : 'General';
+      const spotsLeft = eventData.maxparticipants - eventData.currentparticipants;
+      const isFull = spotsLeft <= 0;
+      
+      // Update preview card content
+      document.getElementById('preview-category-name').innerHTML = 
+        `<strong>Category:</strong> ${escapeHtml(eventData.name)}`;
+      
+      document.getElementById('preview-category-type').innerHTML = 
+        `<strong>Type:</strong> ${escapeHtml(categoryName)}`;
+      
+      document.getElementById('preview-category-fee').innerHTML = 
+        `<strong>Entry Fee:</strong> ₹${eventData.entryfee}`;
+      
+      const spotsText = isFull 
+        ? `<span style="color: var(--danger);">❌ FULL - No spots available</span>` 
+        : `<span style="color: var(--success);">✓ ${spotsLeft} spots available</span>`;
+      
+      document.getElementById('preview-category-spots').innerHTML = spotsText;
+      
+      // Show preview card
+      previewCard.style.display = 'block';
+      
+      // Store selected event ID for form submission
+      document.getElementById('modal-category-select').dataset.selectedEventId = eventData.id;
+    }
+
 
     function closeJoinModal() {
       document.getElementById("join-modal").classList.remove("active");
@@ -1039,46 +1253,56 @@
 
     function submitJoinForm(e) {
       e.preventDefault();
-
+      
+      const categoryId = document.getElementById('join-category-select').value;
+      if (!categoryId) {
+        document.getElementById('join-error-alert').style.display = 'block';
+        document.getElementById('join-error-alert').textContent = 'Please select a category first';
+        return;
+      }
+      
       if (!currentTournament.accept_entries) {
-        document.getElementById("join-error-alert").style.display = "block";
-        document.getElementById("join-error-alert").textContent =
-          "❌ This tournament is no longer accepting new entries";
+        document.getElementById('join-error-alert').style.display = 'block';
+        document.getElementById('join-error-alert').textContent = 'Tournament not accepting entries';
         return;
       }
 
-      const name = document.getElementById("join-name").value;
-      const email = document.getElementById("join-email").value;
-      const phone = document.getElementById("join-phone").value;
-      const academy = document.getElementById("join-academy").value;
-
-      fetch(`${API_URL}/tournaments/${currentTournament.id}/join`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      
+      const name = document.getElementById('join-name').value;
+      const email = document.getElementById('join-email').value;
+      const phone = document.getElementById('join-phone').value;
+      const academy = document.getElementById('join-academy').value;
+      
+      fetch(API_URL + 'tournaments/' + currentTournament.id + '/join', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name,
           email,
           phone,
-          academy_name: academy,
-          selected_venue: currentTournament.venue,
-        }),
-      })
-        .then((r) => r.json())
-        .then((data) => {
-          if (data.error) {
-            document.getElementById("join-error-alert").style.display = "block";
-            document.getElementById("join-error-alert").textContent = "❌ " + data.error;
-          } else {
-            alert("✅ Successfully joined tournament!");
-            closeJoinModal();
-            loadPlayerCount();
-          }
+          academy_name: academy,      // match backend field
+          selected_event_id: categoryId // match backend field
         })
-        .catch((err) => {
-          document.getElementById("join-error-alert").style.display = "block";
-          document.getElementById("join-error-alert").textContent = "❌ Error joining tournament";
-        });
+      })
+
+      .then(r => r.json())
+      .then(data => {
+        if (data.error) {
+          document.getElementById('join-error-alert').style.display = 'block';
+          document.getElementById('join-error-alert').textContent = data.error;
+        } else {
+          alert('✅ Successfully joined ' + categoryId + '!');
+          closeJoinModal();
+          loadPlayerCount();
+        }
+      })
+      .catch(err => {
+        document.getElementById('join-error-alert').style.display = 'block';
+        document.getElementById('join-error-alert').textContent = 'Error joining tournament';
+        console.error(err);
+      });
     }
+
 
     // Match editor functions
     function openMatchEditor(match, roundIndex) {
@@ -1203,6 +1427,13 @@
 
     // Initialize on page load
     document.addEventListener("DOMContentLoaded", loadTournamentDetails);
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
   </script>
 </body>
 </html>

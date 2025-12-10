@@ -131,18 +131,16 @@ async function registerTournament(id) {
         const tournament = await api.getTournament(id);
         
         if (!tournament.accept_entries) {
-            showAlert('Tournament is closed for registrations', 'warning');
+            alert('Tournament is closed for registrations');
             return;
         }
         
-        // Show registration form in modal or redirect
-        sessionStorage.setItem('registrationTournament', JSON.stringify(tournament));
-        showRegistrationForm(tournament);
-        
+        await showTournamentRegistrationWithEvents(tournament);
     } catch (error) {
-        showAlert(`Error: ${error.message}`, 'error');
+        alert(`Error: ${error.message}`);
     }
 }
+
 
 function showRegistrationForm(tournament) {
     const modal = document.createElement('div');
@@ -242,4 +240,115 @@ async function submitRegistration(tournamentId) {
     } finally {
         showLoading(false);
     }
+}
+
+
+
+async function showTournamentRegistrationWithEvents(tournament) {
+    try {
+        const events = await api.getTournamentEvents(tournament.id);
+        
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            overflow-y: auto;
+        `;
+
+        let optionsHtml = '<option value="">-- Select Category (Optional) --</option>';
+        events.forEach(ev => {
+            const isFull = ev.current_participants >= ev.max_participants;
+            const spotsLeft = ev.max_participants - ev.current_participants;
+            const label = `${ev.name} (${ev.category || 'Category'}) - ₹${ev.entry_fee}` +
+                          (isFull ? ' - FULL' : ` - ${spotsLeft} spots`);
+            optionsHtml += `<option value="${ev.id}" ${isFull ? 'disabled' : ''}>${label}</option>`;
+        });
+
+        modal.innerHTML = `
+          <div style="background:white;border-radius:8px;padding:24px;max-width:480px;width:90%;">
+            <h2 style="margin-top:0;color:#1f2937;">Register for ${escapeHtml(tournament.name)}</h2>
+            <form style="display:flex;flex-direction:column;gap:12px;margin-top:16px;">
+              <div>
+                <label style="display:block;margin-bottom:6px;font-weight:bold;">Full Name *</label>
+                <input id="reg-name" type="text" placeholder="Your full name" required
+                       style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:4px;font-size:14px;">
+              </div>
+              <div>
+                <label style="display:block;margin-bottom:6px;font-weight:bold;">Email *</label>
+                <input id="reg-email" type="email" placeholder="your@email.com" required
+                       style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:4px;font-size:14px;">
+              </div>
+              <div>
+                <label style="display:block;margin-bottom:6px;font-weight:bold;">Phone *</label>
+                <input id="reg-phone" type="tel" placeholder="+91 XXXXX XXXXX" required
+                       style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:4px;font-size:14px;">
+              </div>
+              <div>
+                <label style="display:block;margin-bottom:6px;font-weight:bold;">Academy (Optional)</label>
+                <input id="reg-academy" type="text" placeholder="Your academy name"
+                       style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:4px;font-size:14px;">
+              </div>
+              <div>
+                <label style="display:block;margin-bottom:6px;font-weight:bold;">Category</label>
+                <select id="reg-category" style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:4px;font-size:14px;">
+                  ${optionsHtml}
+                </select>
+              </div>
+            </form>
+            <div style="display:flex;gap:8px;margin-top:16px;">
+              <button type="button" onclick="this.closest('[style*=position]').remove()"
+                      style="flex:1;padding:10px;background:#e5e7eb;color:#374151;border:none;border-radius:4px;cursor:pointer;font-weight:bold;">
+                Cancel
+              </button>
+              <button type="button" onclick="submitTournamentRegistrationWithCategory('${tournament.id}');this.closest('[style*=position]').remove();"
+                      style="flex:1;padding:10px;background:#10b981;color:white;border:none;border-radius:4px;cursor:pointer;font-weight:bold;">
+                Register
+              </button>
+            </div>
+          </div>`;
+        document.body.appendChild(modal);
+    } catch (err) {
+        alert(`Failed to load categories: ${err.message}`);
+    }
+}
+
+async function submitTournamentRegistrationWithCategory(tournamentId) {
+    const name = document.getElementById('reg-name').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const phone = document.getElementById('reg-phone').value.trim();
+    const academy = document.getElementById('reg-academy').value.trim();
+    const selectedEventId = document.getElementById('reg-category').value;
+
+    if (!name || !email || !phone) {
+        alert('Please fill in name, email, and phone');
+        return;
+    }
+
+    try {
+        await api.joinTournament(tournamentId, {
+            name,
+            email,
+            phone,
+            academy_name: academy,
+            selected_event_id: selectedEventId || null
+        });
+        alert('Registered successfully!');
+        await loadTournaments();
+    } catch (err) {
+        alert('Registration failed: ' + err.message);
+    }
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }

@@ -180,6 +180,31 @@ class API {
         return this.request(`/admin/tournaments/${tournamentId}/registrations`);
     }
 
+    async getTournamentEvents(tournamentId) {
+        return this.request(`/tournaments/${tournamentId}/events`, { auth: false });
+    }
+
+    async createTournamentEvent(tournamentId, data) {
+        return this.request(`/admin/tournaments/${tournamentId}/events`, {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
+    }
+
+    async updateEvent(eventId, data) {
+        return this.request(`/admin/events/${eventId}`, {
+            method: 'PUT',
+            body: JSON.stringify(data)
+        });
+    }
+
+    async deleteEvent(eventId) {
+        return this.request(`/admin/events/${eventId}`, {
+            method: 'DELETE'
+        });
+    }
+
+
     // Products (User)
     async getProducts() {
         return this.request('/products', { auth: false });
