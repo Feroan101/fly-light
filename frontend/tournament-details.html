@@ -383,6 +383,36 @@
       text-align: center;
     }
 
+    /* ✅ MOBILE FRIENDLY FIXTURES */
+    @media (max-width: 768px) {
+      .bracket-container {
+        padding: 10px !important;
+      }
+      
+      .bracket {
+        flex-direction: column !important;
+        gap: 20px !important;
+      }
+      
+      .bracket-round {
+        min-width: 100% !important;
+        max-width: 100% !important;
+      }
+      
+      .match {
+        min-height: 80px !important;
+        padding: 10px !important;
+      }
+      
+      .match-player {
+        font-size: 14px !important;
+      }
+      
+      .match-id {
+        font-size: 10px !important;
+      }
+    }
+
     .match-edit-btn {
       width: 100%;
       padding: 6px;
@@ -627,9 +657,6 @@
     <div class="section" id="bracket-section" style="display: none;">
       <div class="section-header">
         <h2>🏸 Tournament Bracket</h2>
-        <button class="btn btn-secondary" style="width: auto;" id="admin-bracket-btn" onclick="openBracketAdmin()" style="display: none;">
-          Admin: Edit Bracket
-        </button>
       </div>
       <div class="section-body">
         <div class="bracket-container">
@@ -787,7 +814,6 @@
           checkIfAdmin();
           loadEvents();
           loadBracket();
-          loadPlayerCount();
         })
         .catch((err) => console.error("Error loading tournament:", err));
     }
@@ -797,9 +823,9 @@
       const t = currentTournament;
 
       // Status badge
-      const statusBadge = document.getElementById("status-badge");
-      statusBadge.textContent = t.status ? t.status.toUpperCase() : t.acceptentries ? "UPCOMING" : "ONGOING";
-      statusBadge.className = "status-badge";
+      const statusBadge = document.getElementById('status-badge');
+      statusBadge.textContent = (t.status || 'scheduled').toUpperCase();
+      statusBadge.className = 'status-badge status-' + (t.status || 'scheduled').toLowerCase();
       if (t.acceptentries) statusBadge.classList.add("status-upcoming");
       else statusBadge.classList.add("status-ongoing");
 
@@ -849,7 +875,7 @@
       if (token && adminEmail === "admin@flylight.com") {
         isAdmin = true;
         document.getElementById("admin-edit-btn").style.display = "block";
-        document.getElementById("admin-bracket-btn").style.display = "block";
+        document.getElementById("admin-bracket-btn").style.display = "none";
       }
     }
 
@@ -872,8 +898,9 @@
           const eventsSection = document.getElementById("events-section");
           const eventsGrid = document.getElementById("events-grid");
           
-          if (events.length === 0) {
-            eventsSection.style.display = "none";
+          if (!currentTournament.accept_entries) {
+            // ✅ CLOSED: Hide events, fixtures will show instead
+            document.getElementById('events-section').style.display = 'none';
             return;
           }
 
@@ -942,28 +969,25 @@
 
     // Load bracket
     function loadBracket() {
-      if (!currentTournament.bracket_data) return;
+    if (!currentTournament.bracket_data) return;
 
-      // Only show bracket when registrations CLOSED
-      if (currentTournament.accept_entries === true) {
-        document.getElementById('bracket-section').style.display = 'none';
+    // ✅ Always show bracket if it exists (no more accept_entries check)
+    try {
+      const bracketData = typeof currentTournament.bracket_data === 'string'
+        ? JSON.parse(currentTournament.bracket_data)
+        : currentTournament.bracket_data;
+
+      if (!bracketData || !Array.isArray(bracketData) || bracketData.length === 0) {
         return;
       }
 
-      try {
-        const bracketData = Array.isArray(currentTournament.bracket_data)
-          ? currentTournament.bracket_data
-          : JSON.parse(currentTournament.bracket_data);
-
-        if (!bracketData || !Array.isArray(bracketData) || bracketData.length === 0) return;
-
-        document.getElementById('bracket-section').style.display = 'block';
-        currentBracket = bracketData;
-        renderBracket();
-      } catch (e) {
-        console.error('Error parsing bracket:', e);
-      }
+      document.getElementById('bracket-section').style.display = 'block';
+      currentBracket = bracketData;
+      renderBracket();
+    } catch (e) {
+      console.error('Error parsing bracket:', e);
     }
+  }
 
 
 
@@ -988,10 +1012,10 @@
 
     // Render bracket
    function renderBracket() {
-  // Parse bracket data from tournament
-  const bracketData = typeof currentTournament.bracketdata === 'string' 
-    ? JSON.parse(currentTournament.bracketdata)
-    : currentTournament.bracketdata;
+  // ✅ FIX: Use correct field name from backend
+  const bracketData = typeof currentTournament.bracket_data === 'string' 
+    ? JSON.parse(currentTournament.bracket_data)
+    : currentTournament.bracket_data;
 
   if (!bracketData || !Array.isArray(bracketData) || bracketData.length === 0) {
     return;
@@ -1003,7 +1027,7 @@
 
   const roundNames = [
     "Final",
-    "Semi-finals",
+    "Semi-finals", 
     "Quarter-finals",
     "Round of 16",
     "Round of 32",
@@ -1022,35 +1046,26 @@
 
     roundMatches.forEach((match) => {
       const matchEl = document.createElement("div");
-      matchEl.className = "match";
-      // ✅ NO EDIT in tournament-details (read-only)
-      // if (isAdmin) {
-      //   matchEl.onclick = () => openMatchEditor(match, roundIndex);
-      // }
-
+      matchEl.className = "match";  // ✅ READ-ONLY - NO onclick
+      
+      // Match ID
       const matchId = document.createElement("div");
       matchId.className = "match-id";
       matchId.textContent = match.id;
       matchEl.appendChild(matchId);
 
-      // Player 1
+      // Player 1 ✅ READ-ONLY
       const p1El = document.createElement("div");
       p1El.className = "match-player";
       if (match.winner === 1) p1El.classList.add("winner");
-      p1El.innerHTML = `
-        <span>${match.player1.name || "—"}</span>
-        ${match.winner === 1 ? "✓" : ""}
-      `;
+      p1El.innerHTML = `<span>${match.player1?.name || "—"}</span>`;
       matchEl.appendChild(p1El);
 
-      // Player 2
+      // Player 2 ✅ READ-ONLY  
       const p2El = document.createElement("div");
       p2El.className = "match-player";
       if (match.winner === 2) p2El.classList.add("winner");
-      p2El.innerHTML = `
-        <span>${match.player2.name || "—"}</span>
-        ${match.winner === 2 ? "✓" : ""}
-      `;
+      p2El.innerHTML = `<span>${match.player2?.name || "—"}</span>`;
       matchEl.appendChild(p2El);
 
       // Time
@@ -1059,32 +1074,21 @@
         timeEl.className = "match-time";
         timeEl.textContent = new Date(match.time).toLocaleString("en-IN", {
           month: "short",
-          day: "numeric",
+          day: "numeric", 
           hour: "2-digit",
           minute: "2-digit",
         });
         matchEl.appendChild(timeEl);
       }
 
-      // ✅ NO EDIT BUTTON in tournament-details (read-only)
-      // if (isAdmin) {
-      //   const editBtn = document.createElement("button");
-      //   editBtn.className = "match-edit-btn";
-      //   editBtn.type = "button";
-      //   editBtn.textContent = "✎ Edit Match";
-      //   editBtn.onclick = (e) => {
-      //     e.stopPropagation();
-      //     openMatchEditor(match, roundIndex);
-      //   };
-      //   matchEl.appendChild(editBtn);
-      // }
-
+      // ✅ NO EDIT BUTTON - pure read-only for users
       roundColumn.appendChild(matchEl);
     });
 
     bracketDisplay.appendChild(roundColumn);
   });
 }
+
 
     // Join modal functions
       function openJoinModal() {

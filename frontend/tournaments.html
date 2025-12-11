@@ -327,6 +327,11 @@
       color: #666;
       margin-bottom: 10px;
     }
+
+    .bracket-preview {
+      border-left: 3px solid #10B981;
+    }
+
   </style>
 </head>
 <body>
@@ -459,49 +464,71 @@
     // Override displayTournaments to use modal
     const originalDisplayTournaments = displayTournaments;
     function displayTournaments(tournaments) {
-      const container = document.getElementById('tournaments-container');
-      
-      if (tournaments.length === 0) {
-        container.innerHTML = '<div class="empty-state" style="grid-column: 1/-1;"><h2>No tournaments available</h2><p>Check back soon for upcoming tournaments!</p></div>';
-        return;
+        const container = document.getElementById('tournaments-container');
+        
+        if (tournaments.length === 0) {
+          container.innerHTML = '<div class="empty-state" style="grid-column: 1/-1;"><h2>No tournaments available</h2><p>Check back soon for upcoming tournaments!</p></div>';
+          return;
+        }
+
+        let html = '';
+        tournaments.forEach(tournament => {
+          const startDate = new Date(tournament.start_date).toLocaleDateString('en-IN');
+          const endDate = new Date(tournament.end_date).toLocaleDateString('en-IN');
+          const statusClass = `status-${tournament.status}`;
+          
+          // ✅ Add bracket preview if exists
+          let bracketPreview = '';
+          if (tournament.bracket_data) {
+            try {
+              const bracketData = typeof tournament.bracket_data === 'string'
+                ? JSON.parse(tournament.bracket_data)
+                : tournament.bracket_data;
+              
+              if (bracketData && Array.isArray(bracketData) && bracketData.length > 0) {
+                const totalPlayers = bracketData[0]?.length * 2 || 0;
+                bracketPreview = `
+                  <div class="bracket-preview" style="margin-top: 8px; padding: 8px; background: rgba(58, 169, 255, 0.1); border-radius: 6px; font-size: 13px;">
+                    📊 Bracket Ready: ${totalPlayers} players, ${bracketData.length} rounds
+                  </div>
+                `;
+              }
+            } catch (e) {
+              console.log('Bracket preview parse error:', tournament.name);
+            }
+          }
+
+          html += `
+            <div class="tournament-card">
+              <div class="tournament-poster">
+                ${tournament.poster_url ? `<img src="${tournament.poster_url}" alt="${tournament.name}">` : 'No Poster'}
+                <div class="tournament-status ${statusClass}">${tournament.status.toUpperCase()}</div>
+              </div>
+              <div class="tournament-body">
+                <h3>${tournament.name}</h3>
+                <div class="tournament-info">
+                  <p><strong>📍 Venue:</strong> ${tournament.venue}</p>
+                  <p><strong>📅 Dates:</strong> ${startDate} to ${endDate}</p>
+                  <p><strong>💰 Price:</strong> ₹${tournament.price}</p>
+                  <p><strong>👥 Capacity:</strong> ${tournament.capacity} players</p>
+                  ${bracketPreview}
+                </div>
+                <div class="tournament-actions"> 
+                  <button class="btn btn-secondary" onclick="window.location.href = 'tournament-details.html?id=${tournament.id}'">
+                    View Details
+                  </button>
+                  ${tournament.status !== 'completed' && tournament.accept_entries ? 
+                    `<button class="btn btn-primary" onclick="joinTournament('${tournament.id}')">Join</button>` : ''
+                  }
+                </div>
+              </div>
+            </div>
+          `;
+        });
+
+        container.innerHTML = html;
       }
 
-      let html = '';
-      tournaments.forEach(tournament => {
-        const startDate = new Date(tournament.start_date).toLocaleDateString('en-IN');
-        const endDate = new Date(tournament.end_date).toLocaleDateString('en-IN');
-        const statusClass = `status-${tournament.status}`;
-        
-        html += `
-          <div class="tournament-card">
-            <div class="tournament-poster">
-              ${tournament.poster_url ? `<img src="${tournament.poster_url}" alt="${tournament.name}">` : 'No Poster'}
-              <div class="tournament-status ${statusClass}">${tournament.status.toUpperCase()}</div>
-            </div>
-            <div class="tournament-body">
-              <h3>${tournament.name}</h3>
-              <div class="tournament-info">
-                <p><strong>📍 Venue:</strong> ${tournament.venue}</p>
-                <p><strong>📅 Dates:</strong> ${startDate} to ${endDate}</p>
-                <p><strong>💰 Price:</strong> ₹${tournament.price}</p>
-                <p><strong>👥 Capacity:</strong> ${tournament.capacity} players</p>
-              </div>
-              <div class="tournament-actions"> 
-                <button class="btn btn-secondary" onclick="window.location.href = 'tournament-details.html?id=${tournament.id}'">
-                  View Details
-                </button>
-                ${tournament.status !== 'completed' && tournament.accept_entries ? 
-                  `<button class="btn btn-primary" onclick="joinTournament('${tournament.id}')">Join</button>` : ''
-                }
-
-              </div>
-            </div>
-          </div>
-        `;
-      });
-
-      container.innerHTML = html;
-    }
 
     function viewDetails(tournamentId, gmapsLink) {
       if (gmapsLink) {
