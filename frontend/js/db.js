@@ -75,7 +75,7 @@ const db = new LocalDB();
 // ==================== API UTILITY ====================
 
 class API {
-    constructor(baseURL = 'https://fly-light.onrender.com/api') {
+    constructor(baseURL = 'http://127.0.0.1:5000/api') {
         this.baseURL = baseURL;
     }
 
@@ -278,7 +278,7 @@ class API {
     }
 }
 
-const api = new API('https://fly-light.onrender.com/api');
+const api = new API('http://127.0.0.1:5000/api');
 
 // ==================== UTILITY FUNCTIONS ====================
 
@@ -407,4 +407,16 @@ function logout() {
     db.logout();
     showAlert('Logged out successfully', 'success');
     setTimeout(() => window.location.href = 'index.html', 1000);
+}
+
+// Check live tournament status from API
+async function checkTournamentStatus(tournamentId) {
+  try {
+    const response = await fetch(`${API_URL}tournaments/${tournamentId}`);
+    const tournament = await response.json();
+    return tournament;
+  } catch (err) {
+    console.error('Error checking tournament status:', err);
+    return null;
+  }
 }

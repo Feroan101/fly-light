@@ -758,11 +758,10 @@
 
   <script src="js/db.js"></script>
   <script>
-    const API_URL = "https://fly-light.onrender.com/api/";
+    const API_URL = "http://127.0.0.1:5000/api/";
     let currentTournament = null;
     let currentEvents = [];  // ← ADD THIS LINE
     let currentBracket = null;
-    let currentMatchEdit = null;
     let isAdmin = false;
 
     // Get tournament ID from URL
@@ -799,9 +798,9 @@
 
       // Status badge
       const statusBadge = document.getElementById("status-badge");
-      statusBadge.textContent = t.status ? t.status.toUpperCase() : t.accept_entries ? "UPCOMING" : "ONGOING";
+      statusBadge.textContent = t.status ? t.status.toUpperCase() : t.acceptentries ? "UPCOMING" : "ONGOING";
       statusBadge.className = "status-badge";
-      if (t.accept_entries) statusBadge.classList.add("status-upcoming");
+      if (t.acceptentries) statusBadge.classList.add("status-upcoming");
       else statusBadge.classList.add("status-ongoing");
 
       // Basic info
@@ -811,37 +810,37 @@
       document.getElementById("tournament-capacity").textContent = t.capacity;
 
       // Dates and times
-      const startDate = new Date(t.start_date).toLocaleDateString("en-IN");
-      const endDate = new Date(t.end_date).toLocaleDateString("en-IN");
+      const startDate = new Date(t.startdate).toLocaleDateString("en-IN");
+      const endDate = new Date(t.enddate).toLocaleDateString("en-IN");
       document.getElementById("tournament-dates").textContent = `${startDate} to ${endDate}`;
 
-      const startTime = new Date(`${t.start_date} ${t.start_time}`).toLocaleTimeString("en-IN", {
+      const startTime = new Date(`${t.startdate} ${t.starttime}`).toLocaleTimeString("en-IN", {
         hour: "2-digit",
         minute: "2-digit",
       });
-      const endTime = new Date(`${t.end_date} ${t.end_time}`).toLocaleTimeString("en-IN", {
+      const endTime = new Date(`${t.enddate} ${t.endtime}`).toLocaleTimeString("en-IN", {
         hour: "2-digit",
         minute: "2-digit",
       });
       document.getElementById("tournament-times").textContent = `${startTime} - ${endTime}`;
 
       // Entry status
-      document.getElementById("entry-status").textContent = t.accept_entries ? "🟢 Accepting" : "🔴 Closed";
+      document.getElementById("entry-status").textContent = t.acceptentries ? "🟢 Accepting" : "🔴 Closed";
 
       // Poster
-      if (t.poster_filename) {
-        const posterUrl = `${API_URL.replace("/api", "")}/uploads/tournament-posters/${t.poster_filename}`;
-        document.getElementById("poster-container").innerHTML = `<img src="${posterUrl}" alt="Poster" />`;
+      if (t.posterurl) {
+        document.getElementById("poster-container").innerHTML = `<img src="${t.posterurl}" alt="Poster" />`;
       }
 
       // Join button visibility
       const joinBtn = document.getElementById("join-btn");
-      if (t.accept_entries && t.status !== "completed") {
+      if (t.acceptentries && t.status !== "completed") {
         joinBtn.style.display = "block";
       } else {
         joinBtn.style.display = "none";
       }
     }
+
 
     // Check if user is admin
     function checkIfAdmin() {
@@ -945,25 +944,27 @@
     function loadBracket() {
       if (!currentTournament.bracket_data) return;
 
-      // ONLY show bracket when registrations are closed
-      if (currentTournament.accept_entries) {
-        console.log('Bracket hidden - registrations still open');
+      // Only show bracket when registrations CLOSED
+      if (currentTournament.accept_entries === true) {
+        document.getElementById('bracket-section').style.display = 'none';
         return;
       }
 
       try {
-        currentBracket = typeof currentTournament.bracket_data === "string"
-          ? JSON.parse(currentTournament.bracket_data)
-          : currentTournament.bracket_data;
+        const bracketData = Array.isArray(currentTournament.bracket_data)
+          ? currentTournament.bracket_data
+          : JSON.parse(currentTournament.bracket_data);
 
-        if (!currentBracket || !Array.isArray(currentBracket) || currentBracket.length === 0) return;
+        if (!bracketData || !Array.isArray(bracketData) || bracketData.length === 0) return;
 
-        document.getElementById("bracket-section").style.display = "block";
+        document.getElementById('bracket-section').style.display = 'block';
+        currentBracket = bracketData;
         renderBracket();
       } catch (e) {
-        console.error("Error parsing bracket:", e);
+        console.error('Error parsing bracket:', e);
       }
     }
+
 
 
     function selectEvent(eventId) {
@@ -986,94 +987,104 @@
 
 
     // Render bracket
-    function renderBracket() {
-      const bracketDisplay = document.getElementById("bracket-display");
-      bracketDisplay.innerHTML = "";
+   function renderBracket() {
+  // Parse bracket data from tournament
+  const bracketData = typeof currentTournament.bracketdata === 'string' 
+    ? JSON.parse(currentTournament.bracketdata)
+    : currentTournament.bracketdata;
 
-      const roundNames = [
-        "Final",
-        "Semi-finals",
-        "Quarter-finals",
-        "Round of 16",
-        "Round of 32",
-        "Round of 64",
-      ];
+  if (!bracketData || !Array.isArray(bracketData) || bracketData.length === 0) {
+    return;
+  }
 
-      currentBracket.forEach((roundMatches, roundIndex) => {
-        const roundColumn = document.createElement("div");
-        roundColumn.className = "bracket-round";
+  currentBracket = bracketData; // Store for reference
+  const bracketDisplay = document.getElementById("bracket-display");
+  bracketDisplay.innerHTML = "";
 
-        const roundTitle = document.createElement("div");
-        roundTitle.className = "bracket-round-title";
-        const reversedIndex = currentBracket.length - 1 - roundIndex;
-        roundTitle.textContent = roundNames[reversedIndex] || `Round ${reversedIndex + 1}`;
-        roundColumn.appendChild(roundTitle);
+  const roundNames = [
+    "Final",
+    "Semi-finals",
+    "Quarter-finals",
+    "Round of 16",
+    "Round of 32",
+    "Round of 64",
+  ];
 
-        roundMatches.forEach((match) => {
-          const matchEl = document.createElement("div");
-          matchEl.className = "match";
-          if (isAdmin) {
-            matchEl.onclick = () => openMatchEditor(match, roundIndex);
-          }
+  currentBracket.forEach((roundMatches, roundIndex) => {
+    const roundColumn = document.createElement("div");
+    roundColumn.className = "bracket-round";
 
-          const matchId = document.createElement("div");
-          matchId.className = "match-id";
-          matchId.textContent = match.id;
-          matchEl.appendChild(matchId);
+    const roundTitle = document.createElement("div");
+    roundTitle.className = "bracket-round-title";
+    const reversedIndex = currentBracket.length - 1 - roundIndex;
+    roundTitle.textContent = roundNames[reversedIndex] || `Round ${reversedIndex + 1}`;
+    roundColumn.appendChild(roundTitle);
 
-          // Player 1
-          const p1El = document.createElement("div");
-          p1El.className = "match-player";
-          if (match.winner === 1) p1El.classList.add("winner");
-          p1El.innerHTML = `
-            <span>${match.player1.name || "—"}</span>
-            ${match.winner === 1 ? "✓" : ""}
-          `;
-          matchEl.appendChild(p1El);
+    roundMatches.forEach((match) => {
+      const matchEl = document.createElement("div");
+      matchEl.className = "match";
+      // ✅ NO EDIT in tournament-details (read-only)
+      // if (isAdmin) {
+      //   matchEl.onclick = () => openMatchEditor(match, roundIndex);
+      // }
 
-          // Player 2
-          const p2El = document.createElement("div");
-          p2El.className = "match-player";
-          if (match.winner === 2) p2El.classList.add("winner");
-          p2El.innerHTML = `
-            <span>${match.player2.name || "—"}</span>
-            ${match.winner === 2 ? "✓" : ""}
-          `;
-          matchEl.appendChild(p2El);
+      const matchId = document.createElement("div");
+      matchId.className = "match-id";
+      matchId.textContent = match.id;
+      matchEl.appendChild(matchId);
 
-          // Time
-          if (match.time) {
-            const timeEl = document.createElement("div");
-            timeEl.className = "match-time";
-            timeEl.textContent = new Date(match.time).toLocaleString("en-IN", {
-              month: "short",
-              day: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
-            });
-            matchEl.appendChild(timeEl);
-          }
+      // Player 1
+      const p1El = document.createElement("div");
+      p1El.className = "match-player";
+      if (match.winner === 1) p1El.classList.add("winner");
+      p1El.innerHTML = `
+        <span>${match.player1.name || "—"}</span>
+        ${match.winner === 1 ? "✓" : ""}
+      `;
+      matchEl.appendChild(p1El);
 
-          // Edit button for admin
-          if (isAdmin) {
-            const editBtn = document.createElement("button");
-            editBtn.className = "match-edit-btn";
-            editBtn.type = "button";
-            editBtn.textContent = "✎ Edit Match";
-            editBtn.onclick = (e) => {
-              e.stopPropagation();
-              openMatchEditor(match, roundIndex);
-            };
-            matchEl.appendChild(editBtn);
-          }
+      // Player 2
+      const p2El = document.createElement("div");
+      p2El.className = "match-player";
+      if (match.winner === 2) p2El.classList.add("winner");
+      p2El.innerHTML = `
+        <span>${match.player2.name || "—"}</span>
+        ${match.winner === 2 ? "✓" : ""}
+      `;
+      matchEl.appendChild(p2El);
 
-          roundColumn.appendChild(matchEl);
+      // Time
+      if (match.time) {
+        const timeEl = document.createElement("div");
+        timeEl.className = "match-time";
+        timeEl.textContent = new Date(match.time).toLocaleString("en-IN", {
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
         });
+        matchEl.appendChild(timeEl);
+      }
 
-        bracketDisplay.appendChild(roundColumn);
-      });
-    }
+      // ✅ NO EDIT BUTTON in tournament-details (read-only)
+      // if (isAdmin) {
+      //   const editBtn = document.createElement("button");
+      //   editBtn.className = "match-edit-btn";
+      //   editBtn.type = "button";
+      //   editBtn.textContent = "✎ Edit Match";
+      //   editBtn.onclick = (e) => {
+      //     e.stopPropagation();
+      //     openMatchEditor(match, roundIndex);
+      //   };
+      //   matchEl.appendChild(editBtn);
+      // }
 
+      roundColumn.appendChild(matchEl);
+    });
+
+    bracketDisplay.appendChild(roundColumn);
+  });
+}
 
     // Join modal functions
       function openJoinModal() {
@@ -1310,115 +1321,105 @@
 
 
     // Match editor functions
-    function openMatchEditor(match, roundIndex) {
-      if (!isAdmin) return;
+    let currentMatchEdit = null;
 
-      currentMatchEdit = { match, roundIndex };
-
-      const roundNames = [
-        "Final",
-        "Semi-finals",
-        "Quarter-finals",
-        "Round of 16",
-        "Round of 32",
-        "Round of 64",
-      ];
-
-      const reversedIndex = currentBracket.length - 1 - roundIndex;
-      const roundName = roundNames[reversedIndex] || `Round ${reversedIndex + 1}`;
-
-      document.getElementById("match-info-text").textContent = match.id;
-      document.getElementById("round-info-text").textContent = roundName;
-
-      document.getElementById("edit-player1-name").value = match.player1.name || "";
-      document.getElementById("edit-player1-academy").value = match.player1.academy || "";
-      document.getElementById("edit-player2-name").value = match.player2.name || "";
-      document.getElementById("edit-player2-academy").value = match.player2.academy || "";
-      document.getElementById("edit-match-time").value = match.time || "";
-      document.getElementById("edit-match-status").value = match.status || "pending";
-      document.getElementById("edit-match-winner").value = match.winner || "0";
-
-      // Show winner group only if status is completed
-      const winnerGroup = document.getElementById("winner-group");
-      const advanceNote = document.getElementById("advance-note");
-      if (document.getElementById("edit-match-status").value === "completed") {
-        winnerGroup.style.display = "block";
-        advanceNote.style.display = "block";
-      } else {
-        winnerGroup.style.display = "none";
-        advanceNote.style.display = "none";
+    function openMatchEditor(match) {
+      if (!currentTournament) {
+        alert('No tournament selected');
+        return;
       }
 
-      // Listen for status change
-      document.getElementById("edit-match-status").addEventListener("change", (e) => {
-        if (e.target.value === "completed") {
-          winnerGroup.style.display = "block";
-          advanceNote.style.display = "block";
-        } else {
-          winnerGroup.style.display = "none";
-          advanceNote.style.display = "none";
-        }
-      });
+      currentMatchEdit = match;
 
-      document.getElementById("match-editor-modal").classList.add("active");
+      // Populate fields
+      document.getElementById('match-info-text').textContent = match.id;
+      document.getElementById('round-info-text').textContent = match.roundIndex + 1;
+      
+      document.getElementById('edit-player1-name').value = match.player1?.name || '';
+      document.getElementById('edit-player1-academy').value = match.player1?.academy || '';
+      document.getElementById('edit-player2-name').value = match.player2?.name || '';
+      document.getElementById('edit-player2-academy').value = match.player2?.academy || '';
+      
+      document.getElementById('edit-match-time').value = match.time || '';
+      document.getElementById('edit-match-status').value = match.status || 'pending';
+      document.getElementById('edit-match-winner').value = match.winner || '0';
+
+      // Show/hide winner based on status
+      toggleWinnerGroup();
+
+      // Open modal
+      document.getElementById('match-editor-modal').classList.add('active');
+    }
+
+    function toggleWinnerGroup() {
+      const status = document.getElementById('edit-match-status').value;
+      const winnerGroup = document.getElementById('winner-group');
+      const advanceNote = document.getElementById('advance-note');
+
+      if (status === 'completed') {
+        winnerGroup.style.display = 'block';
+        advanceNote.style.display = 'block';
+      } else {
+        winnerGroup.style.display = 'none';
+        advanceNote.style.display = 'none';
+      }
     }
 
     function closeMatchEditor() {
-      document.getElementById("match-editor-modal").classList.remove("active");
+      document.getElementById('match-editor-modal').classList.remove('active');
+      currentMatchEdit = null;
     }
 
-    function submitMatchEdit(e) {
-      e.preventDefault();
+    async function submitMatchEdit(event) {
+      event.preventDefault();
 
-      const match = currentMatchEdit.match;
-      const roundIndex = currentMatchEdit.roundIndex;
-
-      match.time = document.getElementById("edit-match-time").value;
-      match.status = document.getElementById("edit-match-status").value;
-      match.winner = parseInt(document.getElementById("edit-match-winner").value) || 0;
-
-      // Update bracket in memory
-      currentBracket[roundIndex] = currentBracket[roundIndex].map((m) =>
-        m.id === match.id ? match : m
-      );
-
-      // Advance winner if applicable
-      if (match.winner !== 0 && roundIndex < currentBracket.length - 1) {
-        const nextRound = roundIndex + 1;
-        const nextMatchIndex = Math.floor(match.matchIndex / 2);
-        const slot = match.matchIndex % 2;
-
-        if (nextMatchIndex < currentBracket[nextRound].length) {
-          const nextMatch = currentBracket[nextRound][nextMatchIndex];
-          const winner = match.winner === 1 ? match.player1 : match.player2;
-
-          if (slot === 0) {
-            nextMatch.player1 = { ...winner };
-          } else {
-            nextMatch.player2 = { ...winner };
-          }
-        }
+      if (!currentMatchEdit) {
+        alert('No match selected');
+        return;
       }
 
-      // Save to backend
-      const token = localStorage.getItem("authToken");
-      fetch(`${API_URL}/admin/tournaments/${currentTournament.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          bracket_data: JSON.stringify(currentBracket),
-        }),
-      })
-        .then((r) => r.json())
-        .then((data) => {
-          alert("✅ Match updated successfully");
-          closeMatchEditor();
-          renderBracket();
-        })
-        .catch((err) => alert("❌ Error saving match"));
+      // Update match from form
+      currentMatchEdit.player1.name = document.getElementById('edit-player1-name').value;
+      currentMatchEdit.player1.academy = document.getElementById('edit-player1-academy').value;
+      currentMatchEdit.player2.name = document.getElementById('edit-player2-name').value;
+      currentMatchEdit.player2.academy = document.getElementById('edit-player2-academy').value;
+      currentMatchEdit.time = document.getElementById('edit-match-time').value || null;
+      currentMatchEdit.status = document.getElementById('edit-match-status').value;
+      currentMatchEdit.winner = parseInt(document.getElementById('edit-match-winner').value) || 0;
+
+      // If winner set and completed, advance to next round
+      if (currentMatchEdit.winner !== 0 && currentMatchEdit.status === 'completed') {
+        advanceWinner(currentMatchEdit);
+      }
+
+      // Re-render
+      renderFixtures();
+      closeMatchEditor();
+
+      // Auto-save to DB
+      saveBracketToDatabase();
+    }
+
+    function advanceWinner(match) {
+      const roundIndex = match.roundIndex;
+      if (roundIndex >= fixtures.length - 1) {
+        alert('🏆 Tournament Final Complete!');
+        return;
+      }
+
+      const winner = match.winner === 1 ? match.player1 : match.player2;
+      const nextRound = fixtures[roundIndex + 1];
+      const nextMatchIndex = Math.floor(match.matchIndex / 2);
+      const slot = match.matchIndex % 2;
+
+      if (nextMatchIndex < nextRound.length) {
+        const nextMatch = nextRound[nextMatchIndex];
+        if (slot === 0) {
+          nextMatch.player1 = { ...winner };
+        } else {
+          nextMatch.player2 = { ...winner };
+        }
+      }
     }
 
     // Admin functions
@@ -1438,6 +1439,19 @@
       div.textContent = text;
       return div.innerHTML;
     }
+
+    // Auto-refresh tournament status every 10 seconds to catch admin changes
+    setInterval(async () => {
+      if (currentTournament) {
+        const updated = await checkTournamentStatus(currentTournament.id);
+        if (updated && updated.accept_entries !== currentTournament.accept_entries) {
+          currentTournament = updated;
+          renderTournamentDetails();
+          loadBracket(); // Re-check if bracket should show
+        }
+      }
+    }, 10000);
+
 
   </script>
 </body>

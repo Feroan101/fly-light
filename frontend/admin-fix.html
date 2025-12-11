@@ -811,7 +811,7 @@
       <a href="index.html">Home</a>
       <a href="tournaments.html">Tournaments</a>
       <a href="admin.html">Admin</a>
-      <a href="admin-fix.html">Fixture Manager</a>
+      <a href="ecommerce.html">e-comm</a>
     </div>
   </nav>
 
@@ -835,24 +835,22 @@
         </div>
 
         <div class="field">
-          <label>Number of Rounds</label>
-          <select id="rounds-select">
-            <option value="1">1 – Final (2 players)</option>
-            <option value="2">2 – Semi + Final (4 players)</option>
-            <option value="3" selected>3 – QF + SF + Final (8 players)</option>
-            <option value="4">4 – R16 + QF + SF + Final (16 players)</option>
-            <option value="5">5 – R32 + ... (32 players)</option>
-          </select>
+          <label>Total Players (2^n)</label>
+          <input type="number" id="total-players" min="2" max="1024" step="1" value="8" placeholder="8, 16, 32, 64...">
+          <small style="color: var(--muted); font-size: 11px;">Enter power of 2: 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024</small>
         </div>
 
         <button class="btn" id="btn-generate" onclick="generateBracket()">Generate Bracket</button>
 
         <hr style="border-color: rgba(255,255,255,0.1); margin: 15px 0;" />
 
-        <div class="section-title">📋 Registration Status</div>
+        <div class="section-title">📋 Registration Status</div><div style="margin-top: 10px; padding: 8px; background: rgba(58, 169, 255, 0.1); border-radius: 6px; font-size: 12px;">
+          Current Status: <span id="entry-badge">🟢 Open</span>
+        </div>
+
 
         <div class="toggle-switch">
-          <input type="checkbox" id="accept-entries-switch" checked />
+          <input type="checkbox" id="accept-entries" checked />
           <label class="toggle-label" for="accept-entries">
             Accept New Entries
           </label>
@@ -862,7 +860,7 @@
           When <strong>OFF</strong>: Tournament shows as "Ongoing" (no new entries)
         </small>
 
-        <button class="btn" id="btn-save-settings" style="margin-top: 15px;" onclick="saveMatch()">
+        <button class="btn" id="btn-save-settings" style="margin-top: 15px;">
           Save Settings
         </button>
 
@@ -870,6 +868,7 @@
 
         <div class="section-title">🔧 Actions</div>
 
+        <button class="btn" id="btn-save-bracket" style="margin-top: 8px;">Save Bracket to Database</button>
         <button onclick="clearAllBracket()" class="btn btn-secondary" id="btn-clear">Clear All</button>
         <button onclick="exportBracket()" class="btn btn-danger" style="margin-top: 8px;" id="btn-export">
           Export Bracket (JSON)
@@ -900,76 +899,86 @@
   </div>
 
   <!-- Match Editor Modal -->
-  <div id="match-editor-modal" class="modal" style="display: none;">
-    <div class="modal-content">
+  <div id="match-editor-modal" class="modal">
+    <div class="modal-content" style="max-width: 500px;">
       <div class="modal-header">
-        <h2>⚙️ Edit Match <span id="match-info-text" style="color: var(--accent); font-weight: 700;">M1</span></h2>
-        <button class="modal-close" onclick="closeMatchEditor()">×</button>
+        <h2>Edit Match</h2>
+        <button class="modal-close" onclick="closeMatchEditor()">✕</button>
       </div>
 
-      <div class="match-status-bar">
-        <div class="status-badge status-pending" id="modal-status-badge">⏳ Pending</div>
+      <div class="info-box">
+        <strong>Match:</strong> <span id="match-info-text">M1</span> | 
+        <strong>Round:</strong> <span id="round-info-text">Final</span>
       </div>
 
-      <form class="edit-form">
-        <div class="player-edit-section">
-          <div class="player-edit-card">
-            <div class="player-header player1-header">
-              <span>👤 Player A</span>
-              <div class="winner-toggle">
-                <label class="winner-switch">
-                  <input type="radio" name="winner" value="1" id="winner-p1">
-                  <span class="slider">WINNER</span>
-                </label>
-              </div>
-            </div>
-            <input type="text" id="edit-player1-name" placeholder="Player name" />
-            <input type="text" id="edit-player1-academy" placeholder="Academy/Club" />
-          </div>
+      <form onsubmit="submitMatchEdit(event)">
+        <!-- Player A -->
+        <div class="form-group">
+          <label>Player A</label>
+          <input type="text" id="edit-player1-name" placeholder="Player name" style="font-weight: 600;">
+        </div>
+        <div class="form-group">
+          <label>Player A Academy</label>
+          <input type="text" id="edit-player1-academy" placeholder="Academy/Club">
+        </div>
 
-          <div class="vs-center">VS</div>
+        <!-- Player B -->
+        <div class="form-group">
+          <label>Player B</label>
+          <input type="text" id="edit-player2-name" placeholder="Player name" style="font-weight: 600;">
+        </div>
+        <div class="form-group">
+          <label>Player B Academy</label>
+          <input type="text" id="edit-player2-academy" placeholder="Academy/Club">
+        </div>
 
-          <div class="player-edit-card">
-            <div class="player-header player2-header">
-              <span>👤 Player B</span>
-              <div class="winner-toggle">
-                <label class="winner-switch">
-                  <input type="radio" name="winner" value="2" id="winner-p2">
-                  <span class="slider">WINNER</span>
-                </label>
-              </div>
-            </div>
-            <input type="text" id="edit-player2-name" placeholder="Player name" />
-            <input type="text" id="edit-player2-academy" placeholder="Academy/Club" />
-          </div>
+        <!-- Match Details -->
+        <div class="form-group">
+          <label>Match Date & Time</label>
+          <input type="datetime-local" id="edit-match-time">
         </div>
 
         <div class="form-group">
-          <label>📅 Match Date & Time</label>
-          <input type="datetime-local" id="edit-match-time" />
-        </div>
-
-        <div class="form-group">
-          <label>🎯 Match Status</label>
-          <select id="edit-match-status">
+          <label>Match Status</label>
+          <select id="edit-match-status" onchange="toggleWinnerGroup()">
             <option value="pending">⏳ Pending</option>
             <option value="live">🔴 Live</option>
             <option value="completed">✅ Completed</option>
           </select>
         </div>
 
-        <div class="button-group">
-          <button type="button" class="btn btn-primary" onclick="saveMatch()" style="flex: 1;">💾 Save Match</button>
-          <button type="button" class="btn btn-secondary" onclick="closeMatchEditor()" style="flex: 1;">❌ Cancel</button>
+        <!-- Winner Selection -->
+        <div class="form-group" id="winner-group" style="display: none; background: rgba(58, 169, 255, 0.1); padding: 12px; border-radius: 8px;">
+          <label>Match Winner</label>
+          <select id="edit-match-winner">
+            <option value="0">No Winner Yet</option>
+            <option value="1">👑 Player A Wins</option>
+            <option value="2">👑 Player B Wins</option>
+          </select>
+        </div>
+
+        <div class="info-box" id="advance-note" style="display: none;">
+          Winner will automatically advance to the next round.
+        </div>
+
+        <!-- Buttons -->
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <button type="submit" class="btn" style="flex: 1; background: #10B981;">
+            ✓ Save Match
+          </button>
+          <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="closeMatchEditor()">
+            ✕ Close
+          </button>
         </div>
       </form>
     </div>
   </div>
 
 
+
 <script src="js/db.js"></script>
 <script>
-  const API_URL = "https://fly-light.onrender.com/api";
+  const API_URL = "http://127.0.0.1:5000/api";
   let currentTournament = null;
   let currentBracket = null;
 
@@ -995,7 +1004,7 @@
 
     const token = db.getAuthToken();
     try {
-      const res = await fetch(API_URL + '/tournaments/' + id, {  // ← Fixed endpoint
+      const res = await fetch(API_URL + '/tournaments/' + id, {
         headers: { 'Authorization': 'Bearer ' + token }
       });
       const data = await res.json();
@@ -1003,20 +1012,19 @@
 
       currentTournament = data;
 
-      // ✅ FIX 1: Show tournament name
+      // Show tournament name
       const tournamentSelect = document.getElementById('tournament-select');
       tournamentSelect.innerHTML = `<option value="${id}" selected disabled>${data.name || 'Tournament'}</option>`;
       tournamentSelect.disabled = true;
 
-      // ✅ FIX 2: Set toggle correctly
-      const toggle = document.getElementById('accept-entries-switch');
+      // Set toggle correctly (field name from backend is acceptentries)
+      const toggle = document.getElementById('accept-entries');
       if (toggle) toggle.checked = !!data.accept_entries;
 
-      // ✅ SAFE bracket loading
       if (data.bracket_data != null) {
         try {
-          currentBracket = typeof data.bracket_data === 'object' 
-            ? data.bracket_data 
+          currentBracket = Array.isArray(data.bracket_data)
+            ? data.bracket_data
             : JSON.parse(data.bracket_data);
           if (Array.isArray(currentBracket) && currentBracket.length > 0) {
             renderBracket();
@@ -1026,50 +1034,81 @@
         }
       }
 
+
     } catch (err) {
       alert('Error: ' + err.message);
     }
   }
 
+
   // Generate bracket
   async function generateBracket() {
-    const numRoundsSelect = document.getElementById('rounds-select');
-    if (!numRoundsSelect) {
-      alert('Rounds dropdown not found!');
-      return;
-    }
-
-    const numRounds = parseInt(numRoundsSelect.value);
-    if (!numRounds || numRounds < 1 || numRounds > 6) {
-      alert('Select valid number of rounds');
-      return;
-    }
-    
-    const maxPlayers = Math.pow(2, numRounds);
-    currentBracket = [];
-
-    for (let round = 0; round < numRounds; round++) {
-      const playersInRound = maxPlayers / Math.pow(2, round);
-      const matchCount = Math.floor(playersInRound / 2);  // ✅ FIXED: Math.floor()
-      const matches = [];
-
-      for (let i = 0; i < matchCount; i++) {
-        matches.push({
-          id: `M${i+1}-R${numRounds-round}`,  // ✅ FIXED: M1-R3, M2-R3, M1-R2, etc.
-          matchIndex: i,
-          player1: { name: 'TBD', academy: '' },
-          player2: { name: 'TBD', academy: '' },
-          winner: 0,
-          status: 'pending',
-          time: null
-        });
-      }
-      currentBracket.push(matches);
-    }
-
-    renderBracket();  // ✅ ADD THIS
-    alert(`✅ Bracket generated: ${maxPlayers} players, ${numRounds} rounds`);
+  if (!currentTournament) {
+    alert('No tournament selected');
+    return;
   }
+
+  // If bracket already exists, load instead of regenerating
+  if (currentTournament.bracketdata) {
+    try {
+      currentBracket = Array.isArray(currentTournament.bracketdata)
+        ? currentTournament.bracketdata
+        : JSON.parse(currentTournament.bracketdata);
+      if (currentBracket.length) {
+        renderBracket();
+        alert('Bracket already exists for this tournament. Loaded from database.');
+        return;
+      }
+    } catch (e) {
+      console.error('Bracket parse error, regenerating...', e);
+    }
+  }
+
+  // NEW: use total-players input
+  const totalPlayersInput = document.getElementById('total-players');
+  if (!totalPlayersInput) {
+    alert('Players input not found!');
+    return;
+  }
+
+  const totalPlayers = parseInt(totalPlayersInput.value, 10);
+  const isPowerOfTwo = totalPlayers && (totalPlayers & (totalPlayers - 1)) === 0;
+
+  if (!isPowerOfTwo || totalPlayers < 2 || totalPlayers > 1024) {
+    alert('Enter a valid power of 2 between 2 and 1024');
+    return;
+  }
+
+  const numRounds = Math.log2(totalPlayers);
+  currentBracket = [];
+
+  for (let round = 0; round < numRounds; round++) {
+    const playersInRound = totalPlayers / Math.pow(2, round);
+    const matchCount = Math.floor(playersInRound / 2);
+    const matches = [];
+
+    for (let i = 0; i < matchCount; i++) {
+      matches.push({
+        id: `M${i + 1}-R${numRounds - round}`,
+        matchIndex: i,
+        player1: { name: 'TBD', academy: '' },
+        player2: { name: 'TBD', academy: '' },
+        winner: 0,
+        status: 'pending',
+        time: null
+      });
+    }
+
+    currentBracket.push(matches);
+  }
+
+  renderBracket();
+
+  await saveBracketToDatabase();
+  currentTournament.bracketdata = currentBracket;
+
+  alert(`Bracket generated: ${totalPlayers} players, ${numRounds} rounds`);
+}
 
   // Render bracket
   function renderBracket() {
@@ -1110,8 +1149,9 @@
         const p1Winner = match.winner === 1 ? 'winner-highlight' : '';
         const p2Winner = match.winner === 2 ? 'winner-highlight' : '';
 
-        html += `
-          <div class="match-card ${statusClass}" onclick="editMatch(${roundIdx}, ${matchIdx})">
+        html += `<div class="match-card ${statusClass}" 
+           data-round="${roundIdx}" 
+           data-match="${matchIdx}">
             <div class="match-header">
               <span class="match-id">${match.id}</span>
               <span class="status-badge">${statusIcon}</span>
@@ -1149,124 +1189,217 @@
     });
 
     container.innerHTML = html;
+    // Attach click handlers to each match card
+    const cards = container.querySelectorAll('.match-card');
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        const r = parseInt(card.dataset.round, 10);
+        const m = parseInt(card.dataset.match, 10);
+        const match = currentBracket[r][m];
+        // store indices on the match so advanceWinner works
+        match.roundIndex = r;
+        match.matchIndex = m;
+        openMatchEditor(match);
+      });
+    });
+
   }
+
+  // Save bracket to database
+  async function saveBracketToDatabase() {
+    if (!currentTournament) {
+      alert('Please select a tournament first');
+      return;
+    }
+    if (!currentBracket || !currentBracket.length) {
+      alert('Generate or edit a bracket first');
+      return;
+    }
+
+    const token = db.getAuthToken();
+    if (!token) {
+      alert('Not authenticated');
+      return;
+    }
+
+    const acceptEntries = document.getElementById('accept-entries').checked;
+
+    const res = await fetch(`${API_URL}/admin/tournaments/${currentTournament.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        bracket_data: currentBracket,     // ✅ match backend
+        accept_entries: acceptEntries     // ✅ match backend
+      })
+    });
+
+    const data = await res.json();
+    if (data.error) {
+      alert(`Error: ${data.error}`);
+    } else {
+      currentTournament.bracket_data = currentBracket;
+      currentTournament.accept_entries = acceptEntries;
+      alert('Bracket + settings saved');
+    }
+  }
+
+
+  // Save bracket button
+  document.getElementById('btn-save-bracket')
+    .addEventListener('click', saveBracketToDatabase);
+
+  // Save ONLY status button
+  document.getElementById('btn-save-settings').addEventListener('click', async function () {
+    if (!currentTournament) {
+      alert('Please select a tournament first');
+      return;
+    }
+
+    const acceptEntries = document.getElementById('accept-entries').checked;
+    const token = db.getAuthToken();
+    if (!token) {
+      alert('Not authenticated');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/admin/tournaments/${currentTournament.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          accept_entries: acceptEntries   // ✅ snake_case
+        })
+      });
+
+      const result = await response.json();
+      if (result.error) {
+        alert(`Error: ${result.error}`);
+      } else {
+        currentTournament.accept_entries = acceptEntries;
+        document.getElementById('entry-badge').textContent =
+          acceptEntries ? 'Open' : 'Closed';
+        alert('Registration status saved!');
+      }
+    } catch (err) {
+      alert(`Error: ${err.message}`);
+    }
+  });
+
 
 
   let currentEditRound = null;
   let currentEditMatch = null;
+ function openMatchEditor(match) {
+      if (!currentTournament) {
+        alert('No tournament selected');
+        return;
+      }
 
-  function editMatch(roundIdx, matchIdx) {
-    if (!currentBracket || !currentBracket[roundIdx] || !currentBracket[roundIdx][matchIdx]) {
-      alert('Invalid match');
-      return;
+      currentMatchEdit = match;
+
+      // Populate fields
+      document.getElementById('match-info-text').textContent = match.id;
+      document.getElementById('round-info-text').textContent = match.roundIndex + 1;
+      
+      document.getElementById('edit-player1-name').value = match.player1?.name || '';
+      document.getElementById('edit-player1-academy').value = match.player1?.academy || '';
+      document.getElementById('edit-player2-name').value = match.player2?.name || '';
+      document.getElementById('edit-player2-academy').value = match.player2?.academy || '';
+      
+      document.getElementById('edit-match-time').value = match.time || '';
+      document.getElementById('edit-match-status').value = match.status || 'pending';
+      document.getElementById('edit-match-winner').value = match.winner || '0';
+
+      // Show/hide winner based on status
+      toggleWinnerGroup();
+
+      // Open modal
+      document.getElementById('match-editor-modal').classList.add('active');
     }
 
-    // Store for saveMatch
-    currentEditRound = roundIdx;
-    currentEditMatch = matchIdx;
-    
-    const match = currentBracket[roundIdx][matchIdx];
-    
-    // SAFE element access
-    const setValueSafe = (id, value) => {
-      const el = document.getElementById(id);
-      if (el) el.value = value || '';
-    };
-    
-    setValueSafe('match-info-text', match.id);
-    setValueSafe('edit-player1-name', match.player1.name);
-    setValueSafe('edit-player1-academy', match.player1.academy);
-    setValueSafe('edit-player2-name', match.player2.name);
-    setValueSafe('edit-player2-academy', match.player2.academy);
-    setValueSafe('edit-match-time', match.time || '');
-    
-    const statusEl = document.getElementById('edit-match-status');
-    if (statusEl) statusEl.value = match.status || 'pending';
-    
-    const winnerP1 = document.getElementById('winner-p1');
-    const winnerP2 = document.getElementById('winner-p2');
-    if (winnerP1 && winnerP2) {
-      winnerP1.checked = match.winner === 1;
-      winnerP2.checked = match.winner === 2;
+    function toggleWinnerGroup() {
+      const status = document.getElementById('edit-match-status').value;
+      const winnerGroup = document.getElementById('winner-group');
+      const advanceNote = document.getElementById('advance-note');
+
+      if (status === 'completed') {
+        winnerGroup.style.display = 'block';
+        advanceNote.style.display = 'block';
+      } else {
+        winnerGroup.style.display = 'none';
+        advanceNote.style.display = 'none';
+      }
     }
-    
-    // Show modal
-    const modal = document.getElementById('match-editor-modal');
-    if (modal) modal.style.display = 'flex';
-  }
 
-  function saveMatch() {
-    if (currentEditRound === null || currentEditMatch === null) {
-      alert('No match selected');
-      return;
+    function closeMatchEditor() {
+      document.getElementById('match-editor-modal').classList.remove('active');
+      currentMatchEdit = null;
     }
-    
-    const match = currentBracket[currentEditRound][currentEditMatch];
-    if (!match) return;
-    
-    // SAFE value reading
-    const getValueSafe = (id) => {
-      const el = document.getElementById(id);
-      return el ? el.value : '';
-    };
-    
-    match.player1.name = getValueSafe('edit-player1-name') || 'TBD';
-    match.player1.academy = getValueSafe('edit-player1-academy') || '';
-    match.player2.name = getValueSafe('edit-player2-name') || 'TBD';
-    match.player2.academy = getValueSafe('edit-player2-academy') || '';
-    match.time = getValueSafe('edit-match-time') || null;
-    match.status = getValueSafe('edit-match-status') || 'pending';
-    
-    // WINNER IS OPTIONAL - defaults to 0 (no winner)
-    const winnerP1 = document.getElementById('winner-p1');
-    const winnerP2 = document.getElementById('winner-p2');
-    match.winner = 0;  // ← DEFAULT: No winner
-    
-    // Only set winner if explicitly selected
-    if (winnerP1 && winnerP1.checked) match.winner = 1;
-    if (winnerP2 && winnerP2.checked) match.winner = 2;
-    
-    closeMatchEditor();
-    renderBracket();
-    
-    // Smart status message
-    const statusMsg = match.status === 'completed' ? '✅ Match saved & completed!' : 
-                    match.status === 'live' ? '🔴 Match saved & LIVE!' : '💾 Match saved!';
-    alert(statusMsg);
-  }
 
+    async function submitMatchEdit(event) {
+      event.preventDefault();
 
-  function closeMatchEditor() {
-    const modal = document.getElementById('match-editor-modal');
-    if (modal) modal.style.display = 'none';
-  }
+      if (!currentMatchEdit) {
+        alert('No match selected');
+        return;
+      }
 
-  // Save match changes
-  function saveMatch(roundIdx, matchIdx) {
-    const match = currentBracket[roundIdx][matchIdx];
-    match.player1.name = document.getElementById('edit-player1-name').value;
-    match.player1.academy = document.getElementById('edit-player1-academy').value;
-    match.player2.name = document.getElementById('edit-player2-name').value;
-    match.player2.academy = document.getElementById('edit-player2-academy').value;
-    match.time = document.getElementById('edit-match-time').value;
-    match.status = document.getElementById('edit-match-status').value;
-    match.winner = parseInt(document.getElementById('edit-match-winner').value) || 0;
+      // Update match from form
+      currentMatchEdit.player1.name = document.getElementById('edit-player1-name').value;
+      currentMatchEdit.player1.academy = document.getElementById('edit-player1-academy').value;
+      currentMatchEdit.player2.name = document.getElementById('edit-player2-name').value;
+      currentMatchEdit.player2.academy = document.getElementById('edit-player2-academy').value;
+      currentMatchEdit.time = document.getElementById('edit-match-time').value || null;
+      currentMatchEdit.status = document.getElementById('edit-match-status').value;
+      currentMatchEdit.winner = parseInt(document.getElementById('edit-match-winner').value) || 0;
 
-    closeMatchEditor();
-    renderBracket();
-    alert('✅ Match updated');
-  }
+      // If winner set and completed, advance to next round
+      if (currentMatchEdit.winner !== 0 && currentMatchEdit.status === 'completed') {
+        advanceWinner(currentMatchEdit);
+      }
 
-  function closeMatchEditor() {
-    document.getElementById('match-editor-modal').style.display = 'none';
-  }
+      // Re-render
+      renderBracket();
+      closeMatchEditor();
+
+      // Auto-save to DB
+      saveBracketToDatabase();
+    }
+
+    function advanceWinner(match) {
+      const roundIndex = match.roundIndex;
+      if (roundIndex >= fixtures.length - 1) {
+        alert('🏆 Tournament Final Complete!');
+        return;
+      }
+
+      const winner = match.winner === 1 ? match.player1 : match.player2;
+      const nextRound = fixtures[roundIndex + 1];
+      const nextMatchIndex = Math.floor(match.matchIndex / 2);
+      const slot = match.matchIndex % 2;
+
+      if (nextMatchIndex < nextRound.length) {
+        const nextMatch = nextRound[nextMatchIndex];
+        if (slot === 0) {
+          nextMatch.player1 = { ...winner };
+        } else {
+          nextMatch.player2 = { ...winner };
+        }
+      }
+    }
 
   // Save tournament settings (bracket + accept_entries)
   async function saveTournamentSettings() {
     if (!currentTournament) return;
 
     const token = db.getAuthToken();
-    const acceptEntries = document.getElementById('accept-entries-switch').checked;
+    const acceptEntries = document.getElementById('accept-entries').checked;
 
     try {
       const res = await fetch(API_URL + '/tournaments/' + currentTournament.id, {
