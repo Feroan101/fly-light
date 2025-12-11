@@ -75,7 +75,7 @@ const db = new LocalDB();
 // ==================== API UTILITY ====================
 
 class API {
-    constructor(baseURL = 'http://127.0.0.1:5000/api') {
+    constructor(baseURL = 'https://your-service-name.onrender.com/api') {
         this.baseURL = baseURL;
     }
 
@@ -278,7 +278,7 @@ class API {
     }
 }
 
-const api = new API('http://127.0.0.1:5000/api');
+const api = new API('https://your-service-name.onrender.com/api');
 
 // ==================== UTILITY FUNCTIONS ====================
 

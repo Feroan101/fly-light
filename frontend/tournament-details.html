@@ -588,6 +588,19 @@
         flex-direction: column;
       }
     }
+
+    @media (max-width: 768px) {
+      .poster-img {
+        height: auto;           /* no fixed 300px on mobile */
+      }
+
+      .poster-img img {
+        width: 100%;
+        height: auto;           /* full width, natural height */
+        display: block;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -627,18 +640,19 @@
             <div class="meta-label">Status</div>
             <div class="meta-value" id="entry-status">Accepting</div>
           </div>
-
         </div>
 
         <div class="action-buttons">
           <button class="btn btn-primary" id="join-btn" onclick="openJoinModal()">
             Join Tournament
           </button>
-          <button class="btn btn-secondary" id="admin-edit-btn" onclick="openAdminPanel()" style="display: none;">
-            Admin: Manage
-          </button>
         </div>
       </div>
+      <div class="tournament-description" style="margin-top: 16px;">
+        <h2 style="margin: 0 0 6px 0; font-size: 18px;">Description:</h2>
+        <p id="tournament-description" style="margin: 0; color: var(--muted); font-size: 14px; line-height: 1.6;"></p>
+      </div>
+
     </div>
 
     <!-- Events Section -->
@@ -668,9 +682,7 @@
     </div>
   </div>
 
-  <!-- Join Tournament Modal -->
-  <!-- Join Tournament Modal -->
-<!-- Join Tournament Modal (SIMPLE VERSION) -->
+<!-- Join Tournament Modal -->
 <div id="join-modal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -785,7 +797,7 @@
 
   <script src="js/db.js"></script>
   <script>
-    const API_URL = "http://127.0.0.1:5000/api/";
+    const API_URL = "https://your-service-name.onrender.com/api/";
     let currentTournament = null;
     let currentEvents = [];  // ← ADD THIS LINE
     let currentBracket = null;
@@ -824,48 +836,69 @@
 
       // Status badge
       const statusBadge = document.getElementById('status-badge');
-      statusBadge.textContent = (t.status || 'scheduled').toUpperCase();
-      statusBadge.className = 'status-badge status-' + (t.status || 'scheduled').toLowerCase();
-      if (t.accept_entries) statusBadge.classList.add("status-upcoming");
-      else statusBadge.classList.add("status-ongoing");
+      const isAccepting = t.accept_entries;      // ✅ from API
+      const statusText = isAccepting ? 'SCHEDULED' : 'ONGOING';
+      const statusClass = isAccepting ? 'status-upcoming' : 'status-ongoing';
 
-      // Basic info
-      document.getElementById("tournament-name").textContent = t.name;
-      document.getElementById("tournament-venue").textContent = t.venue;
-      document.getElementById("tournament-price").textContent = t.price;
-      document.getElementById("tournament-capacity").textContent = t.capacity;
+      statusBadge.textContent = statusText;
+      statusBadge.className = 'status-badge ' + statusClass;
 
-      // Dates and times
-      const startDate = new Date(t.startdate).toLocaleDateString("en-IN");
-      const endDate = new Date(t.enddate).toLocaleDateString("en-IN");
-      document.getElementById("tournament-dates").textContent = `${startDate} to ${endDate}`;
+        // Basic info
+        document.getElementById("tournament-name").textContent = t.name;
+        const venueEl = document.getElementById("tournament-venue");
+          if (t.gmaps_link) {
+            venueEl.innerHTML = `<a href="${t.gmaps_link}" target="_blank" rel="noopener" style="color: #3AA9FF; text-decoration: underline;">${t.venue}</a>`;
+          } else {
+            venueEl.textContent = t.venue;
+          }
+        document.getElementById("tournament-price").textContent = t.price;
+        document.getElementById("tournament-capacity").textContent = t.capacity;
 
-      const startTime = new Date(`${t.startdate} ${t.starttime}`).toLocaleTimeString("en-IN", {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-      const endTime = new Date(`${t.enddate} ${t.endtime}`).toLocaleTimeString("en-IN", {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-      document.getElementById("tournament-times").textContent = `${startTime} - ${endTime}`;
+        if (t.description) {
+          const descEl = document.getElementById("tournament-description");
+          if (descEl) {
+            descEl.textContent = t.description;
+          }
+        }
 
-      // Entry status
-      document.getElementById("entry-status").textContent = t.accept_entries ? "🟢 Accepting" : "🔴 Closed";
+        // Dates and times  ✅ use snake_case
+        const startDate = new Date(t.start_date).toLocaleDateString("en-IN");
+        const endDate = new Date(t.end_date).toLocaleDateString("en-IN");
+        document.getElementById("tournament-dates").textContent = `${startDate} to ${endDate}`;
 
-      // Poster
-      if (t.posterurl) {
-        document.getElementById("poster-container").innerHTML = `<img src="${t.posterurl}" alt="Poster" />`;
-      }
+        const startTime = new Date(`${t.start_date} ${t.start_time}`).toLocaleTimeString("en-IN", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        const endTime = new Date(`${t.end_date} ${t.end_time}`).toLocaleTimeString("en-IN", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        document.getElementById("tournament-times").textContent = `${startTime} - ${endTime}`;
 
-      // Join button visibility
-      const joinBtn = document.getElementById("join-btn");
-      if (t.accept_entries && t.status !== "completed") {
-        joinBtn.style.display = "block";
+        // Entry status
+        document.getElementById("entry-status").textContent =
+          t.accept_entries ? "🟢 Accepting" : "🔴 Closed";
+
+        // Poster  ✅ poster_url from API
+       if (t.poster_url) {
+        document.getElementById("poster-container").innerHTML =
+          `<img src="https://your-service-name.onrender.com/${t.poster_url}" alt="Tournament poster for ${t.name}" />`;
       } else {
-        joinBtn.style.display = "none";
+        document.getElementById("poster-container").innerHTML =
+          `<img src="img/default.jpg" alt="Tournament poster for ${t.name}" />`;
       }
-    }
+
+        // Join button visibility
+        const joinBtn = document.getElementById("join-btn");
+        if (t.accept_entries && statusText !== "ONGOING") {
+          // or simply: if (t.accept_entries && t.status !== "completed")
+          joinBtn.style.display = "block";
+        } else {
+          joinBtn.style.display = "none";
+        }
+      }
+
 
 
     // Check if user is admin
