@@ -458,8 +458,12 @@ def update_tournament(tournament_id):
             tournament.capacity = int(data['capacity'])
         if 'status' in data:
             tournament.status = data['status']
-        if 'accept_entries' in data:
-            tournament.accept_entries = data['accept_entries'].lower() == 'true' if isinstance(data['accept_entries'], str) else data['accept_entries']
+        if "accept_entries" in data:
+            tournament.accept_entries = (
+                data["accept_entries"].lower() == "true"
+                if isinstance(data["accept_entries"], str)
+                else data["accept_entries"]
+            )
         if 'bracket_data' in data:
             tournament.bracket_data = data['bracket_data']
         

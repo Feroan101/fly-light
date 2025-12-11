@@ -868,11 +868,11 @@
 
         <div class="section-title">🔧 Actions</div>
 
-        <button class="btn" id="btn-save-bracket" style="margin-top: 8px;">Save Bracket to Database</button>
         <button onclick="clearAllBracket()" class="btn btn-secondary" id="btn-clear">Clear All</button>
         <button onclick="exportBracket()" class="btn btn-danger" style="margin-top: 8px;" id="btn-export">
           Export Bracket (JSON)
         </button>
+        <button class="btn" id="btn-save-bracket" style="margin-top: 8px;">Save Bracket to Database</button>
       </div>
 
       <!-- Fixture Panel -->
@@ -1017,7 +1017,7 @@
       tournamentSelect.innerHTML = `<option value="${id}" selected disabled>${data.name || 'Tournament'}</option>`;
       tournamentSelect.disabled = true;
 
-      // Set toggle correctly (field name from backend is acceptentries)
+      // Set toggle correctly (field name from backend is accept_entries)
       const toggle = document.getElementById('accept-entries');
       if (toggle) toggle.checked = !!data.accept_entries;
 
@@ -1222,7 +1222,7 @@
       return;
     }
 
-    const acceptEntries = document.getElementById('accept-entries').checked;
+    const accept_entries = document.getElementById('accept-entries').checked;
 
     const res = await fetch(`${API_URL}/admin/tournaments/${currentTournament.id}`, {
       method: 'PUT',
@@ -1232,7 +1232,7 @@
       },
       body: JSON.stringify({
         bracket_data: currentBracket,     // ✅ match backend
-        accept_entries: acceptEntries     // ✅ match backend
+        accept_entries: accept_entries     // ✅ match backend
       })
     });
 
@@ -1241,7 +1241,7 @@
       alert(`Error: ${data.error}`);
     } else {
       currentTournament.bracket_data = currentBracket;
-      currentTournament.accept_entries = acceptEntries;
+      currentTournament.accept_entries = accept_entries;
       alert('Bracket + settings saved');
     }
   }
@@ -1258,7 +1258,7 @@
       return;
     }
 
-    const acceptEntries = document.getElementById('accept-entries').checked;
+    const accept_entries = document.getElementById('accept-entries').checked;
     const token = db.getAuthToken();
     if (!token) {
       alert('Not authenticated');
@@ -1273,7 +1273,7 @@
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
-          accept_entries: acceptEntries   // ✅ snake_case
+          accept_entries: accept_entries   // ✅ snake_case
         })
       });
 
@@ -1281,9 +1281,9 @@
       if (result.error) {
         alert(`Error: ${result.error}`);
       } else {
-        currentTournament.accept_entries = acceptEntries;
+        currentTournament.accept_entries = accept_entries;
         document.getElementById('entry-badge').textContent =
-          acceptEntries ? 'Open' : 'Closed';
+          accept_entries ? 'Open' : 'Closed';
         alert('Registration status saved!');
       }
     } catch (err) {
@@ -1399,7 +1399,7 @@
     if (!currentTournament) return;
 
     const token = db.getAuthToken();
-    const acceptEntries = document.getElementById('accept-entries').checked;
+    const accept_entries = document.getElementById('accept-entries').checked;
 
     try {
       const res = await fetch(API_URL + '/tournaments/' + currentTournament.id, {
@@ -1410,7 +1410,7 @@
         },
         body: JSON.stringify({
           bracket_data: currentBracket,
-          accept_entries: acceptEntries
+          accept_entries: accept_entries
         })
       });
 
@@ -1419,7 +1419,7 @@
 
       alert('✅ Tournament settings saved');
       currentTournament.bracket_data = currentBracket;
-      currentTournament.accept_entries = acceptEntries;
+      currentTournament.accept_entries = accept_entries;
 
     } catch (err) {
       alert('Error saving: ' + err.message);

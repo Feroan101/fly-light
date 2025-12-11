@@ -475,7 +475,10 @@
         tournaments.forEach(tournament => {
           const startDate = new Date(tournament.start_date).toLocaleDateString('en-IN');
           const endDate = new Date(tournament.end_date).toLocaleDateString('en-IN');
-          const statusClass = `status-${tournament.status}`;
+          // Decide status purely from accept_entries
+          const isAccepting = tournament.accept_entries;
+          const statusText = isAccepting ? 'SCHEDULED' : 'ONGOING';
+          const statusClass = isAccepting ? 'status-scheduled' : 'status-ongoing';
           
           // ✅ Add bracket preview if exists
           let bracketPreview = '';
@@ -501,8 +504,11 @@
           html += `
             <div class="tournament-card">
               <div class="tournament-poster">
-                ${tournament.poster_url ? `<img src="${tournament.poster_url}" alt="${tournament.name}">` : 'No Poster'}
-                <div class="tournament-status ${statusClass}">${tournament.status.toUpperCase()}</div>
+                ${tournament.poster_url 
+                    ? `<img src="${tournament.poster_url}" alt="${tournament.name}">`
+                    : `<img src="img/default.jpg" alt="${tournament.name}">`
+                  }
+                <div class="tournament-status ${statusClass}">${statusText}</div>
               </div>
               <div class="tournament-body">
                 <h3>${tournament.name}</h3>

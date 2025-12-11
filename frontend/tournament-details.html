@@ -826,7 +826,7 @@
       const statusBadge = document.getElementById('status-badge');
       statusBadge.textContent = (t.status || 'scheduled').toUpperCase();
       statusBadge.className = 'status-badge status-' + (t.status || 'scheduled').toLowerCase();
-      if (t.acceptentries) statusBadge.classList.add("status-upcoming");
+      if (t.accept_entries) statusBadge.classList.add("status-upcoming");
       else statusBadge.classList.add("status-ongoing");
 
       // Basic info
@@ -851,7 +851,7 @@
       document.getElementById("tournament-times").textContent = `${startTime} - ${endTime}`;
 
       // Entry status
-      document.getElementById("entry-status").textContent = t.acceptentries ? "🟢 Accepting" : "🔴 Closed";
+      document.getElementById("entry-status").textContent = t.accept_entries ? "🟢 Accepting" : "🔴 Closed";
 
       // Poster
       if (t.posterurl) {
@@ -860,7 +860,7 @@
 
       // Join button visibility
       const joinBtn = document.getElementById("join-btn");
-      if (t.acceptentries && t.status !== "completed") {
+      if (t.accept_entries && t.status !== "completed") {
         joinBtn.style.display = "block";
       } else {
         joinBtn.style.display = "none";
