@@ -31,6 +31,12 @@
       font-size: 24px;
     }
 
+    .navbar a{
+      color: white;
+      justify-self: flex-end;
+      text-decoration: none;
+    }
+
     .navbar button {
       background: #EF4444;
       color: white;
@@ -502,22 +508,22 @@
                 <textarea name="description" placeholder="Tournament description..."></textarea>
               </div>
             </div>
-            <button type="submit" class="btn btn-primary">Create Tournament</button>
-          </form>
-          <!-- Categories section - OUTSIDE the form -->
+            <!-- Categories section - OUTSIDE the form -->
               <div id="events-section" style="margin-top: 40px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                  <h3 style="margin: 0;">📌 Categories in this tournament</h3>
+                  <h3 style="margin: 0;">Categories in this tournament</h3>
                   <button type="button"
                           onclick="showAddEventModal()"
                           style="padding: 8px 16px; background: #10b981; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
                     ➕ Add Category
                   </button>
                 </div>
-                <div id="events-table" style="background: white; border-radius: 8px; padding: 20px; border: 1px solid #e5e7eb;">
+                <div id="events-table" style="background: white; border-radius: 8px; padding: 20px; margin-bottom: 10px;border: 1px solid #e5e7eb;">
                   No categories yet. Click ➕ to add one.
                 </div>
               </div>
+            <button type="submit" class="btn btn-primary">Create Tournament</button>
+          </form>
         </div>
 
         <!-- Tournaments List -->

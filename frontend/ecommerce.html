@@ -415,7 +415,7 @@
     <div class="navbar-right">
       <a href="index.html">Home</a>
       <a href="tournaments.html">Tournaments</a>
-      <a href="ecommerce.html">Store</a>
+      <a href="gallery.html">Store</a>
       <a href="admin.html">Admin</a>
       <button class="cart-btn" onclick="openCart()">
         <span class="cart-count" id="cart-count-badge">0</span>
@@ -493,6 +493,7 @@
   </div>
 
   <!-- Scripts -->
+  <script src="js/script.js"></script>
   <script src="js/db.js"></script>
   <script>
     const API_URL = 'https://fly-light.onrender.com/api';
@@ -519,30 +520,37 @@
         return;
       }
 
-      const html = products.map(product => `
-        <div class="product-card">
-          <div class="product-image">
-            ${product.image_url ? `<img src="${product.image_url}" alt="${product.name}">` : 'No Image'}
-          </div>
-          <div class="product-body">
-            <h3>${product.name}</h3>
-            <div class="product-category">${product.category || 'Uncategorized'}</div>
-            <p class="product-description">${product.description || 'No description'}</p>
-            <div class="product-footer">
-              <div class="product-price">₹${product.price}</div>
-              <div class="product-stock ${product.stock < 5 ? 'low' : ''}">
-                Stock: ${product.stock}
-              </div>
+      const html = products.map(product => {
+        const imageSrc = product.image_url
+          ? `https://fly-light.onrender.com/${product.image_url}`   // ✅ served by Flask
+          : 'img/default-product.jpg';                     // ✅ your local default
+
+        return `
+          <div class="product-card">
+            <div class="product-image">
+              <img src="${imageSrc}" alt="${product.name}">
             </div>
-            <button class="btn btn-primary" onclick="addToCart('${product.id}', '${product.name}', ${product.price}, ${product.stock})" ${product.stock === 0 ? 'disabled' : ''}>
-              ${product.stock === 0 ? 'Out of Stock' : '🛒 Add to Cart'}
-            </button>
+            <div class="product-body">
+              <h3>${product.name}</h3>
+              <div class="product-category">${product.category || 'Uncategorized'}</div>
+              <p class="product-description">${product.description || 'No description'}</p>
+              <div class="product-footer">
+                <div class="product-price">₹${product.price}</div>
+                <div class="product-stock ${product.stock < 5 ? 'low' : ''}">
+                  Stock: ${product.stock}
+                </div>
+              </div>
+              <button class="btn btn-primary" onclick="addToCart('${product.id}', '${product.name}', ${product.price}, ${product.stock})" ${product.stock === 0 ? 'disabled' : ''}>
+                ${product.stock === 0 ? 'Out of Stock' : '🛒 Add to Cart'}
+              </button>
+            </div>
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
 
       container.innerHTML = html;
     }
+
 
     function addToCart(id, name, price, stock) {
       if (stock === 0) {

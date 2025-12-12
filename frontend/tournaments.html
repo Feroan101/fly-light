@@ -14,38 +14,7 @@
   color: #e5e7eb;
 }
 
-/* Navbar */
-.navbar {
-  background: rgba(10, 16, 35, 0.96);
-  color: white;
-  padding: 14px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.25);
-  backdrop-filter: blur(10px);
-}
 
-.navbar h1 {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 600;
-}
-
-.navbar a {
-  color: #e5e7eb;
-  text-decoration: none;
-  margin-left: 18px;
-  font-size: 14px;
-  transition: color 0.2s ease;
-}
-
-.navbar a:hover {
-  color: #10B981;
-}
 
 /* Container */
 .container {
@@ -453,20 +422,31 @@
 </head>
 <body>
   <!-- Navigation -->
-  <nav class="navbar">
-    <h1>🏸 Sky Light Badminton</h1>
-    <div>
-      <a href="index.html">Home</a>
-      <a href="tournaments.html">Tournaments</a>
-      <a href="ecommerce.html">Store</a>
-      <a href="admin.html">Admin</a>
-    </div>
-  </nav>
+  <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+  <img src="logo.png" alt="fly Light Academy Logo" style="height:60px; vertical-align:middle;">
+</div>
+
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="achievements.html">Achievements</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="./tournaments.html">Tournaments</a></li>
+                <li><a href="ecommerce.html">Store</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
 
   <!-- Page Hero -->
   <section class="page-hero">
     <h1>Join Our Tournaments</h1>
-    <p>Compete, Win, Excel</p>
   </section>
 
   <!-- Main Content -->
@@ -521,6 +501,7 @@
   </div>
 
   <!-- Scripts -->
+  <script src="js/script.js"></script>
   <script src="js/db.js"></script>
   <script src="js/tournaments-user.js"></script>
   <script>
