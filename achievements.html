@@ -344,6 +344,104 @@
     box-shadow: 0 4px 8px rgba(17, 211, 243, 0.3);
 }
 
+/* Reduced padding on container */
+.state-ranking-container {
+    margin-top: 2rem;
+    background: linear-gradient(135deg, #0f766e 0%, #164e63 100%);
+    border-radius: 12px;
+    padding: 1.5rem; /* Reduced from 3rem */
+    box-shadow: 0 8px 24px rgba(15, 118, 110, 0.4);
+}
+
+/* Player photos container */
+.player-photos {
+    display: flex;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+}
+
+.player-photos img {
+    width: 45px;
+    height: 45px;
+    border-radius: 6px;
+    object-fit: cover;
+    border: 2px solid white;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .state-ranking-container {
+        margin-top: 1.5rem;
+        padding: 1rem;
+        border-radius: 8px;
+    }
+
+    .state-ranking-title {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+
+    .state-ranking-table {
+        font-size: 0.85rem;
+    }
+
+    .state-ranking-table th,
+    .state-ranking-table td {
+        padding: 0.75rem 0.5rem;
+        vertical-align: middle;
+    }
+
+    .player-photos {
+        gap: 0.125rem;
+    }
+
+    .player-photos img {
+        width: 35px;
+        height: 35px;
+        border-width: 1.5px;
+    }
+
+    .state-rank-badge {
+        width: 40px;
+        height: 40px;
+        font-size: 0.85rem;
+    }
+
+    /* Stack table on very small screens */
+    @media (max-width: 480px) {
+        .state-ranking-table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .state-ranking-table {
+            min-width: 500px;
+        }
+
+        .state-ranking-table th:nth-child(3),
+        .state-ranking-table td:nth-child(3) {
+            width: 80px;
+            text-align: center;
+        }
+    }
+}
+
+/* Desktop tweaks */
+@media (min-width: 769px) {
+    .player-photos img {
+        width: 60px;
+        height: 60px;
+        border-width: 2.5px;
+    }
+    
+    .state-rank-badge {
+        width: 55px;
+        height: 55px;
+        font-size: 1rem;
+    }
+}
+
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .carousel-content {
@@ -699,26 +797,33 @@
                 <table class="state-ranking-table">
                     <thead>
                         <tr>
-                            <th>Rank</th>
-                            <th>Players</th>
                             <th>Photo</th>
+                            <th>Players</th>
+                            <th>Rank</th>
                             <th>Category</th>
                         </tr>
                     </thead>
                     <tbody>
                         <!-- U-15 Girls (combined row) -->
                         <tr>
-                            <td><img src="https://via.placeholder.com/80x80/FFD700/333333?text=M+V" alt="Monisha">
-                                <img src="https://via.placeholder.com/80x80/FFD700/333333?text=M+V" alt="Veda">
+                             <td>
+                                <div class="player-photos">
+                                    <img src="https://via.placeholder.com/60x60/FFD700/333333?text=M" alt="Monisha">
+                                    <img src="https://via.placeholder.com/60x60/FFD700/333333?text=V" alt="Veda">
+                                </div>
                             </td>
                             <td>Monisha & Veda Varshina</td>
-                            <td><span class="state-rank-badge gold-medal">#9</span></td>
-                            <td>U - 15 Girls doubles</td>
+                            <td><span class="state-rank-badge gold-medal">#9</span></td>         
+                            <td>U-15 Girls Doubles</td>
                         </tr>
 
                         <!-- Senior Singles (Monisha solo) -->
                         <tr>
-                            <td><img src="https://via.placeholder.com/80x80/CD7F32/FFFFFF?text=Monisha" alt="Monisha"></td>
+                            <td>
+                                <div class="player-photos">
+                                    <img src="https://via.placeholder.com/60x60/CD7F32/FFFFFF?text=M" alt="Monisha">
+                                </div>
+                            </td>
                             <td>Monisha</td>
                             <td><span class="state-rank-badge silver-medal">#34</span></td>
                             <td>Senior Singles</td>
@@ -726,17 +831,21 @@
 
                         <!-- U-17 Boys (combined row) -->
                         <tr>
-                            <td><img src="https://via.placeholder.com/80x80/696969/FFFFFF?text=M+Y" alt="Mithin"> 
-                                <img src="https://via.placeholder.com/80x80/696969/FFFFFF?text=M+Y" alt="Yogi">
+                            <td>
+                                <div class="player-photos">
+                                    <img src="https://via.placeholder.com/60x60/696969/FFFFFF?text=M" alt="Mithin">
+                                    <img src="https://via.placeholder.com/60x60/696969/FFFFFF?text=Y" alt="Yogi">
+                                </div>
                             </td>
                             <td>Mithin & Yogi Tamizh</td>
                             <td><span class="state-rank-badge bronze-medal">#9</span></td>
-                            <td>U - 17 Boys doubles</td>
+                            <td>U-17 Boys Doubles</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
+
     </div>
 </section>
 
