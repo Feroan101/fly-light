@@ -980,3 +980,187 @@ section {
         grid-template-columns: 1fr;
     }
 }
+
+
+/* ===== CUSTOMIZABLE: TAMIL NADU STATE RANKING SECTION ===== */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.state-ranking-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 800;
+    color: rgb(71, 71, 71);
+    margin-bottom: 2rem;
+    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+    letter-spacing: 1px;
+}
+
+.state-ranking-table-wrapper {
+    overflow-x: auto;
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* State Ranking Table */
+.state-ranking-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.state-ranking-table thead {
+    background: linear-gradient(135deg, #0f766e 0%, #164e63 100%);  /* MATCHES STATE RANKING BG */
+    color: white;
+}
+
+.state-ranking-table th {
+    padding: 1.2rem;
+    text-align: left;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.state-ranking-table td {
+    padding: 1.2rem;
+    border-bottom: 2px solid #ecf0f1;
+    vertical-align: middle;
+}
+
+.state-ranking-table tbody tr {
+    transition: all 0.3s ease;
+}
+
+.state-ranking-table tbody tr:hover {
+    background-color: #f3f4ff;
+    box-shadow: inset 0 0 8px rgba(15, 118, 110, 0.1);
+}
+
+.state-ranking-table img {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 3px solid #0f766e;  /* MATCHES STATE RANKING BG */
+}
+
+/* Status Badge */
+.status-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+.status-badge.active {
+    background: linear-gradient(135deg, #11d3f3, #00d4ff);
+    color: white;
+    box-shadow: 0 4px 8px rgba(17, 211, 243, 0.3);
+}
+
+/* Reduced padding on container */
+.state-ranking-container {
+    margin-top: 1rem;
+    border-radius: 12px;
+    padding: 1rem; /* Reduced from 3rem */
+}
+
+/* Player photos container */
+.player-photos {
+    display: flex;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+}
+
+.player-photos img {
+    width: 45px;
+    height: 45px;
+    border-radius: 6px;
+    object-fit: cover;
+    border: 2px solid white;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .state-ranking-container {
+        margin-top: 1.5rem;
+        padding: 1rem;
+        border-radius: 8px;
+    }
+
+    .state-ranking-title {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+
+    .state-ranking-table {
+        font-size: 0.85rem;
+    }
+
+    .state-ranking-table th,
+    .state-ranking-table td {
+        padding: 0.75rem 0.5rem;
+        vertical-align: middle;
+    }
+
+    .player-photos {
+        gap: 0.125rem;
+    }
+
+    .player-photos img {
+        width: 35px;
+        height: 35px;
+        border-width: 1.5px;
+    }
+
+    .state-rank-badge {
+        width: 40px;
+        height: 40px;
+        font-size: 0.85rem;
+    }
+
+    /* Stack table on very small screens */
+    @media (max-width: 480px) {
+        .state-ranking-table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .state-ranking-table {
+            min-width: 500px;
+        }
+
+        .state-ranking-table th:nth-child(3),
+        .state-ranking-table td:nth-child(3) {
+            width: 80px;
+            text-align: center;
+        }
+    }
+}
+
+/* Desktop tweaks */
+@media (min-width: 769px) {
+    .player-photos img {
+        width: 60px;
+        height: 60px;
+        border-width: 2.5px;
+    }
+    
+    .state-rank-badge {
+        width: 55px;
+        height: 55px;
+        font-size: 1rem;
+    }
+}
+
