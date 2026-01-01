@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Registrations - Sky Light</title>
+    <link rel="icon" href="logo.png">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f8f9fa;
+      margin: 0;
+    }
+    .navbar {
+      background: rgba(44, 62, 80, 0.95);
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .navbar h1 {
+      margin: 0;
+      font-size: 20px;
+    }
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      margin-left: 15px;
+      font-size: 14px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .filters {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      min-width: 220px;
+    }
+    .form-group label {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #374151;
+    }
+    .form-group select {
+      padding: 8px 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    .btn {
+      padding: 9px 16px;
+      border-radius: 6px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .btn-primary {
+      background: #10B981;
+      color: white;
+    }
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #374151;
+    }
+    .summary {
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: #4b5563;
+    }
+    .table-wrapper {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      overflow: hidden;
+      border: 1px solid #e5e7eb;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+    }
+    th {
+      background: #f3f4f6;
+      font-weight: 600;
+      color: #374151;
+    }
+    tr:nth-child(even) td {
+      background: #fafafa;
+    }
+    .status-pill {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .status-pending {
+      background: #FEF3C7;
+      color: #92400E;
+    }
+    .status-confirmed {
+      background: #D1FAE5;
+      color: #065F46;
+    }
+    .status-cancelled {
+      background: #FEE2E2;
+      color: #991B1B;
+    }
+    .empty {
+      padding: 30px;
+      text-align: center;
+      color: #9CA3AF;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <h1>Registrations - Sky Light</h1>
+    <div>
+      <a href="admin.html">← Admin Dashboard</a>
+      <a href="tournaments.html">Tournaments</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="filters">
+      <div class="form-group">
+        <label for="filter-tournament">Tournament</label>
+        <select id="filter-tournament">
+          <option value="">Loading tournaments...</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="filter-category">Category / Event</label>
+        <select id="filter-category" disabled>
+          <option value="">Select a tournament first</option>
+        </select>
+      </div>
+
+      <button class="btn btn-primary" id="btn-export" disabled>📥 Export CSV</button>
+    </div>
+
+    <div class="summary" id="summary-text">
+      Select a tournament to view registrations.
+    </div>
+
+    <div class="table-wrapper" id="registrations-table-wrapper">
+      <div class="empty">No data yet.</div>
+    </div>
+  </div>
+
+  <script src="js/db.js"></script>
+  <script>
+    const API_URL = "https://fly-light.onrender.com/api/";
+    let allTournaments = [];
+    let eventsByTournament = {};
+    let currentRegistrations = [];
+    let currentTournamentId = null;
+
+    const selTournament = document.getElementById('filter-tournament');
+    const selCategory   = document.getElementById('filter-category');
+    const summaryText   = document.getElementById('summary-text');
+    const tableWrapper  = document.getElementById('registrations-table-wrapper');
+    const btnExport     = document.getElementById('btn-export');
+
+    // ---- INIT ----
+    document.addEventListener('DOMContentLoaded', () => {
+      redirectIfNotAuth(); // from db.js
+      loadTournamentsAndEvents();
+      setupListeners();
+    });
+
+    function setupListeners() {
+      selTournament.addEventListener('change', async () => {
+        const id = selTournament.value;
+        currentTournamentId = id || null;
+        await loadCategoriesForTournament(id);
+        if (id) {
+          await loadRegistrations(id);
+        } else {
+          currentRegistrations = [];
+          renderRegistrationsTable();
+        }
+      });
+
+      selCategory.addEventListener('change', () => {
+        renderRegistrationsTable(); // filter on selected category
+      });
+
+      btnExport.addEventListener('click', exportCurrentViewToCSV);
+    }
+
+    // ---- LOAD TOURNAMENTS + EVENTS ----
+    async function loadTournamentsAndEvents() {
+      const token = db.getAuthToken();
+      try {
+        // get admin tournaments
+        const res = await fetch(API_URL + 'admin/tournaments', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const tournaments = await res.json();
+        if (tournaments.error) throw new Error(tournaments.error);
+        allTournaments = Array.isArray(tournaments) ? tournaments : [];
+
+        // populate tournaments dropdown
+        selTournament.innerHTML = '<option value="">-- Select Tournament --</option>';
+        allTournaments.forEach(t => {
+          const opt = document.createElement('option');
+          opt.value = t.id;
+          opt.textContent = t.name;
+          selTournament.appendChild(opt);
+        });
+
+        // preload events per tournament for category filter
+        for (const t of allTournaments) {
+          const evRes = await fetch(API_URL + 'tournaments/' + t.id + '/events');
+          const evData = await evRes.json();
+          eventsByTournament[t.id] = Array.isArray(evData) ? evData : [];
+        }
+
+        summaryText.textContent = 'Select a tournament to view registrations.';
+      } catch (err) {
+        console.error(err);
+        selTournament.innerHTML = '<option value="">Error loading tournaments</option>';
+        summaryText.textContent = 'Error loading tournaments.';
+      }
+    }
+
+    async function loadCategoriesForTournament(tournamentId) {
+      selCategory.disabled = true;
+      selCategory.innerHTML = '<option value="">All categories</option>';
+
+      if (!tournamentId) return;
+
+      const events = eventsByTournament[tournamentId] || [];
+      if (events.length === 0) {
+        selCategory.innerHTML = '<option value="">No categories for this tournament</option>';
+        return;
+      }
+
+      selCategory.innerHTML = '<option value="">All categories</option>';
+      events.forEach(ev => {
+        const opt = document.createElement('option');
+        opt.value = ev.id;
+        opt.textContent = `${ev.name} (${ev.category || 'General'})`;
+        selCategory.appendChild(opt);
+      });
+      selCategory.disabled = false;
+    }
+
+    // ---- LOAD REGISTRATIONS ----
+    async function loadRegistrations(tournamentId) {
+      const token = db.getAuthToken();
+      try {
+        tableWrapper.innerHTML = '<div class="empty">Loading registrations...</div>';
+        const res = await fetch(API_URL + 'admin/tournaments/' + tournamentId + '/registrations', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+        currentRegistrations = Array.isArray(data) ? data : [];
+
+        const t = allTournaments.find(x => x.id === tournamentId);
+        const count = currentRegistrations.length;
+        summaryText.textContent = `${t ? t.name : 'Selected tournament'} – ${count} registration${count !== 1 ? 's' : ''}`;
+
+        renderRegistrationsTable();
+        btnExport.disabled = count === 0;
+      } catch (err) {
+        console.error(err);
+        tableWrapper.innerHTML = '<div class="empty">Error loading registrations.</div>';
+        summaryText.textContent = 'Error loading registrations.';
+        btnExport.disabled = true;
+      }
+    }
+
+    // ---- RENDER TABLE WITH FILTERS ----
+    function renderRegistrationsTable() {
+      if (!currentTournamentId) {
+        tableWrapper.innerHTML = '<div class="empty">Select a tournament to see players.</div>';
+        btnExport.disabled = true;
+        return;
+      }
+
+      let filtered = currentRegistrations;
+
+      const selectedCategoryId = selCategory.value || null;
+      const events = eventsByTournament[currentTournamentId] || [];
+
+      if (selectedCategoryId) {
+        filtered = filtered.filter(r => r.selected_event_id === selectedCategoryId);
+      }
+
+      if (filtered.length === 0) {
+        tableWrapper.innerHTML = '<div class="empty">No registrations for this filter.</div>';
+        btnExport.disabled = true;
+        return;
+      }
+
+      btnExport.disabled = false;
+
+      let html = `
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Player Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Academy</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th>Joined</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      filtered.forEach((reg, idx) => {
+        const joined = reg.joined_at ? new Date(reg.joined_at).toLocaleString('en-IN') : '-';
+        const event = events.find(e => e.id === reg.selected_event_id);
+        const categoryName = event ? `${event.name} (${event.category || 'General'})` : (reg.selected_event_id || '-');
+
+        let statusClass = 'status-pending';
+        if (reg.status === 'confirmed') statusClass = 'status-confirmed';
+        if (reg.status === 'cancelled') statusClass = 'status-cancelled';
+
+        html += `
+          <tr>
+            <td>${idx + 1}</td>
+            <td>${escapeHtml(reg.participant_name)}</td>
+            <td>${escapeHtml(reg.email)}</td>
+            <td>${escapeHtml(reg.phone)}</td>
+            <td>${escapeHtml(reg.academy_name || '-')}</td>
+            <td>${escapeHtml(categoryName)}</td>
+            <td><span class="status-pill ${statusClass}">${reg.status.toUpperCase()}</span></td>
+            <td>${joined}</td>
+          </tr>
+        `;
+      });
+
+      html += '</tbody></table>';
+      tableWrapper.innerHTML = html;
+    }
+
+    // ---- CSV EXPORT OF CURRENT VIEW ----
+    function exportCurrentViewToCSV() {
+      const selectedCategoryId = selCategory.value || null;
+      const events = eventsByTournament[currentTournamentId] || [];
+      let filtered = currentRegistrations;
+
+      if (selectedCategoryId) {
+        filtered = filtered.filter(r => r.selected_event_id === selectedCategoryId);
+      }
+
+      if (filtered.length === 0) {
+        alert('No registrations to export for this filter.');
+        return;
+      }
+
+      const headers = ['Tournament', 'Category', 'Player Name', 'Email', 'Phone', 'Academy', 'Status', 'Joined At'];
+      const t = allTournaments.find(x => x.id === currentTournamentId);
+      const tournamentName = t ? t.name : currentTournamentId;
+
+      const rows = filtered.map(reg => {
+        const event = events.find(e => e.id === reg.selected_event_id);
+        const categoryName = event ? `${event.name} (${event.category || 'General'})` : (reg.selected_event_id || '-');
+        const joined = reg.joined_at ? new Date(reg.joined_at).toISOString() : '';
+
+        return [
+          tournamentName,
+          categoryName,
+          reg.participant_name,
+          reg.email,
+          reg.phone,
+          reg.academy_name || '',
+          reg.status,
+          joined
+        ];
+      });
+
+      let csv = headers.map(h => `"${h}"`).join(',') + '\n';
+      rows.forEach(row => {
+        csv += row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',') + '\n';
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+
+      const catLabel = selectedCategoryId ? '-category' : '-all';
+      link.download = `registrations-${tournamentName.replace(/[^a-z0-9]+/gi,'_')}${catLabel}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // helper
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>

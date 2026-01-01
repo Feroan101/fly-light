@@ -1,0 +1,1070 @@
+<!doctype html>
+<html class="no-js" lang="zxx">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Fly Light</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
+
+    <!-- CSS here -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/css/slicknav.css">
+    <link rel="stylesheet" href="assets/css/flaticon.css">
+    <link rel="stylesheet" href="assets/css/gijgo.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/css/animated-headline.css">
+    <link rel="stylesheet" href="assets/css/magnific-popup.css">
+    <link rel="stylesheet" href="assets/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="assets/css/themify-icons.css">
+    <link rel="stylesheet" href="assets/css/slick.css">
+    <link rel="stylesheet" href="assets/css/nice-select.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+   <style>
+.achievements-heading {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Bigger white headings */
+.achievements-heading h3 {
+    font-size: 28px;              /* bigger than before */
+    font-weight: 700;
+    color: #ffffff;               /* white */
+    margin: 0;
+}
+
+/* Add side padding so tables don't touch edges */
+/* Shrink horizontal width only */
+.progress-table-wrap {
+    max-width: 50%;               /* shrink width */
+    margin: 0 auto 30px auto;     /* center it */
+}
+
+.progress-table {
+    font-size: 14px;
+}
+
+/* Shrink cell widths specifically */
+.progress-table .serial {
+    width: 10%;                    /* very narrow */
+}
+
+.progress-table .country {
+    width: 30%;                   /* main content space */
+}
+
+.progress-table .visit {
+    width: 30%;                   /* medium */
+}
+
+.progress-table .percentage {
+    width: 30%;                   /* rank space */
+}
+
+
+/* keep this if you still use it */
+.mt-50 {
+    margin-top: 50px;
+}
+</style>
+
+
+<style>
+/* ACHIEVEMENTS SECTION */
+.achievements-section {
+    background-color: black;
+    color: #fff;
+    padding: 60px 20px;
+}
+
+.achievements-section .container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* CAROUSEL HEADING */
+.carousel-heading {
+    font-size: 32px;
+    font-weight: 700;
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* CAROUSEL SECTION */
+.carousel-section {
+    margin-bottom: 80px;
+}
+
+.carousel-container {
+    position: relative;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* CAROUSEL */
+.carousel {
+    display: flex;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.carousel-item {
+    min-width: 100%;
+    opacity: 0;
+    transition: opacity 0.6s ease-in-out;
+}
+
+.carousel-item.active {
+    opacity: 1;
+}
+
+/* ACHIEVEMENT CARD */
+.achievement-card {
+    background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 40px 30px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.achievement-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6);
+    border-color: #32b8c6;
+}
+
+.card-image {
+    margin-bottom: 25px;
+}
+
+.card-image img {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #32b8c6;
+    transition: border-color 0.3s ease;
+}
+
+.achievement-card:hover .card-image img {
+    border-color: #2a9aaa;
+}
+
+.card-content h4 {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 15px 0 10px 0;
+    color: #fff;
+}
+
+.card-content .category {
+    display: block;
+    font-size: 14px;
+    color: #a0a0a0;
+    margin-bottom: 8px;
+}
+
+.card-content .rank {
+    display: block;
+    font-size: 18px;
+    color: #32b8c6;
+    font-weight: 600;
+}
+
+/* CAROUSEL BUTTONS */
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(50, 184, 198, 0.8);
+    color: #fff;
+    border: none;
+    padding: 12px 16px;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background 0.3s ease;
+    z-index: 10;
+}
+
+.carousel-btn:hover {
+    background: rgba(50, 184, 198, 1);
+}
+
+.carousel-btn-prev {
+    left: -60px;
+}
+
+.carousel-btn-next {
+    right: -60px;
+}
+
+@media (max-width: 768px) {
+    .carousel-btn-prev {
+        left: 10px;
+    }
+    .carousel-btn-next {
+        right: 10px;
+    }
+}
+
+/* CAROUSEL DOTS */
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.dot.active {
+    background: #32b8c6;
+}
+
+.dot:hover {
+    background: rgba(50, 184, 198, 0.7);
+}
+
+/* STATE RANKING TABLE */
+.state-ranking-wrapper {
+    margin-top: 80px;
+}
+
+.progress-table-wrap {
+    max-width: 85%;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.progress-table {
+    background-color: #0f0f0f;
+    border: 1px solid #333;
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 14px;
+}
+
+.progress-table .table-head {
+    display: grid;
+    grid-template-columns: 8% 45% 25% 22%;
+    background: linear-gradient(135deg, #32b8c6 0%, #2a9aaa 100%);
+    font-weight: 600;
+    padding: 20px;
+    gap: 15px;
+}
+
+.progress-table .table-row {
+    display: grid;
+    grid-template-columns: 8% 45% 25% 22%;
+    padding: 18px 20px;
+    border-bottom: 1px solid #222;
+    align-items: center;
+    gap: 15px;
+    transition: background 0.3s ease;
+}
+
+.progress-table .table-row:hover {
+    background: #1a1a1a;
+}
+
+.progress-table .serial {
+    font-weight: 600;
+    color: #32b8c6;
+}
+
+.progress-table .country {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.progress-table .country img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #32b8c6;
+}
+
+.progress-table .country img + span,
+.progress-table .country {
+    color: #fff;
+}
+
+.progress-table .visit {
+    color: #a0a0a0;
+}
+
+.progress-table .percentage {
+    color: #32b8c6;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .carousel-heading {
+        font-size: 24px;
+        margin-bottom: 30px;
+    }
+
+    .achievement-card {
+        padding: 25px 20px;
+    }
+
+    .card-image img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .card-content h4 {
+        font-size: 18px;
+    }
+
+    .progress-table .table-head,
+    .progress-table .table-row {
+        grid-template-columns: 15% 40% 25% 20%;
+        padding: 15px 10px;
+        font-size: 12px;
+    }
+
+    .progress-table .serial {
+        text-align: center;
+    }
+
+    .progress-table .country img {
+        width: 35px;
+        height: 35px;
+    }
+}
+</style>
+
+</head>
+<body class="black-bg">
+    <!-- ? Preloader Start -->
+    <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-inner position-relative">
+                <div class="preloader-circle"></div>
+                <div class="preloader-img pere-text">
+                    <img src="assets/img/logo/loder.png" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Preloader Start -->
+    <header>
+        <!-- Header Start -->
+        <div class="header-area header-transparent">
+            <div class="main-header header-sticky">
+                <div class="container-fluid">
+                    <div class="menu-wrapper d-flex align-items-center justify-content-between">
+                        <!-- Logo -->
+                        <div class="logo">
+                            <a href="index.html">flylight</a>
+                        </div>
+                        <!-- Main-menu -->
+                        <div class="main-menu f-right d-none d-lg-block">
+                            <nav>
+                                <ul id="navigation">
+                                    <li><a href="index.html">Home</a></li>
+                                    <li><a href="about.html">About</a></li>
+                                    <li><a href="courses.html">Coaches</a></li>
+                                    <li><a href="pricing.html">Achivements</a></li>
+                                    <li><a href="gallery.html">Gallery</a></li>
+                                    <li><a href="blog.html">Blog</a>
+                                        <ul class="submenu">
+                                            <li><a href="blog.html">Blog</a></li>
+                                            <li><a href="blog_details.html">Blog Details</a></li>
+                                            <li><a href="elements.html">Elements</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="contact.html">Contact</a></li>
+                                </ul>
+                            </nav>
+                        </div>          
+                        <!-- Header-btn -->
+                        <div class="header-btns d-none d-lg-block f-right">
+                           <a href="contact.html" class="btn">Contact me</a>
+                       </div>
+                       <!-- Mobile Menu -->
+                       <div class="col-12">
+                        <div class="mobile_menu d-block d-lg-none"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+</header>
+<main>
+    <!--? Hero Start -->
+    <div class="slider-area2" style="background-image: url(img/achivements-head.jpg) !important;">
+        <div class="slider-height2 d-flex align-items-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="hero-cap hero-cap2 pt-70">
+                            <h2>Achievements</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Hero End -->
+    <!-- Courses area start -->
+    <!-- ACHIEVEMENTS CAROUSELS & TABLE -->
+<section class="achievements-section">
+    <div class="container">
+        <!-- Chengalpattu District Championship 2025 -->
+        <div class="carousel-section">
+            <h3 class="carousel-heading">Chengalpattu District Championship 2025</h3>
+            <div class="carousel-container" data-active-index="0">
+                <div class="carousel">
+                    <!-- Card 1 -->
+                    <div class="carousel-item active">
+                        <div class="achievement-card">
+                            <div class="card-image">
+                                <img src="assets/img/elements/f1.jpg" alt="Giri">
+                            </div>
+                            <div class="card-content">
+                                <h4>Giri</h4>
+                                <p class="category">U-19 Boys Doubles</p>
+                                <p class="rank">🥈 2nd Place</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="carousel-item">
+                        <div class="achievement-card">
+                            <div class="card-image">
+                                <img src="assets/img/elements/f2.jpg" alt="Raghav">
+                            </div>
+                            <div class="card-content">
+                                <h4>Raghav</h4>
+                                <p class="category">U-19 Boys Doubles</p>
+                                <p class="rank">🥈 2nd Place</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="carousel-item">
+                        <div class="achievement-card">
+                            <div class="card-image">
+                                <img src="assets/img/elements/f3.jpg" alt="Nitin">
+                            </div>
+                            <div class="card-content">
+                                <h4>Nitin</h4>
+                                <p class="category">U-17 Boys Doubles</p>
+                                <p class="rank">🥇 1st Place</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card 4 -->
+                    <div class="carousel-item">
+                        <div class="achievement-card">
+                            <div class="card-image">
+                                <img src="assets/img/elements/f4.jpg" alt="Ragav">
+                            </div>
+                            <div class="card-content">
+                                <h4>Ragav</h4>
+                                <p class="category">U-17 Boys Doubles</p>
+                                <p class="rank">🥇 1st Place</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card 5 -->
+                    <div class="carousel-item">
+                        <div class="achievement-card">
+                            <div class="card-image">
+                                <img src="assets/img/elements/f5.jpg" alt="Nitin">
+                            </div>
+                            <div class="card-content">
+                                <h4>Nitin</h4>
+                                <p class="category">U-17 Boys Singles</p>
+                                <p class="rank">🥈 2nd Place</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card 6 -->
+                    <div class="carousel-item">
+                        <div class="achievement-card">
+                            <div class="card-image">
+                                <img src="assets/img/elements/f6.jpg" alt="Chris Jones">
+                            </div>
+                            <div class="card-content">
+                                <h4>Chris Jones</h4>
+                                <p class="category">U-15 Boys Doubles</p>
+                                <p class="rank">🥉 3rd Place</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-btn carousel-btn-prev">❮</button>
+                <button class="carousel-btn carousel-btn-next">❯</button>
+                <div class="carousel-dots">
+                    <span class="dot active" data-slide="0"></span>
+                    <span class="dot" data-slide="1"></span>
+                    <span class="dot" data-slide="2"></span>
+                    <span class="dot" data-slide="3"></span>
+                    <span class="dot" data-slide="4"></span>
+                    <span class="dot" data-slide="5"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chengalpattu District Championship 2024 -->
+        <div class="carousel-section">
+            <h3 class="carousel-heading">Chengalpattu District Championship 2024</h3>
+            <div class="carousel-container" data-active-index="0">
+                <div class="carousel">
+                    <div class="carousel-item active">
+                        <div class="achievement-card">
+                            <div class="card-image">
+                                <img src="assets/img/elements/f1.jpg" alt="Nitin">
+                            </div>
+                            <div class="card-content">
+                                <h4>Nitin</h4>
+                                <p class="category">U-15 Doubles</p>
+                                <p class="rank">🥇 1st Place</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="achievement-card">
+                            <div class="card-image">
+                                <img src="assets/img/elements/f2.jpg" alt="Yogi Tamizh">
+                            </div>
+                            <div class="card-content">
+                                <h4>Yogi Tamizh</h4>
+                                <p class="category">U-15 Doubles</p>
+                                <p class="rank">🥇 1st Place</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="achievement-card">
+                            <div class="card-image">
+                                <img src="assets/img/elements/f3.jpg" alt="Nitin">
+                            </div>
+                            <div class="card-content">
+                                <h4>Nitin</h4>
+                                <p class="category">U-15 Mixed Doubles</p>
+                                <p class="rank">🥉 3rd Place</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="achievement-card">
+                            <div class="card-image">
+                                <img src="assets/img/elements/f4.jpg" alt="Monisha">
+                            </div>
+                            <div class="card-content">
+                                <h4>Monisha</h4>
+                                <p class="category">U-15 Mixed Doubles</p>
+                                <p class="rank">🥉 3rd Place</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="achievement-card">
+                            <div class="card-image">
+                                <img src="assets/img/elements/f5.jpg" alt="Chris Jones">
+                            </div>
+                            <div class="card-content">
+                                <h4>Chris Jones</h4>
+                                <p class="category">U-15 Mixed Doubles</p>
+                                <p class="rank">⭐ Semi-Finals</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="achievement-card">
+                            <div class="card-image">
+                                <img src="assets/img/elements/f6.jpg" alt="Varshini">
+                            </div>
+                            <div class="card-content">
+                                <h4>Varshini</h4>
+                                <p class="category">U-15 Mixed Doubles</p>
+                                <p class="rank">⭐ Semi-Finals</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="achievement-card">
+                            <div class="card-image">
+                                <img src="assets/img/elements/f7.jpg" alt="Sri Ram">
+                            </div>
+                            <div class="card-content">
+                                <h4>Sri Ram</h4>
+                                <p class="category">U-17 Singles</p>
+                                <p class="rank">🥉 3rd Place</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="achievement-card">
+                            <div class="card-image">
+                                <img src="assets/img/elements/f8.jpg" alt="Saktheeswar">
+                            </div>
+                            <div class="card-content">
+                                <h4>Saktheeswar</h4>
+                                <p class="category">U-19 Doubles</p>
+                                <p class="rank">🥈 2nd Place</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="achievement-card">
+                            <div class="card-image">
+                                <img src="assets/img/elements/f9.jpg" alt="Giri">
+                            </div>
+                            <div class="card-content">
+                                <h4>Giri</h4>
+                                <p class="category">U-19 Doubles</p>
+                                <p class="rank">🥈 2nd Place</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-btn carousel-btn-prev">❮</button>
+                <button class="carousel-btn carousel-btn-next">❯</button>
+                <div class="carousel-dots">
+                    <span class="dot active" data-slide="0"></span>
+                    <span class="dot" data-slide="1"></span>
+                    <span class="dot" data-slide="2"></span>
+                    <span class="dot" data-slide="3"></span>
+                    <span class="dot" data-slide="4"></span>
+                    <span class="dot" data-slide="5"></span>
+                    <span class="dot" data-slide="6"></span>
+                    <span class="dot" data-slide="7"></span>
+                    <span class="dot" data-slide="8"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- CM Trophy -->
+        <div class="carousel-section">
+            <h3 class="carousel-heading">CM Trophy</h3>
+            <div class="carousel-container" data-active-index="0">
+                <div class="carousel">
+                    <div class="carousel-item active">
+                        <div class="achievement-card">
+                            <div class="card-image">
+                                <img src="assets/img/elements/f1.jpg" alt="Tharun">
+                            </div>
+                            <div class="card-content">
+                                <h4>Tharun</h4>
+                                <p class="category">Doubles</p>
+                                <p class="rank">🥉 3rd Place</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="achievement-card">
+                            <div class="card-image">
+                                <img src="assets/img/elements/f2.jpg" alt="Sri Ram">
+                            </div>
+                            <div class="card-content">
+                                <h4>Sri Ram</h4>
+                                <p class="category">Doubles</p>
+                                <p class="rank">🥉 3rd Place</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="achievement-card">
+                            <div class="card-image">
+                                <img src="assets/img/elements/f3.jpg" alt="Ragav">
+                            </div>
+                            <div class="card-content">
+                                <h4>Ragav</h4>
+                                <p class="category">Singles</p>
+                                <p class="rank">🥇 1st Place</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="achievement-card">
+                            <div class="card-image">
+                                <img src="assets/img/elements/f4.jpg" alt="Nitin">
+                            </div>
+                            <div class="card-content">
+                                <h4>Nitin</h4>
+                                <p class="category">Doubles</p>
+                                <p class="rank">🏅 Runner-up</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="achievement-card">
+                            <div class="card-image">
+                                <img src="assets/img/elements/f5.jpg" alt="Sri Ram">
+                            </div>
+                            <div class="card-content">
+                                <h4>Sri Ram</h4>
+                                <p class="category">Doubles</p>
+                                <p class="rank">🏅 Runner-up</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="achievement-card">
+                            <div class="card-image">
+                                <img src="assets/img/elements/f6.jpg" alt="Nitin">
+                            </div>
+                            <div class="card-content">
+                                <h4>Nitin</h4>
+                                <p class="category">Doubles</p>
+                                <p class="rank">🥈 2nd Place</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="achievement-card">
+                            <div class="card-image">
+                                <img src="assets/img/elements/f7.jpg" alt="Ragav">
+                            </div>
+                            <div class="card-content">
+                                <h4>Ragav</h4>
+                                <p class="category">Doubles</p>
+                                <p class="rank">🥈 2nd Place</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-btn carousel-btn-prev">❮</button>
+                <button class="carousel-btn carousel-btn-next">❯</button>
+                <div class="carousel-dots">
+                    <span class="dot active" data-slide="0"></span>
+                    <span class="dot" data-slide="1"></span>
+                    <span class="dot" data-slide="2"></span>
+                    <span class="dot" data-slide="3"></span>
+                    <span class="dot" data-slide="4"></span>
+                    <span class="dot" data-slide="5"></span>
+                    <span class="dot" data-slide="6"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SGFI Regional Selection -->
+        <div class="carousel-section">
+            <h3 class="carousel-heading">SGFI Regional Selection</h3>
+            <div class="carousel-container" data-active-index="0">
+                <div class="carousel">
+                    <div class="carousel-item active">
+                        <div class="achievement-card">
+                            <div class="card-image">
+                                <img src="assets/img/elements/f1.jpg" alt="Monisha">
+                            </div>
+                            <div class="card-content">
+                                <h4>Monisha</h4>
+                                <p class="category">U-14 Girls</p>
+                                <p class="rank">🥈 2nd Place</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="achievement-card">
+                            <div class="card-image">
+                                <img src="assets/img/elements/f2.jpg" alt="Giridharan">
+                            </div>
+                            <div class="card-content">
+                                <h4>Giridharan</h4>
+                                <p class="category">U-19 Boys</p>
+                                <p class="rank">🥉 3rd Place</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="achievement-card">
+                            <div class="card-image">
+                                <img src="assets/img/elements/f3.jpg" alt="Ragav">
+                            </div>
+                            <div class="card-content">
+                                <h4>Ragav</h4>
+                                <p class="category">U-17 Boys</p>
+                                <p class="rank">⭐ 5th Place</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-btn carousel-btn-prev">❮</button>
+                <button class="carousel-btn carousel-btn-next">❯</button>
+                <div class="carousel-dots">
+                    <span class="dot active" data-slide="0"></span>
+                    <span class="dot" data-slide="1"></span>
+                    <span class="dot" data-slide="2"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tamil Nadu State Ranking (Table) -->
+        <div class="state-ranking-wrapper">
+            <h3 class="carousel-heading">Tamil Nadu State Ranking – Main Draw Players</h3>
+            <div class="progress-table-wrap">
+                <div class="progress-table">
+                    <div class="table-head">
+                        <div class="serial">#</div>
+                        <div class="country">Name</div>
+                        <div class="visit">Category</div>
+                        <div class="percentage">Ranking</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="serial">01</div>
+                        <div class="country"><img src="assets/img/elements/f1.jpg" alt="flag">Monisha</div>
+                        <div class="visit">U-15 Girls Doubles</div>
+                        <div class="percentage">#9</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="serial">02</div>
+                        <div class="country"><img src="assets/img/elements/f2.jpg" alt="flag">Veda Varshina</div>
+                        <div class="visit">U-15 Girls Doubles</div>
+                        <div class="percentage">#9</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="serial">03</div>
+                        <div class="country"><img src="assets/img/elements/f3.jpg" alt="flag">Monisha</div>
+                        <div class="visit">Senior Singles</div>
+                        <div class="percentage">#34</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="serial">04</div>
+                        <div class="country"><img src="assets/img/elements/f4.jpg" alt="flag">Mithin</div>
+                        <div class="visit">U-17 Boys Doubles</div>
+                        <div class="percentage">#9</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="serial">05</div>
+                        <div class="country"><img src="assets/img/elements/f5.jpg" alt="flag">Yogi Tamizh</div>
+                        <div class="visit">U-17 Boys Doubles</div>
+                        <div class="percentage">#9</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+</div>
+
+
+    <!-- Courses area End -->
+    <!-- ? services-area -->
+    <section class="services-area">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-8">
+                    <div class="single-services mb-40">
+                        <div class="features-icon">
+                            <img src="assets/img/icon/icon1.svg" alt="">
+                        </div>
+                        <div class="features-caption">
+                            <h3>Location</h3>
+                            <p>You’ll look at graphs and charts in Task One, how to approach </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-8">
+                    <div class="single-services mb-40">
+                        <div class="features-icon">
+                            <img src="assets/img/icon/icon2.svg" alt="">
+                        </div>
+                        <div class="features-caption">
+                            <h3>Phone</h3>
+                            <p>(90) 277 278 2566</p>
+                            <p>  (78) 267 256 2578</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-8">
+                    <div class="single-services mb-40">
+                        <div class="features-icon">
+                            <img src="assets/img/icon/icon3.svg" alt="">
+                        </div>
+                        <div class="features-caption">
+                            <h3>Email</h3>
+                            <p>jacson767@gmail.com</p>
+                            <p>contact56@zacsion.com</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<footer>
+    <!--? Footer Start-->
+    <div class="footer-area black-bg">
+        <div class="container">
+            <div class="footer-top footer-padding">
+                <!-- Footer Menu -->
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="single-footer-caption mb-50 text-center">
+                            <!-- logo -->
+                            <div class="footer-logo wow fadeInUp" data-wow-duration="1s" data-wow-delay=".2s">
+                                <a href="index.html">FlyLight</a>
+                            </div>
+                            <!-- Menu -->
+                            <!-- Header Start -->
+                            <div class="header-area main-header2 wow fadeInUp" data-wow-duration="2s" data-wow-delay=".4s">
+                                <div class="main-header main-header2">
+                                    <div class="menu-wrapper menu-wrapper2">
+                                        <!-- Main-menu -->
+                                        <div class="main-menu main-menu2 text-center">
+                                            <nav>
+                                                <ul>
+                                                    <li><a href="index.html">Home</a></li>
+                                                    <li><a href="about.html">About</a></li>
+                                                    <li><a href="courses.html">Coaches</a></li>
+                                                    <li><a href="pricing.html">Achivements</a></li>
+                                                    <li><a href="gallery.html">Gallery</a></li>
+                                                    <li><a href="contact.html">Contact</a></li>
+                                                </ul>
+                                            </nav>
+                                        </div>   
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Header End -->
+                            <!-- social -->
+                            <div class="footer-social mt-30 wow fadeInUp" data-wow-duration="3s" data-wow-delay=".8s">
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="https://bit.ly/sai4ull"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <div class="row d-flex align-items-center">
+                    <div class="col-lg-12">
+                        <div class="footer-copy-right text-center">
+                            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                              Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved by FlyLight </a>
+                              <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- Footer End-->
+  </footer>
+  <!-- Scroll Up -->
+  <div id="back-top" >
+    <a title="Go to Top" href="#"> <i class="fas fa-level-up-alt"></i></a>
+</div>
+
+<!-- JS here -->
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const carouselContainers = document.querySelectorAll('.carousel-container');
+
+    carouselContainers.forEach(container => {
+        const carousel = container.querySelector('.carousel');
+        const items = container.querySelectorAll('.carousel-item');
+        const dots = container.querySelectorAll('.dot');
+        const prevBtn = container.querySelector('.carousel-btn-prev');
+        const nextBtn = container.querySelector('.carousel-btn-next');
+        let currentIndex = 0;
+
+        function showSlide(index) {
+            items.forEach((item, i) => {
+                item.classList.toggle('active', i === index);
+            });
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % items.length;
+            showSlide(currentIndex);
+        }
+
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + items.length) % items.length;
+            showSlide(currentIndex);
+        }
+
+        prevBtn.addEventListener('click', prevSlide);
+        nextBtn.addEventListener('click', nextSlide);
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentIndex = index;
+                showSlide(currentIndex);
+            });
+        });
+
+        showSlide(currentIndex);
+    });
+});
+</script>
+
+
+<script src="./assets/js/vendor/modernizr-3.5.0.min.js"></script>
+<!-- Jquery, Popper, Bootstrap -->
+<script src="./assets/js/vendor/jquery-1.12.4.min.js"></script>
+<script src="./assets/js/popper.min.js"></script>
+<script src="./assets/js/bootstrap.min.js"></script>
+<!-- Jquery Mobile Menu -->
+<script src="./assets/js/jquery.slicknav.min.js"></script>
+
+<!-- Jquery Slick , Owl-Carousel Plugins -->
+<script src="./assets/js/owl.carousel.min.js"></script>
+<script src="./assets/js/slick.min.js"></script>
+<!-- One Page, Animated-HeadLin -->
+<script src="./assets/js/wow.min.js"></script>
+<script src="./assets/js/animated.headline.js"></script>
+<script src="./assets/js/jquery.magnific-popup.js"></script>
+
+<!-- Date Picker -->
+<script src="./assets/js/gijgo.min.js"></script>
+<!-- Nice-select, sticky -->
+<script src="./assets/js/jquery.nice-select.min.js"></script>
+<script src="./assets/js/jquery.sticky.js"></script>
+
+<!-- counter , waypoint,Hover Direction -->
+<script src="./assets/js/jquery.counterup.min.js"></script>
+<script src="./assets/js/waypoints.min.js"></script>
+<script src="./assets/js/jquery.countdown.min.js"></script>
+<script src="./assets/js/hover-direction-snake.min.js"></script>
+
+<!-- contact js -->
+<script src="./assets/js/contact.js"></script>
+<script src="./assets/js/jquery.form.js"></script>
+<script src="./assets/js/jquery.validate.min.js"></script>
+<script src="./assets/js/mail-script.js"></script>
+<script src="./assets/js/jquery.ajaxchimp.min.js"></script>
+
+<!-- Jquery Plugins, main Jquery -->	
+<script src="./assets/js/plugins.js"></script>
+<script src="./assets/js/main.js"></script>
+
+</body>
+</html>

@@ -1,346 +1,538 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html class="no-js" lang="zxx">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>fly Light - The School of Badminton</title>
-    <link rel="icon" href="logo.png">
-    <link rel="stylesheet" href="styles/styles.css">
-    <style>
-.state-ranking-mobile {
-    margin: 1rem 0;
-}
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Fly Light</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
 
-.ranking-card {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    padding: 1rem;
-    border-bottom: 1px solid #e5e7eb;
-    background: white;
-    transition: background 0.2s ease;
-}
-
-.ranking-card:hover {
-    background: #f8fafc;
-}
-
-.card-badge {
-    flex-shrink: 0;
-    width: 28px;
-    height: 28px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 0.8rem;
-    margin-top: 0.125rem;
-}
-
-.card-left {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.375rem;
-    min-width: 75px;
-    flex-shrink: 0;
-}
-
-.card-right {
-    flex: 1;
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: #1f2937;
-    line-height: 1.4;
-    margin-top: 0.125rem;
-}
-
-.category-tag {
-    font-size: 0.8rem;
-    color: #6b7280;
-    font-weight: 500;
-    padding: 0.25rem 0.75rem;
-    background: #f1f5f9;
-    border-radius: 20px;
-    white-space: nowrap;
-}
-
-/* Vibrant badge colors */
-.state-rank-badge {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
-    font-size: 0.75rem;
-    color: white;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.state-rank-badge.gold-medal {
-    background: linear-gradient(135deg, #facc15, #eab308);
-}
-
-.state-rank-badge.silver-medal {
-    background: linear-gradient(135deg, #e5e7eb, #d1d5db);
-    color: #374151;
-}
-
-.state-rank-badge.bronze-medal {
-    background: linear-gradient(135deg, #f97316, #ea580c);
-}
-
-/* Mobile spacing */
-@media (max-width: 768px) {
-    .ranking-card {
-        padding: 0.875rem 0.75rem;
-        gap: 0.75rem;
-    }
-    
-    .card-badge {
-        width: 24px;
-        height: 24px;
-        font-size: 0.75rem;
-    }
-    
-    .state-rank-badge {
-        width: 32px;
-        height: 32px;
-        font-size: 0.7rem;
-    }
-    
-    .card-right {
-        font-size: 0.9rem;
-    }
-}
-
-    </style>
+    <!-- CSS here -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/css/slicknav.css">
+    <link rel="stylesheet" href="assets/css/flaticon.css">
+    <link rel="stylesheet" href="assets/css/gijgo.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/css/animated-headline.css">
+    <link rel="stylesheet" href="assets/css/magnific-popup.css">
+    <link rel="stylesheet" href="assets/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="assets/css/themify-icons.css">
+    <link rel="stylesheet" href="assets/css/slick.css">
+    <link rel="stylesheet" href="assets/css/nice-select.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body>
-    <!--https://fly-light.onrender.com-->
-    <!--http://127.0.0.1:5000-->
-    <!-- Navigation -->
-    <nav class="navbar" id="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-  <img src="logo.png" alt="fly Light Academy Logo" style="height:60px; vertical-align:middle;">
-</div>
-
-            <div class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
+<body class="black-bg">
+    <!-- ? Preloader Start -->
+    <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-inner position-relative">
+                <div class="preloader-circle"></div>
+                <div class="preloader-img pere-text">
+                    <img src="assets/img/logo/loder.png" alt="">
+                </div>
             </div>
-            <ul class="nav-menu" id="nav-menu">
-                <li><a href="index.html" class="active">Home</a></li>
-                <li><a href="achievements.html">Achievements</a></li>
-                <li><a href="gallery.html">Gallery</a></li>
-                <li><a href="coaches.html">Coaches</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
         </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero" id="hero">
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <h1 class="hero-title">fly Light</h1>
-            <p class="hero-subtitle">The School of Badminton</p>
-            <a href="#achievements" class="btn btn-primary">Explore Our Journey</a>
+    </div>
+    <!-- Preloader Start -->
+    <header>
+        <!-- Header Start -->
+        <div class="header-area header-transparent">
+            <div class="main-header header-sticky">
+                <div class="container-fluid">
+                    <div class="menu-wrapper d-flex align-items-center justify-content-between">
+                        <!-- Logo -->
+                        <div class="logo">
+                            <a href="index.html">flylight</a>
+                        </div>
+                        <!-- Main-menu -->
+                        <div class="main-menu f-right d-none d-lg-block">
+                            <nav>
+                                <ul id="navigation">
+                                    <li><a href="index.html">Home</a></li>
+                                    <li><a href="about.html">About</a></li>
+                                    <li><a href="courses.html">Coaches</a></li>
+                                    <li><a href="pricing.html">Achivements</a></li>
+                                    <li><a href="gallery.html">Gallery</a></li>
+                                    <li><a href="blog.html">Blog</a>
+                                        <ul class="submenu">
+                                            <li><a href="blog.html">Blog</a></li>
+                                            <li><a href="blog_details.html">Blog Details</a></li>
+                                            <li><a href="elements.html">Elements</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="contact.html">Contact</a></li>
+                                </ul>
+                            </nav>
+                        </div>          
+                        <!-- Header-btn -->
+                        <div class="header-btns d-none d-lg-block f-right">
+                           <a href="contact.html" class="btn">Contact me</a>
+                       </div>
+                       <!-- Mobile Menu -->
+                       <div class="col-12">
+                        <div class="mobile_menu d-block d-lg-none"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </section>
+    </div>
+    <!-- Header End -->
+</header>
+<main>
+    <!--? slider Area Start-->
+    <div class="slider-area position-relative" style="background-image: url(img/hero.jpeg) !important;">
+        <div class="slider-active">
+            <!-- Single Slider -->
+            <div class="single-slider slider-height d-flex align-items-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-9 col-lg-9 col-md-10">
+                            <div class="hero__caption">
+                                <span data-animation="fadeInLeft" data-delay="0.1s">
+                                    Welcome to Sky Light
+                                </span>
 
-    <!-- Achievements Section with Carousel -->
-    <section class="achievements-section" id="achievements">
-    <div class="container">
-        <h2 class="section-title">Our Achievements</h2>
-        <p class="section-subtitle">Celebrating Excellence and Success</p>
+                                <h1 data-animation="fadeInLeft" data-delay="0.4s">
+                                    Badminton Academy
+                                </h1>
 
-        
-        <!-- Replace entire table with this -->
-<div class="state-ranking-mobile">
-    <h2 class="state-ranking-title">Tamil Nadu State Ranking – Main Draw Players</h2>
+                                <a href="courses.html" class="border-btn hero-btn" data-animation="fadeInLeft" data-delay="0.8s">
+                                    Explore Training Programs
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>          
+            </div>
+        </div>
+    </div>
+    <!-- slider Area End-->
+    <!-- Traning categories Start -->
     
-    <div class="ranking-card">
-        <div class="card-badge">1</div>
-        <div class="card-left">
-            <span class="state-rank-badge gold-medal">#9</span>
-            <span class="category-tag">U-15 Girls Doubles</span>
+    <!-- Traning categories End-->
+    <!--? Team -->
+    <section class="team-area fix">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="section-tittle text-center mb-55 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".1s">
+                        <h2>Training Programs</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <div class="single-cat text-center mb-30 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".2s" >
+                        <div class="cat-icon">
+                            <img src="assets/img/gallery/team1.png" alt="">
+                        </div>
+                        <div class="cat-cap">
+                            <h5><a href="services.html">Beginner Program</a></h5>
+                            <p>Perfect for those starting their badminton journey. Learn the fundamentals and develop a love for the game.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="single-cat text-center mb-30 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".4s">
+                        <div class="cat-icon">
+                            <img src="assets/img/gallery/team2.png" alt="">
+                        </div>
+                        <div class="cat-cap">
+                            <h5><a href="services.html">Intermediate Program</a></h5>
+                            <p>Develop advanced techniques and competitive skills. Build on fundamentals with more complex strategies.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="single-cat text-center mb-30 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".6s">
+                        <div class="cat-icon">
+                            <img src="assets/img/gallery/team3.png" alt="">
+                        </div>
+                        <div class="cat-cap">
+                            <h5><a href="services.html">Professional Coaching</a></h5>
+                            <p>Fitness and skill development for adults. Stay active and improve your game at any age.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="card-right">Monisha & Veda Varshina</div>
+    </section>
+    <!-- Services End -->
+    <!-- Gallery Area Start -->
+    <div class="gallery-area section-padding30" style="padding: 50px !important;">
+        <div class="section-top-border">
+            <div class="section-tittle text-center mb-55 wow fadeInUp" data-wow-duration="2s" data-wow-delay=".1s">
+                <h2>Achievements</h2>
+            </div>
+            <div class="progress-table-wrap">
+                <div class="progress-table" style="background-color: black !important; color: white; font-size: 16px;">
+                    <div class="table-head">
+                        <div class="serial">#</div>
+                        <div class="country">Name</div>
+                        <div class="visit">Catagory</div>
+                        <div class="percentage">Ranking</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="serial">01</div>
+                        <div class="country"> <img src="assets/img/elements/f1.jpg" alt="flag">Monisha</div>
+                        <div class="visit">U-15 Girls Doubles</div>
+                        <div class="percentage">#9</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="serial">02</div>
+                        <div class="country"> <img src="assets/img/elements/f2.jpg" alt="flag">Veda Varshina</div>
+                        <div class="visit">U-15 Girls Doubles</div>
+                        <div class="percentage">#9</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="serial">03</div>
+                        <div class="country"> <img src="assets/img/elements/f3.jpg" alt="flag">Monisha</div>
+                        <div class="visit">Senior Singles</div>
+                        <div class="percentage">#34</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="serial">04</div>
+                        <div class="country"> <img src="assets/img/elements/f4.jpg" alt="flag">Mithin</div>
+                        <div class="visit">U-17 Boys Doubles</div>
+                        <div class="percentage">#9</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="serial">05</div>
+                        <div class="country"> <img src="assets/img/elements/f5.jpg" alt="flag">Yogi Tamizh</div>
+                        <div class="visit">U-17 Boys Doubles</div>
+                        <div class="percentage">#9</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="ranking-card">
-        <div class="card-badge">2</div>
-        <div class="card-left">
-            <span class="state-rank-badge silver-medal">#34</span>
-            <span class="category-tag">Senior Singles</span>
+    <!-- Gallery Area End -->
+    <!-- Courses area start -->
+    <!-- Courses area End -->
+    <!--? About Area-2 Start -->
+    <section class="about-area2 fix pb-padding pt-50 pb-80">
+        <div class="support-wrapper align-items-center">
+            <div class="right-content2">
+                <!-- img -->
+                <div class="right-img wow fadeInUp" data-wow-duration="1s" data-wow-delay=".1s">
+                    <img src="assets/img/gallery/about.png" alt="">
+                </div>
+            </div>
+            <div class="left-content2">
+                <!-- section tittle -->
+                <div class="section-tittle2 mb-20 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s">
+                    <div class="front-text">
+                        <h2 class=""> Lokeshmaran</h2>
+                        <p>A <b>former national player</b>, Lokeshmaran focuses on strong fundamentals and mental toughness for every player. He believes in personalized 
+                            attention and structured progression, 
+                            blending traditional coaching wisdom with modern sports science to help students reach their full potential.</p>
+                        <p class="mb-40">His sessions balance technical drills, physical conditioning, and tactical awareness to create complete players. 
+                            This structured yet adaptable approach helps students build confidence, discipline, and a strong competitive mindset on and off the court.</p>
+                        
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="card-right" style="margin-left: 30px;">Monisha</div>
+        <div class="support-wrapper align-items-center d-flex flex-row-reverse" style="margin-top: 30px; margin-left: 35px;">
+        <div class="right-content2">
+                <!-- img -->
+                <div class="right-img wow fadeInUp" data-wow-duration="1s" data-wow-delay=".1s">
+                    <img src="assets/img/gallery/about.png" alt="">
+                </div>
+            </div>
+            <div class="left-content2">
+                <!-- section tittle -->
+                <div class="section-tittle2 mb-20 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s">
+                    <div class="front-text">
+                        <h2 class="">Kirthi vasan</h2>
+                        <p>An <b>NIS certified coach</b>, Kirthi emphasizes fun-based learning for younger students while maintaining technical precision. He creates engaging drills 
+                            that develop both skills and passion for the game, making training enjoyable without compromising on quality.</p>
+                        <p class="mb-40">His patient and encouraging approach helps students build confidence alongside their badminton abilities. By combining structured 
+                            practice with a positive environment, he ensures that players progress steadily while continuing to love the sport.</p>
+                       <!-- <a href="courses.html" class="border-btn">My Courses</a> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- About Area End -->
+    <!--? Blog Area Start 
+    <section class="home-blog-area pt-10 pb-50">
+        <div class="container">
+             Section Tittle 
+            <div class="row justify-content-center">
+                <div class="col-lg-7 col-md-9 col-sm-10">
+                    <div class="section-tittle text-center mb-100 wow fadeInUp" data-wow-duration="2s" data-wow-delay=".2s">
+                        <h2>Gallery</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6">
+                    <div class="home-blog-single mb-30 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".4s">
+                        <div class="blog-img-cap">
+                            <div class="blog-img">
+                                <img src="assets/img/gallery/blog1.png" alt="">
+                            </div>
+                            <div class="blog-cap">
+                                <span>Gym & Fitness</span>
+                                <h3><a href="blog_details.html">Your Antibiotic One Day To 10 Day Options</a></h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6">
+                    <div class="home-blog-single mb-30 wow fadeInUp" data-wow-duration="2s" data-wow-delay=".6s">
+                        <div class="blog-img-cap">
+                            <div class="blog-img">
+                                <img src="assets/img/gallery/blog2.png" alt="">
+                            </div>
+                            <div class="blog-cap">
+                                <span>Gym & Fitness</span>
+                                <h3><a href="blog_details.html">Your Antibiotic One Day To 10 Day Options</a></h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+    <!-- Blog Area End -->
+     <section class="pricing-area section-padding40 fix location-text" >
+        <div class="container">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="section-tittle text-center mb-55 wow fadeInUp" data-wow-duration="2s" data-wow-delay=".1s">
+                <h2>Locations</h2>
+            </div>
+        </div>
     </div>
+    <div class="row">
+        <!-- Rally Point Badminton Academy -->
+        <div class="col-lg-4 col-md-6 col-sm-6">
+            <div class="properties mb-30 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".2s">
+                <div class="properties__card">
+                    
+                    <div class="properties__caption location-text" style="font-size: 0.9rem !important;">
+                        <span class="month">Rally Point Badminton Academy</span>
 
-    <div class="ranking-card">
-        <div class="card-badge">3</div>
-        <div class="card-left">
-            <span class="state-rank-badge bronze-medal">#9</span>
-            <span class="category-tag">U-17 Boys Doubles</span>
+                        <p class="mb-10" style="font-size: 2rem !important;">Teachers Colony, Nenmeli, Chengalpattu, Tamil Nadu 603003</p>
+
+                        <a href="https://maps.app.goo.gl/3R7NELGZptXPYzLh6"
+                           class="border-btn border-btn2"
+                           target="_blank"
+                           rel="noopener noreferrer">
+                            Open in Google Maps
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="card-right">Mithin & Yogi Tamizh</div>
+
+        <!-- Avalanche Badminton Academy -->
+        <div class="col-lg-4 col-md-6 col-sm-6">
+            <div class="properties mb-30 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".4s">
+                <div class="properties__card">
+                    <div class="properties__caption">
+                        <span class="month">Avalanche Badminton Academy</span>
+
+                        <p class="mb-10" style="font-size: 2rem !important;">(Next to Allahabad Bank), Big Maniyakara St, Gokulapuram, Tamil Nadu 603001</p>
+                        <a href="https://maps.app.goo.gl/Ttk7doMvT4jTS19w9"
+                           class="border-btn border-btn2"
+                           target="_blank"
+                           rel="noopener noreferrer">
+                            Open in Google Maps
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- D 2 Badminton Academy -->
+        <div class="col-lg-4 col-md-6 col-sm-6">
+            <div class="properties mb-30 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".6s">
+                <div class="properties__card">
+                    <div class="properties__caption">
+                        <span class="month">D 2 Badminton Academy</span>
+
+                        <p class="mb-10" style="font-size: 2rem !important;">P2P2+76C, Mahindra World City, Tamil Nadu 603004</p>
+                        <a href="https://maps.app.goo.gl/2HBtE1wxPudZDcRQ6"
+                           class="border-btn border-btn2"
+                           target="_blank"
+                           rel="noopener noreferrer">
+                            Open in Google Maps
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-
-        <div class="text-center mt-40">
-            <a href="achievements.html" class="btn btn-secondary">View All Achievements</a>
+    </section>
+    <!--? video_start -->
+    <div class="video-area section-bg2 d-flex align-items-center"  data-background="assets/img/gallery/video-bg.png">
+        <div class="container">
+            <div class="video-wrap position-relative">
+                <div class="video-icon" >
+                    <a class="popup-video btn-icon" href="https://www.youtube.com/watch?v=up68UAfH0d0"><i class="fas fa-play"></i></a>
+                </div>
+            </div>
         </div>
     </div>
-</section>
-
-    <!-- About Section -->
-    <section class="about-section" id="about">
+    <!-- video_end -->
+    <!-- ? services-area -->
+    <section class="services-area">
         <div class="container">
-            <h2 class="section-title">About Our Academy</h2>
-            <div class="about-content">
-                <p>fly Light - The School of Badminton is dedicated to nurturing champions through expert coaching, state-of-the-art facilities, and a passion for excellence. Our experienced coaches bring years of competitive experience and are committed to developing both technical skills and mental strength in every player.</p>
-                <p>We believe in creating a supportive environment where players of all levels can thrive, from beginners taking their first steps on the court to advanced athletes preparing for competitive tournaments.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Programs Section -->
-    <section class="programs-section" id="programs">
-        <div class="container">
-            <h2 class="section-title">Training Programs</h2>
-            <p class="section-subtitle">Find the perfect program for your skill level</p>
-
-            <div class="programs-grid">
-                <div class="program-card">
-                    <h3>Beginner Program</h3>
-                    <p class="program-age">Introductory Classes</p>
-                    <p>Perfect for those starting their badminton journey. Learn the fundamentals and develop a love for the game.</p>
-                </div>
-
-                <div class="program-card">
-                    <h3>Intermediate Program</h3>
-                    <p class="program-age">Skill Development Classes</p>
-                    <p>Develop advanced techniques and competitive skills. Build on fundamentals with more complex strategies.</p>
-                </div>
-
-                <div class="program-card">
-                    <h3>Professional Coaching</h3>
-                    <p class="program-age">Elite Performance Training</p>
-                    <p>Fitness and skill development for adults. Stay active and improve your game at any age.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Coaches Preview Section -->
-    <section class="coaches-preview-section" id="coaches-preview">
-        <div class="container">
-            <h2 class="section-title">Meet Our Coaches</h2>
-            <p class="section-subtitle">Expert guidance from experienced professionals</p>
-
-            <div class="coaches-preview-grid">
-                <div class="coach-preview-card">
-                    <div class="coach-preview-image">
-                        <img src="https://via.placeholder.com/200x200/2C3E50/FFFFFF?text=RK" alt="Rajesh Kumar">
+            <div class="row justify-content-between">
+                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-8">
+                    <div class="single-services mb-40 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".1s">
+                        <div class="features-icon">
+                            <img src="assets/img/icon/icon1.svg" alt="">
+                        </div>
+                        <div class="features-caption">
+                            <h3>Location</h3>
+                            <p>You’ll look at graphs and charts in Task One, how to approach </p>
+                        </div>
                     </div>
-                    <h3>Lokeshmaran</h3>
-                    <p class="coach-title">Head Coach & Director</p>
-                    <p class="coach-brief">Formal national player</p>
                 </div>
-
-                <div class="coach-preview-card">
-                    <div class="coach-preview-image">
-                        <img src="https://via.placeholder.com/200x200/10B981/FFFFFF?text=PS" alt="Priya Sharma">
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-8">
+                    <div class="single-services mb-40 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".2s">
+                        <div class="features-icon">
+                            <img src="assets/img/icon/icon2.svg" alt="">
+                        </div>
+                        <div class="features-caption">
+                            <h3>Phone</h3>
+                            <p>(90) 277 278 2566</p>
+                            <p>  (78) 267 256 2578</p>
+                        </div>
                     </div>
-                    <h3>Kirthi vasan</h3>
-                    <p class="coach-title">Senior Coach</p>
-                    <p class="coach-brief">NIS certified coach</p>
                 </div>
-            </div>
-
-            <div class="text-center mt-40">
-                <a href="coaches.html" class="btn btn-primary">Meet All Our Coaches</a>
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-8">
+                    <div class="single-services mb-40 wow fadeInUp" data-wow-duration="2s" data-wow-delay=".4s">
+                        <div class="features-icon">
+                            <img src="assets/img/icon/icon3.svg" alt="">
+                        </div>
+                        <div class="features-caption">
+                            <h3>Email</h3>
+                            <p>jacson767@gmail.com</p>
+                            <p>contact56@zacsion.com</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
-
-    <!-- Contact Section -->
-    <section class="contact-section" id="contact">
+</main>
+<footer>
+    <!--? Footer Start-->
+    <div class="footer-area black-bg">
         <div class="container">
-            <h2 class="section-title">Get In Touch</h2>
-
-            <div class="contact-grid">
-    <div class="contact-info">
-        <!-- Location 1: Chengalpattu (Main) -->
-        <div class="contact-item">
-            <h3>Rally Point Badminton Academy</h3>
-            <a href="tel:+919629525180" class="phone-link">
-                    <strong>+91 96295 25180</strong>
-                </a>
-            <p>
-            Teachers Colony, Nenmeli,<br>
-            Chengalpattu, Tamil Nadu 603003</p>
-            <a href="https://maps.app.goo.gl/3R7NELGZptXPYzLh6" target="_blank" class="maps-link">
-                📍 View on Google Maps
-            </a>
-        </div>
-
-        <!-- Location 2: Salem -->
-        <div class="contact-item">
-            <h3>Avalanche Badminton Academy</h3>
-            <a href="tel:+919629525180" class="phone-link">
-                    <strong>+91 96295 25180</strong>
-                </a>
-            <p>
-            (Next to Allahabad Bank), Big Maniyakara St,
-            Gokulapuram, Tamil Nadu 603001</p>
-            <a href="https://maps.app.goo.gl/Ttk7doMvT4jTS19w9" target="_blank" class="maps-link">
-                📍 View on Google Maps
-            </a>
-        </div>
-
-        <!-- Location 3: Tambaram -->
-        <div class="contact-item">
-            <h3>D 2 Badminton Academy</h3>
-            <a href="tel:+919629525180" class="phone-link">
-                    <strong>+91 96295 25180</strong>
-                </a>
-            <p>
-            P2P2+76C, Mahindra World City,<br>
-             Tamil Nadu 603004</p>
-            <a href="https://maps.app.goo.gl/2HBtE1wxPudZDcRQ6" target="_blank" class="maps-link">
-                📍 View on Google Maps
-            </a>
-        </div>
-    </div>
+            <div class="footer-top footer-padding">
+                <!-- Footer Menu -->
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="single-footer-caption mb-50 text-center">
+                            <!-- logo -->
+                            <div class="footer-logo wow fadeInUp" data-wow-duration="1s" data-wow-delay=".2s">
+                                <a href="index.html">FlyLight</a>
+                            </div>
+                            <!-- Menu -->
+                            <!-- Header Start -->
+                            <div class="header-area main-header2 wow fadeInUp" data-wow-duration="2s" data-wow-delay=".4s">
+                                <div class="main-header main-header2">
+                                    <div class="menu-wrapper menu-wrapper2">
+                                        <!-- Main-menu -->
+                                        <div class="main-menu main-menu2 text-center">
+                                            <nav>
+                                                <ul>
+                                                    <li><a href="index.html">Home</a></li>
+                                                    <li><a href="about.html">About</a></li>
+                                                    <li><a href="courses.html">Coaches</a></li>
+                                                    <li><a href="pricing.html">Achivements</a></li>
+                                                    <li><a href="gallery.html">Gallery</a></li>
+                                                    <li><a href="contact.html">Contact</a></li>
+                                                </ul>
+                                            </nav>
+                                        </div>   
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Header End -->
+                            <!-- social -->
+                            <div class="footer-social mt-30 wow fadeInUp" data-wow-duration="3s" data-wow-delay=".8s">
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="https://bit.ly/sai4ull"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <div class="row d-flex align-items-center">
+                    <div class="col-lg-12">
+                        <div class="footer-copy-right text-center">
+                            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                              Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved by FlyLight </a>
+                              <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- Footer End-->
+  </footer>
+  <!-- Scroll Up -->
+  <div id="back-top" >
+    <a title="Go to Top" href="#"> <i class="fas fa-level-up-alt"></i></a>
 </div>
 
-        </div>
-    </section>
+<!-- JS here -->
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2026 fly Light - The School of Badminton. All rights reserved.</p>
-            <div class="footer-links">
-                <a href="index.html">Home</a>
-                <a href="achievements.html">Achievements</a>
-                <a href="gallery.html">Gallery</a>
-                <a href="coaches.html">Coaches</a>
-            </div>
-        </div>
-    </footer>
+<script src="./assets/js/vendor/modernizr-3.5.0.min.js"></script>
+<!-- Jquery, Popper, Bootstrap -->
+<script src="./assets/js/vendor/jquery-1.12.4.min.js"></script>
+<script src="./assets/js/popper.min.js"></script>
+<script src="./assets/js/bootstrap.min.js"></script>
+<!-- Jquery Mobile Menu -->
+<script src="./assets/js/jquery.slicknav.min.js"></script>
 
-    <script src="js/script.js"></script>
+<!-- Jquery Slick , Owl-Carousel Plugins -->
+<script src="./assets/js/owl.carousel.min.js"></script>
+<script src="./assets/js/slick.min.js"></script>
+<!-- One Page, Animated-HeadLin -->
+<script src="./assets/js/wow.min.js"></script>
+<script src="./assets/js/animated.headline.js"></script>
+<script src="./assets/js/jquery.magnific-popup.js"></script>
+
+<!-- Date Picker -->
+<script src="./assets/js/gijgo.min.js"></script>
+<!-- Nice-select, sticky -->
+<script src="./assets/js/jquery.nice-select.min.js"></script>
+<script src="./assets/js/jquery.sticky.js"></script>
+
+<!-- counter , waypoint,Hover Direction -->
+<script src="./assets/js/jquery.counterup.min.js"></script>
+<script src="./assets/js/waypoints.min.js"></script>
+<script src="./assets/js/jquery.countdown.min.js"></script>
+<script src="./assets/js/hover-direction-snake.min.js"></script>
+
+<!-- contact js -->
+<script src="./assets/js/contact.js"></script>
+<script src="./assets/js/jquery.form.js"></script>
+<script src="./assets/js/jquery.validate.min.js"></script>
+<script src="./assets/js/mail-script.js"></script>
+<script src="./assets/js/jquery.ajaxchimp.min.js"></script>
+
+<!-- Jquery Plugins, main Jquery -->	
+<script src="./assets/js/plugins.js"></script>
+<script src="./assets/js/main.js"></script>
+
 </body>
 </html>
