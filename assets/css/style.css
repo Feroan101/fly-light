@@ -4518,6 +4518,11 @@ hr {
   margin-bottom: 30px;
 }
 
+.cat-icon img {
+  width: 350px;
+  height: auto;
+}
+
 /* line 15, C:/Users/HP/Desktop/July-HTML/292 Health coach/assets/scss/_team.scss */
 .team-area .single-cat .cat-cap span {
   color: #fff;
@@ -7952,6 +7957,14 @@ del {
     margin-top: 50px;
 }
 
+.load-text {
+   font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; /* clean modern font */
+    font-weight: 900; /* bold but not too heavy */
+    font-size: 14px; /* adjust for header size */
+    letter-spacing: 1px; /* minimal spacing for elegance */
+    text-transform: uppercase; /* optional, makes it crisp */
+    color: #b30000; /* dark minimal color */
+}
 @media (max-width: 768px) {
   .progress-table-wrap {
       max-width: 90%;
