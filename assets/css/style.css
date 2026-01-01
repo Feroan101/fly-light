@@ -7918,3 +7918,45 @@ del {
     font-size: 0.9rem !important; /* smaller than default */
 }
 
+.progress-table-wrap {
+    max-width: 55%;
+    margin: 0 auto;
+    padding: 0 20px;
+    overflow: hidden;
+}
+
+.progress-table {
+    font-size: 14px;
+}
+
+/* Shrink cell widths specifically */
+.progress-table .serial {
+    width: 10%;                    /* very narrow */
+}
+
+.progress-table .country {
+    width: 30%;                   /* main content space */
+}
+
+.progress-table .visit {
+    width: 30%;                   /* medium */
+}
+
+.progress-table .percentage {
+    width: 30%;                   /* rank space */
+}
+
+
+/* keep this if you still use it */
+.mt-50 {
+    margin-top: 50px;
+}
+
+@media (max-width: 768px) {
+  .progress-table-wrap {
+      max-width: 90%;
+      margin: 0 auto;
+      padding: 0 5px;
+      overflow: scroll;
+  }
+}

@@ -126,14 +126,16 @@
 }
 
 /* ACHIEVEMENT CARD */
+/* ACHIEVEMENT CARD */
 .achievement-card {
     background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
     border: 1px solid #333;
     border-radius: 12px;
-    padding: 40px 30px;
-    text-align: center;
+    overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
 }
 
 .achievement-card:hover {
@@ -143,39 +145,51 @@
 }
 
 .card-image {
-    margin-bottom: 25px;
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    flex-shrink: 0;
 }
 
 .card-image img {
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    border: 4px solid #32b8c6;
-    transition: border-color 0.3s ease;
+    border: none;
+    transition: transform 0.3s ease;
 }
 
 .achievement-card:hover .card-image img {
-    border-color: #2a9aaa;
+    transform: scale(1.05);
+}
+
+.card-content {
+    padding: 20px 15px;
+    background: #0a0a0a;
+    text-align: center;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .card-content h4 {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 600;
-    margin: 15px 0 10px 0;
+    margin: 0 0 8px 0;
     color: #fff;
 }
 
 .card-content .category {
     display: block;
-    font-size: 14px;
+    font-size: 12px;
     color: #a0a0a0;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .card-content .rank {
     display: block;
-    font-size: 18px;
+    font-size: 16px;
     color: #32b8c6;
     font-weight: 600;
 }
@@ -248,95 +262,50 @@
 }
 
 .progress-table-wrap {
-    max-width: 85%;
+    max-width: 55%;
     margin: 0 auto;
     padding: 0 20px;
-}
-
-.progress-table {
-    background-color: #0f0f0f;
-    border: 1px solid #333;
-    border-radius: 8px;
     overflow: hidden;
-    font-size: 14px;
 }
 
-.progress-table .table-head {
-    display: grid;
-    grid-template-columns: 8% 45% 25% 22%;
-    background: linear-gradient(135deg, #32b8c6 0%, #2a9aaa 100%);
-    font-weight: 600;
-    padding: 20px;
-    gap: 15px;
-}
-
-.progress-table .table-row {
-    display: grid;
-    grid-template-columns: 8% 45% 25% 22%;
-    padding: 18px 20px;
-    border-bottom: 1px solid #222;
-    align-items: center;
-    gap: 15px;
-    transition: background 0.3s ease;
-}
-
-.progress-table .table-row:hover {
-    background: #1a1a1a;
-}
-
-.progress-table .serial {
-    font-weight: 600;
-    color: #32b8c6;
-}
-
-.progress-table .country {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.progress-table .country img {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #32b8c6;
-}
-
-.progress-table .country img + span,
-.progress-table .country {
-    color: #fff;
-}
-
-.progress-table .visit {
-    color: #a0a0a0;
-}
-
-.progress-table .percentage {
-    color: #32b8c6;
-    font-weight: 600;
-    text-align: center;
-}
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
-    .carousel-heading {
+   .carousel-heading {
         font-size: 24px;
         margin-bottom: 30px;
     }
 
     .achievement-card {
-        padding: 25px 20px;
+        display: flex;
+        flex-direction: column;
     }
 
-    .card-image img {
-        width: 120px;
-        height: 120px;
+    .card-image {
+        width: 100%;
+        height: 180px;
+        flex-shrink: 0;
+    }
+
+    .card-content {
+        padding: 15px 12px;
+        background: #0a0a0a;
     }
 
     .card-content h4 {
         font-size: 18px;
+        margin: 0 0 6px 0;
     }
+
+    .card-content .category {
+        font-size: 11px;
+        margin-bottom: 4px;
+    }
+
+    .card-content .rank {
+        font-size: 14px;
+    }
+
 
     .progress-table .table-head,
     .progress-table .table-row {
@@ -352,6 +321,13 @@
     .progress-table .country img {
         width: 35px;
         height: 35px;
+    }
+
+    .progress-table-wrap {
+        max-width: 80%;
+        margin: 0 auto;
+        padding: 0 5px;
+        overflow: scroll;
     }
 }
 </style>
@@ -384,11 +360,12 @@
                         <div class="main-menu f-right d-none d-lg-block">
                             <nav>
                                 <ul id="navigation">
-                                    <li><a href="index.html">Home</a></li>
-                                    <li><a href="about.html">About</a></li>
+                                    <li><a href="index.html">Home</a></li>                             
                                     <li><a href="courses.html">Coaches</a></li>
                                     <li><a href="pricing.html">Achivements</a></li>
                                     <li><a href="gallery.html">Gallery</a></li>
+
+<li><a href="about.html">Resources</a></li>
                                     <li><a href="blog.html">Blog</a>
                                         <ul class="submenu">
                                             <li><a href="blog.html">Blog</a></li>
@@ -818,49 +795,46 @@
         </div>
 
         <!-- Tamil Nadu State Ranking (Table) -->
-        <div class="state-ranking-wrapper">
-            <h3 class="carousel-heading">Tamil Nadu State Ranking – Main Draw Players</h3>
-            <div class="progress-table-wrap">
-                <div class="progress-table">
+        <div class="progress-table-wrap">
+                <div class="progress-table" style="background-color: black !important; color: white; font-size: 16px;">
                     <div class="table-head">
                         <div class="serial">#</div>
                         <div class="country">Name</div>
-                        <div class="visit">Category</div>
+                        <div class="visit">Catagory</div>
                         <div class="percentage">Ranking</div>
                     </div>
                     <div class="table-row">
                         <div class="serial">01</div>
-                        <div class="country"><img src="assets/img/elements/f1.jpg" alt="flag">Monisha</div>
+                        <div class="country"> <img src="assets/img/elements/f1.jpg" alt="flag">Monisha</div>
                         <div class="visit">U-15 Girls Doubles</div>
                         <div class="percentage">#9</div>
                     </div>
                     <div class="table-row">
                         <div class="serial">02</div>
-                        <div class="country"><img src="assets/img/elements/f2.jpg" alt="flag">Veda Varshina</div>
+                        <div class="country"> <img src="assets/img/elements/f2.jpg" alt="flag">Veda Varshina</div>
                         <div class="visit">U-15 Girls Doubles</div>
                         <div class="percentage">#9</div>
                     </div>
                     <div class="table-row">
                         <div class="serial">03</div>
-                        <div class="country"><img src="assets/img/elements/f3.jpg" alt="flag">Monisha</div>
+                        <div class="country"> <img src="assets/img/elements/f3.jpg" alt="flag">Monisha</div>
                         <div class="visit">Senior Singles</div>
                         <div class="percentage">#34</div>
                     </div>
                     <div class="table-row">
                         <div class="serial">04</div>
-                        <div class="country"><img src="assets/img/elements/f4.jpg" alt="flag">Mithin</div>
+                        <div class="country"> <img src="assets/img/elements/f4.jpg" alt="flag">Mithin</div>
                         <div class="visit">U-17 Boys Doubles</div>
                         <div class="percentage">#9</div>
                     </div>
                     <div class="table-row">
                         <div class="serial">05</div>
-                        <div class="country"><img src="assets/img/elements/f5.jpg" alt="flag">Yogi Tamizh</div>
+                        <div class="country"> <img src="assets/img/elements/f5.jpg" alt="flag">Yogi Tamizh</div>
                         <div class="visit">U-17 Boys Doubles</div>
                         <div class="percentage">#9</div>
                     </div>
                 </div>
             </div>
-        </div>
 
     </div>
 </section>
@@ -870,47 +844,7 @@
 
     <!-- Courses area End -->
     <!-- ? services-area -->
-    <section class="services-area">
-        <div class="container">
-            <div class="row justify-content-between">
-                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-8">
-                    <div class="single-services mb-40">
-                        <div class="features-icon">
-                            <img src="assets/img/icon/icon1.svg" alt="">
-                        </div>
-                        <div class="features-caption">
-                            <h3>Location</h3>
-                            <p>You’ll look at graphs and charts in Task One, how to approach </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-8">
-                    <div class="single-services mb-40">
-                        <div class="features-icon">
-                            <img src="assets/img/icon/icon2.svg" alt="">
-                        </div>
-                        <div class="features-caption">
-                            <h3>Phone</h3>
-                            <p>(90) 277 278 2566</p>
-                            <p>  (78) 267 256 2578</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-8">
-                    <div class="single-services mb-40">
-                        <div class="features-icon">
-                            <img src="assets/img/icon/icon3.svg" alt="">
-                        </div>
-                        <div class="features-caption">
-                            <h3>Email</h3>
-                            <p>jacson767@gmail.com</p>
-                            <p>contact56@zacsion.com</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    
 </main>
 <footer>
     <!--? Footer Start-->
