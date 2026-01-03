@@ -24,92 +24,103 @@
     <link rel="stylesheet" href="assets/css/nice-select.css">
     <link rel="stylesheet" href="assets/css/style.css">
 
+    <style>
+        #lightbox-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
 
-<style>
-/* PDF SECTION */
-.pdf-section {
-    background-color: #000;
-    color: #fff;
-    padding: 60px 20px;
-}
+        #lightbox-overlay img {
+            max-width: 95vw;
+            max-height: 95vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
 
-.pdf-section .container {
-    max-width: 1000px;
-    margin: 0 auto;
-}
+        #lightbox-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            color: #fff;
+            cursor: pointer;
+        }
 
-/* PDF ITEM */
-.pdf-item {
-    margin-bottom: 50px;
-}
+        /* Arrows */
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            border: none;
+            font-size: 2.2rem;
+            width: 48px;
+            height: 72px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: background 0.2s ease;
+        }
 
-.pdf-heading {
-    font-size: 24px;
-    font-weight: 600;
-    color: #fff;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid #32b8c6;
-    display: inline-block;
-}
+        .lightbox-nav:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
 
-/* PDF CONTAINER */
-.pdf-container {
-    background: #111;
-    border: 1px solid #333;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
-    height: 700px;
-}
+        .lightbox-prev {
+            left: 20px;
+        }
 
-.pdf-container iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-}
+        .lightbox-next {
+            right: 20px;
+        }
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
-    .pdf-heading {
-        font-size: 20px;
-        margin-bottom: 15px;
-    }
+        @media (max-width: 768px) {
+            .lightbox-nav {
+                font-size: 1.8rem;
+                width: 40px;
+                height: 60px;
+                background: rgba(73, 73, 73, 0.705);
+            }
 
-    .pdf-container {
-        height: 500px;
-    }
+        }
 
-    .pdf-item {
-        margin-bottom: 40px;
-    }
-}
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            /* 16:9 aspect ratio */
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
 
-@media (max-width: 480px) {
-    .pdf-container {
-        height: 400px;
-    }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
 
-    .pdf-heading {
-        font-size: 18px;
-    }
-}
-</style>
+        .video-wrapper iframe {
+            width: 100%;
+            aspect-ratio: 16/9;
+            border: 0;
+        }
 
 
+    </style>
 </head>
 <body class="black-bg">
-    <!-- ? Preloader Start 
-    <div id="preloader-active">
-        <div class="preloader d-flex align-items-center justify-content-center">
-            <div class="preloader-inner position-relative">
-                <div class="preloader-circle"></div>
-                <div class="preloader-img pere-text load-text">
-                   <img src="img/black-logo.png"/>
-                </div>
-            </div>
-        </div>
-    </div> -->
     <!-- Preloader Start -->
     <header>
         <!-- Header Start -->
@@ -158,13 +169,13 @@
 </header>
 <main>
     <!--? Hero Start -->
-    <div class="slider-area2" style="background-image: url(img/resources.jpg) !important;">
+    <div class="slider-area2" style="background-image: url(img/gallery-head.jpeg) !important;">
         <div class="slider-height2 d-flex align-items-center">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="hero-cap hero-cap2 pt-70">
-                            <h2>Resources</h2>
+                            <h2> Video Gallery</h2>
                         </div>
                     </div>
                 </div>
@@ -172,117 +183,95 @@
         </div>
     </div>
     <!-- Hero End -->
-    <!-- PDF SECTION -->
-<!-- PDF SECTION (LAZY LOADED) -->
-<section class="pdf-section">
-    <div class="container">
-        <!-- PDF 1 -->
-        <div class="pdf-item">
-            <h3 class="pdf-heading">Badminton steps to success</h3>
-            <div class="pdf-container">
-                <iframe loading="lazy" src="./pdf-files/Badminton_Steps_to_Success.pdf" type="application/pdf"></iframe>
-            </div>
+    <!-- GALLERY -->
+        <div class="gallery-area">
+  <div class="container-fluid">
+    <div class="row">
+      <!-- 1 -->
+      <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
+        <div class="box snake mb-30">
+          <div class="video-wrapper">
+            <iframe
+              src="https://www.youtube.com/embed/VIDEO_ID_1"
+              title="YouTube video"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
         </div>
-
-        <!-- PDF 2 -->
-        <div class="pdf-item">
-            <h3 class="pdf-heading">Laws of badminton</h3>
-            <div class="pdf-container">
-                <iframe loading="lazy" src="./pdf-files/Laws_of_Badminton.pdf" type="application/pdf"></iframe>
-            </div>
+      </div>
+      <!-- 2 -->
+      <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
+        <div class="box snake mb-30">
+          <div class="video-wrapper">
+            <iframe
+              src="https://www.youtube.com/embed/VIDEO_ID_2"
+              title="YouTube video"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
         </div>
-
-        <!-- PDF 3 -->
-        <div class="pdf-item">
-            <h3 class="pdf-heading">introduction to nutrition-guide</h3>
-            <div class="pdf-container">
-                <iframe loading="lazy" src="./pdf-files/introduction-to-nutrition.pdf" type="application/pdf"></iframe>
-            </div>
+      </div>
+      <!-- 3 -->
+      <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
+        <div class="box snake mb-30">
+          <div class="video-wrapper">
+            <iframe
+              src="https://www.youtube.com/embed/VIDEO_ID_3"
+              title="YouTube video"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
         </div>
-
-        <!-- PDF 4 -->
-        <div class="pdf-item">
-            <h3 class="pdf-heading">food for badminton players</h3>
-            <div class="pdf-container">
-                <iframe loading="lazy" src="./pdf-files/food_bad.pdf" type="application/pdf"></iframe>
-            </div>
+      </div>
+      <!-- 4 -->
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+        <div class="box snake mb-30">
+          <div class="video-wrapper">
+            <iframe
+              src="https://www.youtube.com/embed/VIDEO_ID_4"
+              title="YouTube video"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
         </div>
-
-        <!-- PDF 5 -->
-        <div class="pdf-item">
-            <h3 class="pdf-heading">Nutrition Presentation specific for Badminton</h3>
-            <div class="pdf-container">
-                <iframe loading="lazy" src="./pdf-files/Nutrition-Presentation-specific-for-Badminton.pdf" type="application/pdf"></iframe>
-            </div>
+      </div>
+      <!-- 5 -->
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+        <div class="box snake mb-30">
+          <div class="video-wrapper">
+            <iframe
+              src="https://www.youtube.com/embed/VIDEO_ID_5"
+              title="YouTube video"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
         </div>
-
-        <!-- PDF 6 -->
-        <div class="pdf-item">
-            <h3 class="pdf-heading">General competition regulations</h3>
-            <div class="pdf-container">
-                <iframe loading="lazy" src="./pdf-files/GENERAL_COMPETITION_REGULATIONS.pdf" type="application/pdf"></iframe>
-            </div>
-        </div>
-
-        <!-- PDF 7 -->
-        <div class="pdf-item">
-            <h3 class="pdf-heading">Footwork guide</h3>
-            <div class="pdf-container">
-                <iframe loading="lazy" src="./pdf-files/footwork_guide.pdf" type="application/pdf"></iframe>
-            </div>
-        </div>
-
-        <!-- PDF 8 -->
-        <div class="pdf-item">
-            <h3 class="pdf-heading">Tactics In Badminton Singles</h3>
-            <div class="pdf-container">
-                <iframe loading="lazy" src="./pdf-files/TacticsInBadmintonSingles.pdf" type="application/pdf"></iframe>
-            </div>
-        </div>
-
-        <!-- PDF 9 -->
-        <div class="pdf-item">
-            <h3 class="pdf-heading">Tactics In Badminton Doubles</h3>
-            <div class="pdf-container">
-                <iframe loading="lazy" src="./pdf-files/Badminton_Doubles.pdf" type="application/pdf"></iframe>
-            </div>
-        </div>
-
-        <!-- PDF 10 -->
-        <div class="pdf-item">
-            <h3 class="pdf-heading">Badminton-related musculoskeletal injuries</h3>
-            <div class="pdf-container">
-                <iframe loading="lazy" src="./pdf-files/Badminton_injuries.pdf" type="application/pdf"></iframe>
-            </div>
-        </div>
-
-        <!-- PDF 11 -->
-        <div class="pdf-item">
-            <h3 class="pdf-heading">General badminton injuries</h3>
-            <div class="pdf-container">
-                <iframe loading="lazy" src="./pdf-files/Badminton_injuries_2.pdf" type="application/pdf"></iframe>
-            </div>
-        </div>
-
-        <!-- PDF 12 -->
-        <div class="pdf-item">
-            <h3 class="pdf-heading">Badminton injuries: incidence, characteristics and risk factors</h3>
-            <div class="pdf-container">
-                <iframe loading="lazy" src="./pdf-files/badminton_injuries_3.pdf" type="application/pdf"></iframe>
-            </div>
-        </div>
-
-        <!-- PDF 13 -->
-        <div class="pdf-item">
-            <h3 class="pdf-heading">Journal of physical education & sports</h3>
-            <div class="pdf-container">
-                <iframe loading="lazy" src="./pdf-files/journal.pdf" type="application/pdf"></iframe>
-            </div>
-        </div>
-
+      </div>
     </div>
-</section>
+  </div>
+</div>
 
+   <!-- LIGHTBOX OVERLAY -->
+    <div id="lightbox-overlay">
+        <span id="lightbox-close">&times;</span>
+        <button id="lightbox-prev" class="lightbox-nav lightbox-prev">&#10094;</button>
+        <img id="lightbox-image" src="" alt="Gallery image">
+        <button id="lightbox-next" class="lightbox-nav lightbox-next">&#10095;</button>
+    </div>
+
+
+    <!-- Gallery Area End -->
+    <!-- ? services-area -->
     
 </main>
 <footer>
@@ -348,6 +337,78 @@
 </div>
 
 <!-- JS here -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const items = Array.from(document.querySelectorAll('.lightbox-item'));
+    const overlay = document.getElementById('lightbox-overlay');
+    const overlayImg = document.getElementById('lightbox-image');
+    const closeBtn = document.getElementById('lightbox-close');
+    const prevBtn = document.getElementById('lightbox-prev');
+    const nextBtn = document.getElementById('lightbox-next');
+
+    let currentIndex = 0;
+
+    function openLightbox(index) {
+        currentIndex = index;
+        const src = items[currentIndex].getAttribute('data-full');
+        overlayImg.src = src;
+        overlay.style.display = 'flex';
+    }
+
+    function closeLightbox() {
+        overlay.style.display = 'none';
+        overlayImg.src = '';
+    }
+
+    function showNext() {
+        currentIndex = (currentIndex + 1) % items.length;
+        const src = items[currentIndex].getAttribute('data-full');
+        overlayImg.src = src;
+    }
+
+    function showPrev() {
+        currentIndex = (currentIndex - 1 + items.length) % items.length;
+        const src = items[currentIndex].getAttribute('data-full');
+        overlayImg.src = src;
+    }
+
+    // Click thumbnails
+    items.forEach((item, index) => {
+        item.addEventListener('click', () => openLightbox(index));
+    });
+
+    // Close
+    closeBtn.addEventListener('click', closeLightbox);
+
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+            closeLightbox();
+        }
+    });
+
+    // Nav arrows
+    nextBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showNext();
+    });
+
+    prevBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showPrev();
+    });
+
+    // Optional: keyboard support
+    document.addEventListener('keydown', (e) => {
+        if (overlay.style.display === 'flex') {
+            if (e.key === 'ArrowRight') showNext();
+            if (e.key === 'ArrowLeft') showPrev();
+            if (e.key === 'Escape') closeLightbox();
+        }
+    });
+});
+</script>
+
+
 
 <script src="./assets/js/vendor/modernizr-3.5.0.min.js"></script>
 <!-- Jquery, Popper, Bootstrap -->
