@@ -23,9 +23,21 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <style>
         .num {display: flex; align-items: center; justify-content: center; padding: 20px;}
+        .kiri{margin-top: 30px; margin-left: 35px;}
+        .progress-table .country img  {
+            width: 85px;
+            height: auto;
+            border-radius: 50%;
+        }
         @media (max-width: 768px) {
             .num {
                 flex-direction: column;
+            }
+            .kiri{margin-left: 0px; margin-top: 0px;}
+
+            .progress-table .country img {
+                width: 70px;
+                height: auto;
             }
         }
     </style>
@@ -60,8 +72,12 @@
                                     <li><a href="index.html">Home</a></li>                             
                                     <li><a href="courses.html">Coaches</a></li>
                                     <li><a href="pricing.html">Achivements</a></li>
-                                    <li><a href="gallery.html">Gallery</a></li>
-                                    <li><a href="video-gallery.html">Videos</a></li>
+                                    <li><a href="gallery.html">Gallery</a>
+                                        <ul class="submenu">
+                                            <li><a href="gallery.html">Image</a></li>
+                                            <li><a href="video-gallery.html">video</a></li>
+                                        </ul>
+                                    </li>
                                     <li><a href="about.html">Resources</a></li>
                                     <!-- <li><a href="blog.html">Blog</a>
                                         <ul class="submenu">
@@ -184,25 +200,25 @@
                     </div>
                     <div class="table-row">
                         <div class="serial">01</div>
-                        <div class="country"> <img src="assets/img/elements/f1.jpg" alt="flag">Monisha</div>
+                        <div class="country"> <img src="img/achive/monistate.jpeg" alt="flag">Monisha</div>
                         <div class="visit">U-15 Girls Doubles</div>
                         <div class="percentage">#9</div>
                     </div>
                     <div class="table-row">
                         <div class="serial">02</div>
-                        <div class="country"> <img src="assets/img/elements/f2.jpg" alt="flag">Veda Varshina</div>
+                        <div class="country"> <img src="img/achive/vedastate.jpeg" alt="flag">Vedha varshini</div>
                         <div class="visit">U-15 Girls Doubles</div>
                         <div class="percentage">#9</div>
                     </div>
                     <div class="table-row">
                         <div class="serial">03</div>
-                        <div class="country"> <img src="assets/img/elements/f3.jpg" alt="flag">Monisha</div>
+                        <div class="country"> <img src="img/achive/monistate.jpeg" alt="flag">Monisha</div>
                         <div class="visit">Senior Singles</div>
                         <div class="percentage">#34</div>
                     </div>
                     <div class="table-row">
                         <div class="serial">04</div>
-                        <div class="country"> <img src="assets/img/elements/f4.jpg" alt="flag">nitin</div>
+                        <div class="country"> <img src="img/achive/nithinstate.jpeg" alt="flag">nithin</div>
                         <div class="visit">U-17 Boys Doubles</div>
                         <div class="percentage">#9</div>
                     </div>
@@ -220,14 +236,14 @@
             <div class="right-content2">
                 <!-- img -->
                 <div class="right-img wow fadeInUp" data-wow-duration="1s" data-wow-delay=".1s">
-                    <img src="assets/img/gallery/about.png" alt="">
+                    <img src="img/loki_coach.jpeg" alt="">
                 </div>
             </div>
             <div class="left-content2">
                 <!-- section tittle -->
                 <div class="section-tittle2 mb-20 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s">
                     <div class="front-text">
-                        <h2 class=""> Lokeshmaran</h2>
+                        <h2 class="">Lokeshmaran</h2>
                         <p>A <b>former national player</b>, Lokeshmaran focuses on strong fundamentals and mental toughness for every player. He believes in personalized 
                             attention and structured progression, 
                             blending traditional coaching wisdom with modern sports science to help students reach their full potential.</p>
@@ -238,11 +254,11 @@
                 </div>
             </div>
         </div>
-        <div class="support-wrapper align-items-center d-flex flex-row-reverse" style="margin-top: 30px; margin-left: 35px;">
+        <div class="support-wrapper align-items-center d-flex flex-row-reverse kiri" >
         <div class="right-content2">
                 <!-- img -->
                 <div class="right-img wow fadeInUp" data-wow-duration="1s" data-wow-delay=".1s">
-                    <img src="assets/img/gallery/about.png" alt="">
+                    <img src="img/kiri_coach.jpeg" alt="">
                 </div>
             </div>
             <div class="left-content2">
@@ -420,9 +436,13 @@
                                                     <li><a href="about.html">About</a></li>
                                                     <li><a href="courses.html">Coaches</a></li>
                                                     <li><a href="pricing.html">Achivements</a></li>
-                                                    <li><a href="gallery.html">Gallery</a></li>
-                                    <li><a href="video-gallery.html">Videos</a></li>
-                                                   <!--<li><a href="contact.html">Contact</a></li> -->
+                                                    <li><a href="gallery.html">Gallery</a>
+                                        <ul class="submenu">
+                                            <li><a href="gallery.html">Image</a></li>
+                                            <li><a href="video-gallery.html">video</a></li>
+                                        </ul>
+                                    </li>
+                                                                                       <!--<li><a href="contact.html">Contact</a></li> -->
                                                 </ul>
                                             </nav>
                                         </div>   

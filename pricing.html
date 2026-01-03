@@ -207,7 +207,7 @@
     cursor: pointer;
     border-radius: 6px;
     transition: background 0.3s ease;
-    z-index: 10;
+    z-index: 5;
 }
 
 .carousel-btn:hover {
@@ -268,6 +268,11 @@
     overflow: hidden;
 }
 
+.state-img {
+    width: 85px;
+    height: auto;
+    border-radius: 50%;
+}
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
@@ -319,8 +324,8 @@
     }
 
     .progress-table .country img {
-        width: 35px;
-        height: 35px;
+        width: 70px;
+        height: auto;
     }
 
     .progress-table-wrap {
@@ -329,6 +334,8 @@
         padding: 0 5px;
         overflow: scroll;
     }
+
+
 }
 </style>
 
@@ -346,7 +353,7 @@
         </div>
     </div> -->
     <!-- Preloader Start -->
-    <header>
+    <header style="z-index: 10;">
         <!-- Header Start -->
         <div class="header-area header-transparent">
             <div class="main-header header-sticky">
@@ -363,8 +370,12 @@
                                     <li><a href="index.html">Home</a></li>                             
                                     <li><a href="courses.html">Coaches</a></li>
                                     <li><a href="pricing.html">Achivements</a></li>
-                                    <li><a href="gallery.html">Gallery</a></li>
-                                    <li><a href="video-gallery.html">Videos</a></li>
+                                    <li><a href="gallery.html">Gallery</a>
+                                        <ul class="submenu">
+                                            <li><a href="gallery.html">Image</a></li>
+                                            <li><a href="video-gallery.html">video</a></li>
+                                        </ul>
+                                    </li>
                                     <li><a href="about.html">Resources</a></li>
                                     <!-- <li><a href="blog.html">Blog</a>
                                         <ul class="submenu">
@@ -420,10 +431,10 @@
                     <div class="carousel-item active">
                         <div class="achievement-card">
                             <div class="card-image">
-                                <img src="assets/img/elements/f1.jpg" alt="Giri">
+                                <img src="img/achive/ragvgiri.jpeg" alt="Giri">
                             </div>
                             <div class="card-content">
-                                <h4>Giri</h4>
+                                <h4>Giri & raghav</h4>
                                 <p class="category">U-19 Boys Doubles</p>
                                 <p class="rank">🥈 2nd Place</p>
                             </div>
@@ -433,25 +444,12 @@
                     <div class="carousel-item">
                         <div class="achievement-card">
                             <div class="card-image">
-                                <img src="assets/img/elements/f2.jpg" alt="Raghav">
+                                <img src="img/achive/nithinragv.jpeg" alt="Raghav">
                             </div>
                             <div class="card-content">
-                                <h4>Raghav</h4>
-                                <p class="category">U-19 Boys Doubles</p>
-                                <p class="rank">🥈 2nd Place</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Card 3 -->
-                    <div class="carousel-item">
-                        <div class="achievement-card">
-                            <div class="card-image">
-                                <img src="assets/img/elements/f3.jpg" alt="Nitin">
-                            </div>
-                            <div class="card-content">
-                                <h4>Nitin</h4>
+                                <h4>nithin & Raghav</h4>
                                 <p class="category">U-17 Boys Doubles</p>
-                                <p class="rank">🥇 1st Place</p>
+                                <p class="rank">1st Place</p>
                             </div>
                         </div>
                     </div>
@@ -459,25 +457,12 @@
                     <div class="carousel-item">
                         <div class="achievement-card">
                             <div class="card-image">
-                                <img src="assets/img/elements/f4.jpg" alt="Ragav">
+                                <img src="img/achive/nithin25.jpeg" alt="Raghav">
                             </div>
                             <div class="card-content">
-                                <h4>Ragav</h4>
-                                <p class="category">U-17 Boys Doubles</p>
-                                <p class="rank">🥇 1st Place</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Card 5 -->
-                    <div class="carousel-item">
-                        <div class="achievement-card">
-                            <div class="card-image">
-                                <img src="assets/img/elements/f5.jpg" alt="Nitin">
-                            </div>
-                            <div class="card-content">
-                                <h4>Nitin</h4>
+                                <h4>Nithin</h4>
                                 <p class="category">U-17 Boys Singles</p>
-                                <p class="rank">🥈 2nd Place</p>
+                                <p class="rank">2st Place</p>
                             </div>
                         </div>
                     </div>
@@ -485,12 +470,12 @@
                     <div class="carousel-item">
                         <div class="achievement-card">
                             <div class="card-image">
-                                <img src="assets/img/elements/f6.jpg" alt="Chris Jones">
+                                <img src="img/achive/chris25.jpeg" alt="Chris Jones">
                             </div>
                             <div class="card-content">
                                 <h4>Chris Jones</h4>
                                 <p class="category">U-15 Boys Doubles</p>
-                                <p class="rank">🥉 3rd Place</p>
+                                <p class="rank">3rd Place</p>
                             </div>
                         </div>
                     </div>
@@ -502,8 +487,6 @@
                     <span class="dot" data-slide="1"></span>
                     <span class="dot" data-slide="2"></span>
                     <span class="dot" data-slide="3"></span>
-                    <span class="dot" data-slide="4"></span>
-                    <span class="dot" data-slide="5"></span>
                 </div>
             </div>
         </div>
@@ -516,12 +499,12 @@
                     <div class="carousel-item active">
                         <div class="achievement-card">
                             <div class="card-image">
-                                <img src="assets/img/elements/f1.jpg" alt="Nitin">
+                                <img src="img/achive/nithin24.jpeg" alt="nithin">
                             </div>
                             <div class="card-content">
-                                <h4>Nitin</h4>
+                                <h4>nithin</h4>
                                 <p class="category">U-15 Doubles</p>
-                                <p class="rank">🥇 1st Place</p>
+                                <p class="rank">1st Place</p>
                             </div>
                         </div>
                     </div>
@@ -529,84 +512,48 @@
                     <div class="carousel-item">
                         <div class="achievement-card">
                             <div class="card-image">
-                                <img src="assets/img/elements/f3.jpg" alt="Nitin">
+                                <img src="img/achive/nithinmoni.jpeg" alt="nithin">
                             </div>
                             <div class="card-content">
-                                <h4>Nitin</h4>
+                                <h4>nithin & Monisha</h4>
                                 <p class="category">U-15 Mixed Doubles</p>
-                                <p class="rank">🥉 3rd Place</p>
+                                <p class="rank">3rd Place</p>
                             </div>
                         </div>
                     </div>
                     <div class="carousel-item">
                         <div class="achievement-card">
                             <div class="card-image">
-                                <img src="assets/img/elements/f4.jpg" alt="Monisha">
+                                <img src="img/achive/chrisvarsh.jpeg" alt="Chris Jones">
                             </div>
                             <div class="card-content">
-                                <h4>Monisha</h4>
+                                <h4>Chris Jones & Varshini</h4>
                                 <p class="category">U-15 Mixed Doubles</p>
-                                <p class="rank">🥉 3rd Place</p>
+                                <p class="rank">Semi-Finals</p>
                             </div>
                         </div>
                     </div>
                     <div class="carousel-item">
                         <div class="achievement-card">
                             <div class="card-image">
-                                <img src="assets/img/elements/f5.jpg" alt="Chris Jones">
+                                <img src="img/achive/varshmoni.jpeg" alt="Sri Ram">
                             </div>
                             <div class="card-content">
-                                <h4>Chris Jones</h4>
-                                <p class="category">U-15 Mixed Doubles</p>
-                                <p class="rank">⭐ Semi-Finals</p>
+                                <h4>Varshini & monisha</h4>
+                                <p class="category">U-17 doubles</p>
+                                <p class="rank">1st Place</p>
                             </div>
                         </div>
                     </div>
                     <div class="carousel-item">
                         <div class="achievement-card">
                             <div class="card-image">
-                                <img src="assets/img/elements/f6.jpg" alt="Varshini">
+                                <img src="img/achive/giri24.jpeg" alt="Saktheeswar">
                             </div>
                             <div class="card-content">
-                                <h4>Varshini</h4>
-                                <p class="category">U-15 Mixed Doubles</p>
-                                <p class="rank">⭐ Semi-Finals</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="achievement-card">
-                            <div class="card-image">
-                                <img src="assets/img/elements/f7.jpg" alt="Sri Ram">
-                            </div>
-                            <div class="card-content">
-                                <h4>Sri Ram</h4>
-                                <p class="category">U-17 Singles</p>
-                                <p class="rank">🥉 3rd Place</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="achievement-card">
-                            <div class="card-image">
-                                <img src="assets/img/elements/f8.jpg" alt="Saktheeswar">
-                            </div>
-                            <div class="card-content">
-                                <h4>Saktheeswar</h4>
+                                <h4>Saktheeswar & Giri</h4>
                                 <p class="category">U-19 Doubles</p>
-                                <p class="rank">🥈 2nd Place</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="achievement-card">
-                            <div class="card-image">
-                                <img src="assets/img/elements/f9.jpg" alt="Giri">
-                            </div>
-                            <div class="card-content">
-                                <h4>Giri</h4>
-                                <p class="category">U-19 Doubles</p>
-                                <p class="rank">🥈 2nd Place</p>
+                                <p class="rank">2nd Place</p>
                             </div>
                         </div>
                     </div>
@@ -619,9 +566,6 @@
                     <span class="dot" data-slide="2"></span>
                     <span class="dot" data-slide="3"></span>
                     <span class="dot" data-slide="4"></span>
-                    <span class="dot" data-slide="5"></span>
-                    <span class="dot" data-slide="6"></span>
-                    <span class="dot" data-slide="7"></span>
                 </div>
             </div>
         </div>
@@ -635,7 +579,7 @@
                     <div class="carousel-item active">
                         <div class="achievement-card">
                             <div class="card-image">
-                                <img src="assets/img/elements/f1.jpg" alt="jeevs">
+                                <img src="img/achive/jeevs.jpeg" alt="jeevs">
                             </div>
                             <div class="card-content">
                                 <h4>Jeevitha</h4>              
@@ -646,31 +590,21 @@
                     <div class="carousel-item">
                         <div class="achievement-card">
                             <div class="card-image">
-                                <img src="assets/img/elements/f2.jpg" alt="vasu">
+                                <img src="img/achive/chrisvasi.jpeg" alt="vasu">
                             </div>
                             <div class="card-content">
-                                <h4>Vaseegaran</h4>                         
+                                <h4>Vaseegaran & Chris Jones</h4>                         
                             </div>
                         </div>
                     </div>
                     <!-- Card 3 -->
-                    <div class="carousel-item">
-                        <div class="achievement-card">
-                            <div class="card-image">
-                                <img src="assets/img/elements/f3.jpg" alt="Nitin">
-                            </div>
-                            <div class="card-content">
-                                <h4>Chris Jones</h4>
-                            </div>
-                        </div>
-                    </div>
+                    
                 </div>
                 <button class="carousel-btn carousel-btn-prev">❮</button>
                 <button class="carousel-btn carousel-btn-next">❯</button>
                 <div class="carousel-dots">
                     <span class="dot active" data-slide="0"></span>
                     <span class="dot" data-slide="1"></span>
-                    <span class="dot" data-slide="2"></span>
                 </div>
             </div>
         </div>
@@ -683,87 +617,53 @@
                     <div class="carousel-item active">
                         <div class="achievement-card">
                             <div class="card-image">
-                                <img src="assets/img/elements/f1.jpg" alt="Tharun">
+                                <img src="img/achive/cmtrophy.jpeg" alt="Tharun">
                             </div>
                             <div class="card-content">
-                                <h4>Tharun</h4>
+                                <h4>Tharun & Sri Ram</h4>
                                 <p class="category">Doubles</p>
-                                <p class="rank">🥉 3rd Place</p>
+                                <p class="rank">3rd Place</p>
                             </div>
                         </div>
                     </div>
                     <div class="carousel-item">
                         <div class="achievement-card">
                             <div class="card-image">
-                                <img src="assets/img/elements/f2.jpg" alt="Sri Ram">
+                                <img src="img/achive/cmtrophy.jpeg" alt="Raghav">
                             </div>
                             <div class="card-content">
-                                <h4>Sri Ram</h4>
-                                <p class="category">Doubles</p>
-                                <p class="rank">🥉 3rd Place</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="achievement-card">
-                            <div class="card-image">
-                                <img src="assets/img/elements/f3.jpg" alt="Ragav">
-                            </div>
-                            <div class="card-content">
-                                <h4>Ragav</h4>
+                                <h4>Raghav</h4>
                                 <p class="category">Singles</p>
-                                <p class="rank">🥇 1st Place</p>
+                                <p class="rank">1st Place</p>
                             </div>
                         </div>
                     </div>
                     <div class="carousel-item">
                         <div class="achievement-card">
                             <div class="card-image">
-                                <img src="assets/img/elements/f4.jpg" alt="Nitin">
+                                <img src="assets/img/elements/f4.jpg" alt="nithin">
                             </div>
                             <div class="card-content">
-                                <h4>Nitin</h4>
+                                <h4>nithin & Sri Ram</h4>
                                 <p class="category">Doubles</p>
-                                <p class="rank">🏅 Runner-up</p>
+                                <p class="rank">Runner-up</p>
                             </div>
                         </div>
                     </div>
+                
                     <div class="carousel-item">
                         <div class="achievement-card">
                             <div class="card-image">
-                                <img src="assets/img/elements/f5.jpg" alt="Sri Ram">
+                                <img src="img/achive/cmtrophy.jpeg" alt="nithin">
                             </div>
                             <div class="card-content">
-                                <h4>Sri Ram</h4>
+                                <h4>nithin & Raghav</h4>
                                 <p class="category">Doubles</p>
-                                <p class="rank">🏅 Runner-up</p>
+                                <p class="rank">2nd Place</p>
                             </div>
                         </div>
                     </div>
-                    <div class="carousel-item">
-                        <div class="achievement-card">
-                            <div class="card-image">
-                                <img src="assets/img/elements/f6.jpg" alt="Nitin">
-                            </div>
-                            <div class="card-content">
-                                <h4>Nitin</h4>
-                                <p class="category">Doubles</p>
-                                <p class="rank">🥈 2nd Place</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="achievement-card">
-                            <div class="card-image">
-                                <img src="assets/img/elements/f7.jpg" alt="Ragav">
-                            </div>
-                            <div class="card-content">
-                                <h4>Ragav</h4>
-                                <p class="category">Doubles</p>
-                                <p class="rank">🥈 2nd Place</p>
-                            </div>
-                        </div>
-                    </div>
+                    
                 </div>
                 <button class="carousel-btn carousel-btn-prev">❮</button>
                 <button class="carousel-btn carousel-btn-next">❯</button>
@@ -772,9 +672,6 @@
                     <span class="dot" data-slide="1"></span>
                     <span class="dot" data-slide="2"></span>
                     <span class="dot" data-slide="3"></span>
-                    <span class="dot" data-slide="4"></span>
-                    <span class="dot" data-slide="5"></span>
-                    <span class="dot" data-slide="6"></span>
                 </div>
             </div>
         </div>
@@ -787,36 +684,36 @@
                     <div class="carousel-item active">
                         <div class="achievement-card">
                             <div class="card-image">
-                                <img src="assets/img/elements/f1.jpg" alt="Monisha">
+                                <img src="img/achive/cmtrophy.jpeg" alt="nithin">
                             </div>
                             <div class="card-content">
                                 <h4>Monisha</h4>
                                 <p class="category">U-14 Girls</p>
-                                <p class="rank">🥈 2nd Place</p>
+                                <p class="rank">2nd Place</p>
                             </div>
                         </div>
                     </div>
                     <div class="carousel-item">
                         <div class="achievement-card">
                             <div class="card-image">
-                                <img src="assets/img/elements/f2.jpg" alt="Giridharan">
+                                <img src="img/achive/cmtrophy.jpeg" alt="nithin">
                             </div>
                             <div class="card-content">
                                 <h4>Giridharan</h4>
                                 <p class="category">U-19 Boys</p>
-                                <p class="rank">🥉 3rd Place</p>
+                                <p class="rank">3rd Place</p>
                             </div>
                         </div>
                     </div>
                     <div class="carousel-item">
                         <div class="achievement-card">
                             <div class="card-image">
-                                <img src="assets/img/elements/f3.jpg" alt="Ragav">
+                                <img src="img/achive/cmtrophy.jpeg" alt="nithin">
                             </div>
                             <div class="card-content">
-                                <h4>Ragav</h4>
+                                <h4>Raghav</h4>
                                 <p class="category">U-17 Boys</p>
-                                <p class="rank">⭐ 5th Place</p>
+                                <p class="rank">5th Place</p>
                             </div>
                         </div>
                     </div>
@@ -842,25 +739,25 @@
                     </div>
                     <div class="table-row">
                         <div class="serial">01</div>
-                        <div class="country"> <img src="assets/img/elements/f1.jpg" alt="flag">Monisha</div>
+                        <div class="country"> <img src="img/achive/monistate.jpeg" alt="flag" class="state-img">Monisha</div>
                         <div class="visit">U-15 Girls Doubles</div>
                         <div class="percentage">#9</div>
                     </div>
                     <div class="table-row">
                         <div class="serial">02</div>
-                        <div class="country"> <img src="assets/img/elements/f2.jpg" alt="flag">Veda Varshina</div>
+                        <div class="country"> <img src="img/achive/vedastate.jpeg" alt="flag" class="state-img"> Vedha varshini</div>
                         <div class="visit">U-15 Girls Doubles</div>
                         <div class="percentage">#9</div>
                     </div>
                     <div class="table-row">
                         <div class="serial">03</div>
-                        <div class="country"> <img src="assets/img/elements/f3.jpg" alt="flag">Monisha</div>
+                        <div class="country"> <img src="img/achive/monistate.jpeg" alt="flag" class="state-img">Monisha</div>
                         <div class="visit">Senior Singles</div>
                         <div class="percentage">#34</div>
                     </div>
                     <div class="table-row">
                         <div class="serial">04</div>
-                        <div class="country"> <img src="assets/img/elements/f4.jpg" alt="flag">nitin</div>
+                        <div class="country"> <img src="img/achive/nithinstate.jpeg" alt="flag" class="state-img">nithin</div>
                         <div class="visit">U-17 Boys Doubles</div>
                         <div class="percentage">#9</div>
                     </div>
@@ -903,9 +800,13 @@
                                                     <li><a href="about.html">About</a></li>
                                                     <li><a href="courses.html">Coaches</a></li>
                                                     <li><a href="pricing.html">Achivements</a></li>
-                                                    <li><a href="gallery.html">Gallery</a></li>
-                                    <li><a href="video-gallery.html">Videos</a></li>
-                                                    <li><a href="contact.html">Contact</a></li>
+                                                    <li><a href="gallery.html">Gallery</a>
+                                        <ul class="submenu">
+                                            <li><a href="gallery.html">Image</a></li>
+                                            <li><a href="video-gallery.html">video</a></li>
+                                        </ul>
+                                    </li>
+                                     <li><a href="contact.html">Contact</a></li>
                                                 </ul>
                                             </nav>
                                         </div>   
