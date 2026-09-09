@@ -6,10 +6,10 @@ import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 
 const rankingPlayers = [
-  { serial: '01', name: 'Nithin', image: '/img/achive/nithinstate.jpeg', category: 'TNBA Ranking Player', rank: '—' },
-  { serial: '02', name: 'Gowtham', image: '/img/achive/Gowtham.jpeg', category: 'U-11 Boys Singles', rank: '#11' },
-  { serial: '03', name: 'Porchezian', image: '/img/achive/Porchezihan.jpeg', category: 'U-11 Boys Doubles', rank: '#12' },
-  { serial: '04', name: 'Harinesh', image: '/img/achive/Harinesh.jpeg', category: 'U-11 Boys Doubles', rank: '#12' },
+  { serial: '01', name: 'Monisha', image: '/img/achive/monistate.jpeg', category: 'U-17 & U-19 Girls Singles', rank: '#20 (U-17) · #22 (U-19)' },
+  { serial: '02', name: 'Nithin', image: '/img/achive/nithinstate.jpeg', category: 'U-17 Boys Doubles', rank: '#17' },
+  { serial: '03', name: 'Gowtham', image: '/img/achive/Gowtham.jpeg', category: 'U-11 Boys Singles', rank: '#17' },
+  { serial: '04', name: 'Porchezhiyan & Harinesh', image: '/img/achive/Porchezihan.jpeg', category: 'U-11 Boys Doubles', rank: '#16' },
 ];
 
 const locations = [
